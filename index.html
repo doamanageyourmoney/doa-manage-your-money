@@ -340,5 +340,34 @@ function startVoiceEntry() {
 
   recognition.start();
 }</script>
-</body>
+<button id="doaFloatingMic" onclick="startVoiceEntry()" title="Speak to DOA">🎤</button>
+
+<style>
+#doaFloatingMic {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  width: 58px;
+  height: 58px;
+  border: none;
+  border-radius: 50%;
+  background: #16a36a;
+  color: white;
+  font-size: 27px;
+  cursor: pointer;
+  z-index: 99999;
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);
+}
+</style>
+
+<script>
+document.getElementById("doaFloatingMic").onclick = function() {
+  document.getElementById("doaFloatingMic").textContent = "🔴";
+  showSection("addRecord");
+  startVoiceEntry();
+  setTimeout(function() {
+    document.getElementById("doaFloatingMic").textContent = "🎤";
+  }, 5000);
+};
+</script></body>
 </html>
