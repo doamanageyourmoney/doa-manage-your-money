@@ -360,17 +360,19 @@ function startVoiceEntry() {
 }
 </style>
 
+
 <script>
 document.getElementById("doaFloatingMic").onclick = function() {
-  document.getElementById("doaFloatingMic").textContent = "🔴";
-  showPage("add");
- const mic = document.getElementById("doaFloatingMic");
-mic.textContent = "🎤";
-mic.disabled = false;
-startVoiceEntry();
+  showPage("add", null);
+
+  const mic = document.getElementById("doaFloatingMic");
+  mic.textContent = "🔴";
+
   setTimeout(function() {
-    document.getElementById("doaFloatingMic").textContent = "🎤";
-  }, 5000);
+    startVoiceEntry();
+  }, 700);
 };
+</script>
+
 </script></body>
 </html>
