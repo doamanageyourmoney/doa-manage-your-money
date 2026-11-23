@@ -70,7 +70,19 @@ footer{text-align:center;padding:25px;color:#758197;font-size:12px}
 <section id="add" class="page">
 <div class="card">
 <h2>Record a Transaction</h2>
-<form id="recordForm">
+
+<div class="card">
+<h3>🎤 Speak Your Transaction</h3>
+<label>Speaking language</label>
+<select id="voiceLanguage">
+<option value="en-US">English</option>
+<option value="lg-UG">Luganda</option>
+</select>
+<button type="button" class="primary" onclick="startVoiceEntry()">🎤 Start Speaking</button>
+<p id="voiceStatus" class="muted">Speak your income or expense details.</p>
+</div>
+
+ <form id="recordForm">
 <label>Transaction Type</label>
 <select id="type"><option value="expense">Expense</option><option value="income">Income</option></select>
 <label>Account</label>
