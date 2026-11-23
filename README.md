@@ -232,7 +232,93 @@ function exportData() {
  a.click();
  URL.revokeObjectURL(url);
 }
-render();
+
+function startVoiceEntry() {
+  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const status = document.getElementById("voiceStatus");
+
+  if (!Speech) {
+    status.textContent = "Voice recognition is not supported. Please use Chrome.";
+    return;
+  }
+
+  const language = document.getElementById("voiceLanguage")?.value || "en-US";
+  const recognition = new Speech();
+
+  recognition.lang = language;
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  status.textContent = "Listening... Tell me about your transaction.";
+
+  recognition.onresult = function(event) {
+    const spoken = event.results[0][0].transcript;
+    const amountMatch = spoken.match(/\d[\d,]*(?:\.\d+)?/);
+
+    if (!amountMatch) {
+      status.textContent = "I heard: " + spoken + ". Please enter the amount manually, then try again.";
+      document.getElementById("description").value = spoken;
+      return;
+    }
+
+    const amount = amountMatch[0].replace(/,/g, "");
+    const words = spoken.toLowerCase();
+
+    const type = /\b(income|received|earned|salary|sold)\b/i.test(words)
+      ? "income" : "expense";
+
+    document.getElementById("type").value = type;
+    document.getElementById("description").value = spoken;
+    document.getElementById("amount").value = amount;
+
+    if (/food|lunch|dinner|meal/i.test(words))
+      document.getElementById("category").value = "Food";
+    else if (/transport|taxi|fuel/i.test(words))
+      document.getElementById("category").value = "Transport";
+    else if (/rent/i.test(words))
+      document.getElementById("category").value = "Rent";
+
+    status.textContent =
+      "I heard: " + spoken + ". Say YES to save or NO to cancel.";
+
+    const confirmSpeech = new Speech();
+    confirmSpeech.lang = language;
+    confirmSpeech.interimResults = false;
+
+    confirmSpeech.onresult = function(answer) {
+      const reply = answer.results[0][0].transcript.toLowerCase();
+
+      if (/\b(yes|yeah|correct|save|okay|ok)\b/i.test(reply)) {
+        const form = document.getElementById("recordForm");
+
+        if (form) {
+          form.requestSubmit();
+          status.textContent = "Your transaction has been submitted.";
+        } else {
+          status.textContent = "Please use the Save button to save this transaction.";
+        }
+      } else {
+        status.textContent = "Cancelled. Your transaction was not saved.";
+      }
+    };
+
+    confirmSpeech.onerror = function() {
+      status.textContent = "I couldn't hear your confirmation. Please use the Save button.";
+    };
+
+    setTimeout(function() {
+      confirmSpeech.start();
+    }, 700);
+  };
+
+  recognition.onerror = function() {
+    status.textContent = "I couldn't hear you. Please try again.";
+  };
+
+  recognition.start();
+}
+
+ render();
 </script>
 </body>
 </html>
