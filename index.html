@@ -1,1 +1,282 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOA - Manage Your Money</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5fa;color:#17243a;font-family:Arial,sans-serif}
+header{background:#101d35;color:white;padding:22px}
+header h1{margin:0;color:#fff;font-size:30px;letter-spacing:3px}
+header h1 span{color:#e8b64b}
+header p{margin:5px 0 0;color:#cbd5e1;font-size:12px}
+nav{display:flex;gap:7px;padding:12px;overflow-x:auto;background:white;position:sticky;top:0}
+nav button{padding:12px 15px;border:0;border-radius:8px;background:#edf1f7;white-space:nowrap;font-weight:bold}
+nav button.active{background:#2563eb;color:white}
+main{max-width:1000px;margin:auto;padding:15px}
+.page{display:none}
+.page.active{display:block}
+.card{background:white;padding:18px;border-radius:13px;margin:12px 0;box-shadow:0 2px 9px #0000000a}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+small{color:#758197}
+.amount{font-size:22px;font-weight:bold;margin-top:8px;overflow-wrap:anywhere}
+.green{color:#159765}.red{color:#dc4c59}
+label{display:block;font-size:13px;font-weight:bold;margin-top:8px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #d9dfeb;border-radius:8px;margin:7px 0 12px;font-size:15px}
+.primary{background:#2563eb;color:white;border:0;border-radius:8px;padding:13px;width:100%;font-weight:bold}
+.secondary{background:#e9eef6;border:0;padding:11px;border-radius:8px}
+.entry{padding:12px 0;border-bottom:1px solid #edf0f5}
+.muted{color:#758197;font-size:13px}
+footer{text-align:center;padding:25px;color:#758197;font-size:12px}
+@media(min-width:650px){.cards{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+<h1>D<span>O</span>A</h1>
+<p>MANAGE YOUR MONEY | PERSONAL & BUSINESS FINANCE</p>
+</header>
+<nav>
+<button class="active" onclick="showPage('dashboard',this)">Overview</button>
+<button onclick="showPage('add',this)">Add Record</button>
+<button onclick="showPage('records',this)">Transactions</button>
+<button onclick="showPage('reports',this)">Reports</button>
+<button onclick="showPage('reminders',this)">Reminders</button>
+<button onclick="showPage('settings',this)">Settings</button>
+</nav>
+<main>
+<section id="dashboard" class="page active">
+<h2>Financial Overview</h2>
+<p class="muted" id="today"></p>
+<div class="cards">
+<div class="card"><small>Available Balance</small><div class="amount" id="balance">UGX 0</div></div>
+<div class="card"><small>Total Income</small><div class="amount green" id="income">UGX 0</div></div>
+<div class="card"><small>Total Expenses</small><div class="amount red" id="expense">UGX 0</div></div>
+<div class="card"><small>Transactions</small><div class="amount" id="count">0</div></div>
+</div>
+<div class="card">
+<h3>Welcome to DOA</h3>
+<p class="muted">Your personal and business financial management assistant.</p>
+<button class="primary" onclick="showPage('add')">+ Add Income or Expense</button>
+</div>
+<div class="card">
+<h3>Recent Transactions</h3>
+<div id="recent">No transactions recorded yet.</div>
+</div>
+</section>
+
+<section id="add" class="page">
+<div class="card">
+<h2>Record a Transaction</h2>
+<form id="recordForm">
+<label>Transaction Type</label>
+<select id="type"><option value="expense">Expense</option><option value="income">Income</option></select>
+<label>Account</label>
+<select id="account"><option>Personal</option><option>Business</option></select>
+<label>Description</label>
+<input id="description" required placeholder="e.g. Food, salary, sales">
+<label>Amount (UGX)</label>
+<input id="amount" type="number" min="1" required placeholder="Enter amount">
+<label>Category</label>
+<select id="category">
+<option>Food</option><option>Transport</option><option>Rent</option><option>Salary</option><option>Sales</option><option>Business costs</option><option>Health</option><option>Education</option><option>Shopping</option><option>Utilities</option><option>Other</option>
+</select>
+<label>Date</label>
+<input id="date" type="date" required>
+<label>Payment Method</label>
+<select id="method"><option>Cash</option><option>Mobile Money - manual</option><option>Bank - manual</option><option>Other</option></select>
+<label>Notes</label>
+<textarea id="notes" placeholder="Optional notes"></textarea>
+<button class="primary" type="submit">Save Transaction</button>
+</form>
+</div>
+</section>
+
+<section id="records" class="page">
+<div class="card">
+<h2>Transaction History</h2>
+<select id="filter" onchange="render()">
+<option value="all">All records</option>
+<option value="income">Income</option>
+<option value="expense">Expenses</option>
+<option value="Personal">Personal</option>
+<option value="Business">Business</option>
+</select>
+<div id="allRecords">No records yet.</div>
+</div>
+</section>
+
+<section id="reports" class="page">
+<div class="card">
+<h2>Financial Reports</h2>
+<p>Total Income: <b id="reportIncome">UGX 0</b></p>
+<p>Total Expenses: <b id="reportExpense">UGX 0</b></p>
+<p>Net Result: <b id="reportNet">UGX 0</b></p>
+<h3>Category Breakdown</h3>
+<div id="categories">No records yet.</div>
+<button class="primary" onclick="exportCSV()">Export CSV Report</button>
+</div>
+</section>
+
+<section id="reminders" class="page">
+<div class="card">
+<h2>Financial Reminders</h2>
+<form id="reminderForm">
+<label>Reminder</label>
+<input id="reminderTitle" required placeholder="e.g. Pay rent">
+<label>Due Date</label>
+<input id="reminderDate" type="date" required>
+<label>Amount (UGX, optional)</label>
+<input id="reminderAmount" type="number" min="0">
+<button class="primary">Save Reminder</button>
+</form>
+</div>
+<div class="card">
+<h3>Your Reminders</h3>
+<div id="reminderList">No reminders yet.</div>
+</div>
+</section>
+
+<section id="settings" class="page">
+<div class="card">
+<h2>Settings</h2>
+<p>Currency: Ugandan Shillings (UGX)</p>
+<button class="primary" onclick="exportCSV()">Download Financial Records</button>
+<p class="muted">Records in this initial version are stored on this device. Online accounts and cloud synchronisation must be added separately.</p>
+</div>
+</section>
+</main>
+<footer>DOA – Manage Your Money</footer>
+
+<script>
+const KEY="doa_records_v1";
+const REMKEY="doa_reminders_v1";
+let records=JSON.parse(localStorage.getItem(KEY)||"[]");
+let reminders=JSON.parse(localStorage.getItem(REMKEY)||"[]");
+
+const money=n=>"UGX "+Number(n||0).toLocaleString("en-UG");
+const save=()=>localStorage.setItem(KEY,JSON.stringify(records));
+const saveRem=()=>localStorage.setItem(REMKEY,JSON.stringify(reminders));
+
+function showPage(id,btn){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ render();
+}
+
+document.getElementById("date").value=new Date().toISOString().slice(0,10);
+document.getElementById("today").textContent=new Date().toDateString();
+
+document.getElementById("recordForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ const item={
+ id:Date.now(),
+ type:document.getElementById("type").value,
+ account:document.getElementById("account").value,
+ description:document.getElementById("description").value.trim(),
+ amount:Number(document.getElementById("amount").value),
+ category:document.getElementById("category").value,
+ date:document.getElementById("date").value,
+ method:document.getElementById("method").value,
+ notes:document.getElementById("notes").value
+ };
+ if(!item.description||item.amount<=0)return alert("Enter a description and valid amount.");
+ records.unshift(item);
+ save();
+ this.reset();
+ document.getElementById("date").value=new Date().toISOString().slice(0,10);
+ alert("Transaction saved successfully.");
+ showPage("dashboard");
+});
+
+function makeEntry(r){
+ const sign=r.type==="income"?"+":"-";
+ const color=r.type==="income"?"green":"red";
+ return `<div class="entry">
+ <b>${escapeText(r.description)}</b>
+ <span class="${color}" style="float:right">${sign}${money(r.amount)}</span>
+ <div class="muted">${escapeText(r.date)} · ${escapeText(r.category)} · ${escapeText(r.account)}</div>
+ </div>`;
+}
+
+function escapeText(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function render(){
+ const income=records.filter(r=>r.type==="income").reduce((a,r)=>a+r.amount,0);
+ const expense=records.filter(r=>r.type==="expense").reduce((a,r)=>a+r.amount,0);
+ document.getElementById("balance").textContent=money(income-expense);
+ document.getElementById("income").textContent=money(income);
+ document.getElementById("expense").textContent=money(expense);
+ document.getElementById("count").textContent=records.length;
+ document.getElementById("reportIncome").textContent=money(income);
+ document.getElementById("reportExpense").textContent=money(expense);
+ document.getElementById("reportNet").textContent=money(income-expense);
+
+ document.getElementById("recent").innerHTML=
+ records.length?records.slice(0,5).map(makeEntry).join(""):"No transactions recorded yet.";
+
+ const filter=document.getElementById("filter").value;
+ const filtered=records.filter(r=>filter==="all"||r.type===filter||r.account===filter);
+ document.getElementById("allRecords").innerHTML=filtered.length?
+ filtered.map(r=>makeEntry(r)+`<button class="secondary" onclick="deleteRecord(${r.id})">Delete</button>`).join(""):"No matching records.";
+
+ const totals={};
+ records.forEach(r=>{
+  if(r.type==="expense")totals[r.category]=(totals[r.category]||0)+r.amount;
+ });
+ document.getElementById("categories").innerHTML=
+ Object.keys(totals).length?Object.entries(totals).map(([k,v])=>`<div class="entry">${escapeText(k)} <b style="float:right">${money(v)}</b></div>`).join(""):"No expense records yet.";
+
+ document.getElementById("reminderList").innerHTML=reminders.length?
+ reminders.map(r=>`<div class="entry"><b>${escapeText(r.title)}</b><div class="muted">Due: ${escapeText(r.date)} ${r.amount? " · "+money(r.amount):""}</div><button class="secondary" onclick="deleteReminder(${r.id})">Delete</button></div>`).join(""):"No reminders yet.";
+}
+
+function deleteRecord(id){
+ if(confirm("Delete this transaction?")){
+ records=records.filter(r=>r.id!==id);
+ save();render();
+ }
+}
+
+document.getElementById("reminderForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ reminders.unshift({
+ id:Date.now(),
+ title:document.getElementById("reminderTitle").value.trim(),
+ date:document.getElementById("reminderDate").value,
+ amount:Number(document.getElementById("reminderAmount").value||0)
+ });
+ saveRem();
+ this.reset();
+ alert("Reminder saved.");
+ render();
+});
+
+function deleteReminder(id){
+ if(confirm("Delete this reminder?")){
+ reminders=reminders.filter(r=>r.id!==id);
+ saveRem();render();
+ }
+}
+
+function exportCSV(){
+ const rows=[["Date","Type","Account","Description","Category","Amount UGX","Payment Method","Notes"]];
+ records.forEach(r=>rows.push([r.date,r.type,r.account,r.description,r.category,r.amount,r.method,r.notes]));
+ const csv=rows.map(row=>row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\n");
+ const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download="DOA-financial-records.csv";a.click();
+ URL.revokeObjectURL(url);
+}
+
+render();
+</script>
+</body>
+</html>
