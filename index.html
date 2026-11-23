@@ -364,7 +364,10 @@ function startVoiceEntry() {
 document.getElementById("doaFloatingMic").onclick = function() {
   document.getElementById("doaFloatingMic").textContent = "🔴";
   showSection("addRecord");
-  startVoiceEntry();
+ const mic = document.getElementById("doaFloatingMic");
+mic.textContent = "🎤";
+mic.disabled = false;
+startVoiceEntry();
   setTimeout(function() {
     document.getElementById("doaFloatingMic").textContent = "🎤";
   }, 5000);
