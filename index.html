@@ -86,7 +86,11 @@ nav button.active{background:#b38b43;color:#080d18}
  text-align:left;
  line-height:1.6;
  min-height:55px;
+ overflow-wrap:anywhere;
 }
+.chat-line{margin:0 0 14px}
+.chat-line:last-child{margin-bottom:0}
+.chat-label{color:#e5bd72;font-weight:bold}
 .input-area{
  display:flex;
  gap:8px;
@@ -110,6 +114,7 @@ input{
  border-radius:10px;
  cursor:pointer;
 }
+.send:disabled{opacity:.55}
 .record{
  background:#142238;
  border:1px solid #293e5c;
@@ -142,6 +147,10 @@ input{
  cursor:pointer;
  box-shadow:0 0 25px #b38b4460;
  z-index:10;
+}
+.bottom-mic.listening{
+ background:#a13c42;
+ color:white;
 }
 footer{
  text-align:center;
@@ -183,13 +192,16 @@ I'm ready to listen. What can I do for you?
 Tap the microphone and talk to DOA.
 </div>
 
-<div class="message" id="conversation">
-<strong>DOA:</strong> Hello! How can I help you today?
+<div class="message" id="conversation" aria-live="polite">
+<div class="chat-line">
+<span class="chat-label">DOA:</span>
+Hello! How can I help you today?
+</div>
 </div>
 
 <div class="input-area">
 <input id="userInput" placeholder="Type your instruction...">
-<button class="send" onclick="sendText()">Send</button>
+<button class="send" id="sendButton" onclick="sendText()">Send</button>
 </div>
 
 </section>
@@ -208,113 +220,176 @@ Tap the microphone and talk to DOA.
 
 </section>
 
-<button class="bottom-mic" onclick="toggleMic()" title="Talk to DOA">🎙</button>
+<button class="bottom-mic" id="bottomMic"
+ onclick="toggleMic()" title="Talk to DOA">🎙</button>
 
 <footer>
 DOA 2.0 | Your personal assistant
 </footer>
 
 <script>
+const DOA_BACKEND =
+ "https://soft-frog-4cf8.doa2026app.workers.dev";
+
+const CHAT_ENDPOINT = DOA_BACKEND + "/chat";
+
 let recognition;
 let listening = false;
+let busy = false;
+let chatHistory = [];
 let currentPage = "home";
 
 const statusBox = document.getElementById("status");
 const conversation = document.getElementById("conversation");
 const mainMic = document.getElementById("mainMic");
+const bottomMic = document.getElementById("bottomMic");
+const sendButton = document.getElementById("sendButton");
 
 function openPage(page,button){
  document.querySelectorAll(".page").forEach(p=>{
   p.classList.remove("active");
  });
+
  document.getElementById(page).classList.add("active");
+
  document.querySelectorAll("nav button").forEach(b=>{
   b.classList.remove("active");
  });
+
  if(button) button.classList.add("active");
+
  currentPage=page;
+
  if(page==="records") loadRecords();
+}
+
+function setStatus(text){
+ if(statusBox) statusBox.innerText=text;
+}
+
+function addMessage(who,text){
+ const line=document.createElement("div");
+ line.className="chat-line";
+
+ const label=document.createElement("span");
+ label.className="chat-label";
+ label.textContent=who+": ";
+
+ const content=document.createElement("span");
+ content.textContent=text;
+
+ line.appendChild(label);
+ line.appendChild(content);
+ conversation.appendChild(line);
+
+ conversation.scrollTop=conversation.scrollHeight;
 }
 
 function speak(text){
  if(!("speechSynthesis" in window)) return;
+
  window.speechSynthesis.cancel();
+
  const speech=new SpeechSynthesisUtterance(text);
  speech.lang="en-US";
  speech.rate=1;
  speech.pitch=1;
+
  window.speechSynthesis.speak(speech);
 }
 
 function reply(text){
- conversation.innerHTML="<strong>DOA:</strong> "+escapeHTML(text);
+ addMessage("DOA",text);
  speak(text);
 }
 
-function escapeHTML(text){
- return String(text).replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",
- '"':"&quot;","'":"&#39;"
- })[c]);
+function setBusy(value){
+ busy=value;
+ sendButton.disabled=value;
+ sendButton.textContent=value?"Wait...":"Send";
 }
 
-function toggleMic(){
- if(listening){
-  recognition?.stop();
-  return;
+function saveHistory(role,content){
+ chatHistory.push({
+  role:role,
+  content:content
+ });
+
+ // Keep recent conversation context manageable.
+ if(chatHistory.length>20){
+  chatHistory=chatHistory.slice(-20);
  }
+}
 
- const SpeechRecognition=
- window.SpeechRecognition || window.webkitSpeechRecognition;
+async function askDOA(message){
+ if(busy) return;
 
- if(!SpeechRecognition){
-  reply("Voice recognition is not supported in this browser. Please use Chrome on your phone.");
-  return;
+ setBusy(true);
+ setStatus("DOA is thinking...");
+
+ try{
+  const response=await fetch(CHAT_ENDPOINT,{
+   method:"POST",
+   headers:{
+    "Content-Type":"application/json"
+   },
+   body:JSON.stringify({
+    message:message,
+    history:chatHistory
+   })
+  });
+
+  const data=await response.json();
+
+  if(!response.ok){
+   throw new Error(
+    data.error || data.message ||
+    "The AI service returned an error."
+   );
+  }
+
+  let answer =
+   data.reply ||
+   data.response ||
+   data.answer ||
+   data.output_text;
+
+  // Support the standard Responses API output structure
+  // if the Worker returns it directly.
+  if(!answer && Array.isArray(data.output)){
+   answer=data.output
+    .flatMap(item=>item.content||[])
+    .filter(item=>item.type==="output_text")
+    .map(item=>item.text)
+    .join("\n");
+  }
+
+  if(!answer){
+   throw new Error("DOA received an unexpected response.");
+  }
+
+  answer=String(answer);
+
+  saveHistory("user",message);
+  saveHistory("assistant",answer);
+
+  reply(answer);
+  setStatus("DOA is ready to help.");
+
+ }catch(error){
+  console.error("DOA connection error:",error);
+
+  reply(
+   "I'm having trouble connecting to my AI engine. " +
+   "Please check your internet connection and try again."
+  );
+
+  setStatus("AI connection problem. Please try again.");
+
+ }finally{
+  setBusy(false);
  }
-
- recognition=new SpeechRecognition();
- recognition.lang="en-US";
- recognition.continuous=false;
- recognition.interimResults=false;
-
- recognition.onstart=()=>{
-  listening=true;
-  mainMic.classList.add("listening");
-  statusBox.innerText="DOA is listening...";
- };
-
- recognition.onresult=(event)=>{
-  const words=event.results[0][0].transcript;
-  conversation.innerHTML="<strong>You:</strong> "+escapeHTML(words);
-  processInstruction(words);
- };
-
- recognition.onerror=()=>{
-  statusBox.innerText="I couldn't hear you. Please try again.";
- };
-
- recognition.onend=()=>{
-  listening=false;
-  mainMic.classList.remove("listening");
-  statusBox.innerText="Tap the microphone to speak again.";
- };
-
- recognition.start();
 }
-
-function sendText(){
- const input=document.getElementById("userInput");
- const words=input.value.trim();
- if(!words)return;
- conversation.innerHTML="<strong>You:</strong> "+escapeHTML(words);
- input.value="";
- processInstruction(words);
-}
-
-document.getElementById("userInput")
-.addEventListener("keydown",e=>{
- if(e.key==="Enter")sendText();
-});
 
 function processInstruction(text){
  const command=text.toLowerCase().trim();
@@ -328,7 +403,8 @@ function processInstruction(text){
  }
 
  if(command.includes("open home") ||
-    command.includes("go home")){
+    command.includes("go home") ||
+    command.includes("return home")){
   openPage("home",document.querySelectorAll("nav button")[0]);
   reply("Welcome back to your home page.");
   return;
@@ -336,6 +412,7 @@ function processInstruction(text){
 
  if(command.startsWith("save record")){
   const value=text.replace(/save record/i,"").trim();
+
   if(value){
    addRecord(value);
    reply("Your record has been saved.");
@@ -348,10 +425,15 @@ function processInstruction(text){
  if(command.includes("read records") ||
     command.includes("list records")){
   openPage("records",document.querySelectorAll("nav button")[1]);
-  const records=JSON.parse(localStorage.getItem("doaRecords")||"[]");
+
+  const records=JSON.parse(
+   localStorage.getItem("doaRecords")||"[]"
+  );
+
   reply(records.length?
    "You have "+records.length+" saved records.":
-   "You do not have any saved records yet.");
+   "You do not have any saved records yet."
+  );
   return;
  }
 
@@ -362,37 +444,123 @@ function processInstruction(text){
   return;
  }
 
- if(command.includes("hello") ||
-    command.includes("good morning") ||
-    command.includes("good afternoon")){
-  reply("Hello! I'm DOA, your personal assistant. How may I help you?");
+ // All other questions and instructions go to the AI.
+ askDOA(text);
+}
+
+function sendText(){
+ const input=document.getElementById("userInput");
+ const words=input.value.trim();
+
+ if(!words || busy) return;
+
+ addMessage("You",words);
+ input.value="";
+
+ processInstruction(words);
+}
+
+document.getElementById("userInput")
+.addEventListener("keydown",e=>{
+ if(e.key==="Enter") sendText();
+});
+
+function toggleMic(){
+ if(listening){
+  if(recognition) recognition.stop();
   return;
  }
 
- reply("I have received your instruction: "+text+
- " My AI assistant connection is not yet configured. I can currently handle basic navigation and record commands.");
+ if(busy){
+  setStatus("Please wait for DOA to finish answering.");
+  return;
+ }
+
+ const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+ if(!SpeechRecognition){
+  reply(
+   "Voice recognition is not supported in this browser. " +
+   "Please use Chrome on your phone."
+  );
+  return;
+ }
+
+ recognition=new SpeechRecognition();
+ recognition.lang="en-US";
+ recognition.continuous=false;
+ recognition.interimResults=false;
+
+ recognition.onstart=()=>{
+  listening=true;
+  mainMic.classList.add("listening");
+  bottomMic.classList.add("listening");
+  setStatus("DOA is listening...");
+ };
+
+ recognition.onresult=(event)=>{
+  const words=event.results[0][0].transcript.trim();
+
+  if(!words) return;
+
+  addMessage("You",words);
+  processInstruction(words);
+ };
+
+ recognition.onerror=(event)=>{
+  console.error("Voice recognition error:",event.error);
+  setStatus("I couldn't hear you. Please try again.");
+ };
+
+ recognition.onend=()=>{
+  listening=false;
+  mainMic.classList.remove("listening");
+  bottomMic.classList.remove("listening");
+
+  if(!busy){
+   setStatus("Tap the microphone to speak again.");
+  }
+ };
+
+ try{
+  recognition.start();
+ }catch(error){
+  console.error(error);
+  setStatus("Please try tapping the microphone again.");
+ }
 }
 
 function addRecord(value){
- const records=JSON.parse(localStorage.getItem("doaRecords")||"[]");
+ const records=JSON.parse(
+  localStorage.getItem("doaRecords")||"[]"
+ );
+
  records.push({
   text:value,
   date:new Date().toLocaleString()
  });
+
  localStorage.setItem("doaRecords",JSON.stringify(records));
  loadRecords();
 }
 
 function saveRecord(){
  const input=document.getElementById("recordInput");
- if(!input.value.trim())return;
+
+ if(!input.value.trim()) return;
+
  addRecord(input.value.trim());
  input.value="";
  reply("Your record has been saved.");
 }
 
 function loadRecords(){
- const records=JSON.parse(localStorage.getItem("doaRecords")||"[]");
+ const records=JSON.parse(
+  localStorage.getItem("doaRecords")||"[]"
+ );
+
  const list=document.getElementById("recordList");
 
  if(!records.length){
@@ -404,18 +572,34 @@ function loadRecords(){
  <div class="record">
  <strong>${escapeHTML(r.text)}</strong><br>
  <small>${escapeHTML(r.date)}</small><br>
- <button class="delete" onclick="deleteRecord(${i})">Delete</button>
+ <button class="delete" onclick="deleteRecord(${i})">
+ Delete
+ </button>
  </div>
  `).join("");
 }
 
+function escapeHTML(text){
+ return String(text).replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ })[c]);
+}
+
 function deleteRecord(index){
- const records=JSON.parse(localStorage.getItem("doaRecords")||"[]");
+ const records=JSON.parse(
+  localStorage.getItem("doaRecords")||"[]"
+ );
+
  records.splice(index,1);
+
  localStorage.setItem("doaRecords",JSON.stringify(records));
  loadRecords();
 }
- 
+
 loadRecords();
 </script>
 
