@@ -4,195 +4,235 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOA | Manage Your Money</title>
+<title>DOA | Personal Financial Assistant</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f5f9;color:#17243a}
-header{background:#101d32;color:white;padding:22px}
-header h1{margin:0;color:#e6bd65;font-size:27px}
-header p{margin:7px 0 0;color:#c6ced9}
-main{max-width:1050px;margin:auto;padding:18px}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f5f8;color:#172033}
+header{background:#102b46;color:white;padding:24px 18px}
+header h1{margin:0;font-size:28px;letter-spacing:2px}
+header p{margin:7px 0 0;color:#c9d6e3}
+main{max-width:900px;margin:auto;padding:18px}
 h2{font-size:19px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.card{background:white;padding:17px;border-radius:13px;box-shadow:0 2px 10px #0000000a}
-.card small{color:#718096}
-.amount{font-size:23px;font-weight:bold;margin-top:9px}
-.gold{color:#bd913b}
-.green{color:#168451}
-.red{color:#d64b4b}
-input,select,button{width:100%;padding:13px;margin:6px 0;border:1px solid #dce1e9;border-radius:8px;font-size:15px}
-button{background:#14243c;color:white;border:0;font-weight:bold;cursor:pointer}
-button:hover{background:#263c5e}
-.record{border-bottom:1px solid #eee;padding:13px 0;display:flex;justify-content:space-between;gap:10px}
-.record small{color:#718096}
-.section{margin-top:22px}
-footer{text-align:center;padding:25px;color:#778397;font-size:12px}
-@media(max-width:500px){main{padding:12px}.amount{font-size:19px}}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:white;padding:16px 12px;border-radius:12px;box-shadow:0 2px 9px #0000000c}
+.card small{color:#64748b}
+.card strong{display:block;margin-top:10px;font-size:18px;overflow-wrap:anywhere}
+.green{color:#13834b}
+.red{color:#d33b42}
+section{background:white;padding:18px;border-radius:12px;margin-top:18px}
+input,select,textarea{width:100%;padding:13px;margin:7px 0 13px;border:1px solid #ccd5df;border-radius:8px;font-size:15px}
+button{background:#123c60;color:white;border:0;padding:13px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:hover{background:#20577f}
+.delete{background:#b8323b;padding:7px 10px;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:11px 6px;border-bottom:1px solid #e5eaf0}
+th{color:#64748b}
+.empty{text-align:center;color:#7a8797;padding:20px}
+footer{text-align:center;color:#8290a0;padding:25px}
+@media(max-width:520px){
+.cards{grid-template-columns:1fr}
+.card strong{font-size:20px}
+table{font-size:12px}
+}
 </style>
 </head>
 <body>
-
 <header>
 <h1>DOA</h1>
-<p>Manage Your Money | Personal Financial Assistant</p>
+<p>Personal Financial Assistant</p>
 </header>
 
 <main>
 <h2>Financial Overview</h2>
-
-<div class="grid">
-<div class="card">
-<small>Total Balance</small>
-<div class="amount gold" id="balance">UGX 0</div>
-</div>
+<div class="cards">
 <div class="card">
 <small>Total Income</small>
-<div class="amount green" id="income">UGX 0</div>
+<strong class="green" id="income">UGX 0</strong>
 </div>
 <div class="card">
-<small>Total Expenditure</small>
-<div class="amount red" id="expense">UGX 0</div>
+<small>Total Expenses</small>
+<strong class="red" id="expenses">UGX 0</strong>
 </div>
 <div class="card">
-<small>Transactions</small>
-<div class="amount" id="count">0</div>
+<small>Available Balance</small>
+<strong id="balance">UGX 0</strong>
 </div>
 </div>
 
-<div class="section card">
+<section>
 <h2>Record a Transaction</h2>
-
 <form id="transactionForm">
+<label>Transaction type</label>
 <select id="type" required>
 <option value="income">Income</option>
-<option value="expense">Expenditure</option>
+<option value="expense">Expense</option>
 </select>
 
-<select id="account" required>
-<option value="Personal">Personal Finance</option>
-<option value="Business">Business Finance</option>
-</select>
+<label>Amount (UGX)</label>
+<input type="number" id="amount" min="1" step="1" placeholder="Enter amount" required>
 
-<input id="description" placeholder="Description" required>
-
-<input id="amount" type="number" min="1" step="any"
-placeholder="Amount in UGX" required>
-
-<select id="category">
+<label>Category</label>
+<select id="category" required>
 <option>Salary</option>
 <option>Business</option>
 <option>Sales</option>
 <option>Food</option>
 <option>Transport</option>
 <option>Rent</option>
-<option>Education</option>
-<option>Medical</option>
-<option>Shopping</option>
 <option>Utilities</option>
+<option>Education</option>
+<option>Health</option>
+<option>Shopping</option>
 <option>Other</option>
 </select>
 
-<input id="date" type="date" required>
+<label>Description</label>
+<input type="text" id="description" placeholder="What was this transaction for?">
+
+<label>Date</label>
+<input type="date" id="date" required>
 
 <button type="submit">Save Transaction</button>
 </form>
-</div>
+</section>
 
-<div class="section card">
+<section>
 <h2>Transaction History</h2>
-<div id="transactions">No transactions recorded yet.</div>
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Type</th>
+<th>Category</th>
+<th>Amount</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="records">
+<tr><td colspan="5" class="empty">No transactions recorded yet.</td></tr>
+</tbody>
+</table>
 </div>
+</section>
 
-<div class="section card">
-<h2>DOA Financial Assistant</h2>
-<p>Your financial management starts here. Record your income and expenditure to build your financial history.</p>
-<p class="gold"><b>DOA — Your Money. Your Control.</b></p>
-</div>
+<section>
+<h2>Financial Report</h2>
+<p id="report">Start recording transactions to see your financial report.</p>
+<button onclick="exportData()">Export Records (CSV)</button>
+</section>
 
 </main>
 
-<footer>
-DOA Personal Financial Assistant | Version 1.0
-</footer>
+<footer>DOA Personal Financial Assistant · Manage your money wisely.</footer>
 
 <script>
-const storageKey = "doa_transactions";
-let transactions = JSON.parse(localStorage.getItem(storageKey) || "[]");
+let transactions = [];
+try {
+ transactions = JSON.parse(localStorage.getItem("doa_transactions") || "[]");
+ if (!Array.isArray(transactions)) transactions = [];
+} catch(e) { transactions = []; }
 
-const money = value => "UGX " + new Intl.NumberFormat("en-UG").format(value);
+const money = n => "UGX " + Math.round(n).toLocaleString("en-UG");
 
-function save(){
-localStorage.setItem(storageKey,JSON.stringify(transactions));
-render();
+function save() {
+ localStorage.setItem("doa_transactions", JSON.stringify(transactions));
+ render();
 }
 
-function render(){
-let income = transactions
-.filter(t=>t.type==="income")
-.reduce((s,t)=>s+t.amount,0);
+function render() {
+ const income = transactions.filter(t=>t.type==="income")
+ .reduce((s,t)=>s+t.amount,0);
+ const expenses = transactions.filter(t=>t.type==="expense")
+ .reduce((s,t)=>s+t.amount,0);
 
-let expense = transactions
-.filter(t=>t.type==="expense")
-.reduce((s,t)=>s+t.amount,0);
+ document.getElementById("income").textContent=money(income);
+ document.getElementById("expenses").textContent=money(expenses);
+ document.getElementById("balance").textContent=money(income-expenses);
 
-document.getElementById("balance").textContent=money(income-expense);
-document.getElementById("income").textContent=money(income);
-document.getElementById("expense").textContent=money(expense);
-document.getElementById("count").textContent=transactions.length;
+ const records=document.getElementById("records");
+ records.innerHTML="";
 
-let list=document.getElementById("transactions");
-list.innerHTML="";
+ if(!transactions.length) {
+  records.innerHTML='<tr><td colspan="5" class="empty">No transactions recorded yet.</td></tr>';
+ } else {
+  [...transactions].reverse().forEach(t=>{
+   const tr=document.createElement("tr");
+   const values=[t.date,t.type,t.category,
+    (t.type==="income"?"+":"-")+money(t.amount)];
+   values.forEach((v,i)=>{
+    const td=document.createElement("td");
+    td.textContent=v;
+    if(i===3) td.style.color=t.type==="income"?"#13834b":"#d33b42";
+    tr.appendChild(td);
+   });
+   const action=document.createElement("td");
+   const btn=document.createElement("button");
+   btn.className="delete";
+   btn.textContent="Delete";
+   btn.onclick=()=>removeTransaction(t.id);
+   action.appendChild(btn);
+   tr.appendChild(action);
+   records.appendChild(tr);
+  });
+ }
 
-if(!transactions.length){
-list.textContent="No transactions recorded yet.";
-return;
-}
-
-[...transactions].reverse().forEach(t=>{
-let div=document.createElement("div");
-div.className="record";
-
-let details=document.createElement("div");
-let title=document.createElement("b");
-title.textContent=t.description;
-let info=document.createElement("small");
-info.textContent=t.account+" | "+t.category+" | "+t.date;
-details.append(title,document.createElement("br"),info);
-
-let value=document.createElement("b");
-value.className=t.type==="income"?"green":"red";
-value.textContent=(t.type==="income"?"+":"-")+money(t.amount);
-
-div.append(details,value);
-list.append(div);
-});
+ document.getElementById("report").textContent=
+ "You have recorded "+transactions.length+
+ " transactions. Your current balance is "+money(income-expenses)+
+ ". Your total income is "+money(income)+
+ " and your total expenses are "+money(expenses)+".";
 }
 
 document.getElementById("date").value=
-new Date().toISOString().slice(0,10);
+ new Date().toISOString().slice(0,10);
 
-document.getElementById("transactionForm")
-.addEventListener("submit",function(e){
-e.preventDefault();
-
-let transaction={
-type:document.getElementById("type").value,
-account:document.getElementById("account").value,
-description:document.getElementById("description").value,
-amount:Number(document.getElementById("amount").value),
-category:document.getElementById("category").value,
-date:document.getElementById("date").value
-};
-
-transactions.push(transaction);
-save();
-this.reset();
-document.getElementById("date").value=
-new Date().toISOString().slice(0,10);
+document.getElementById("transactionForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const amount=Number(document.getElementById("amount").value);
+ if(!Number.isFinite(amount)||amount<=0) {
+  alert("Enter a valid amount.");
+  return;
+ }
+ transactions.push({
+  id:Date.now()+Math.random(),
+  type:document.getElementById("type").value,
+  amount:amount,
+  category:document.getElementById("category").value,
+  description:document.getElementById("description").value,
+  date:document.getElementById("date").value
+ });
+ save();
+ e.target.reset();
+ document.getElementById("date").value=
+  new Date().toISOString().slice(0,10);
+ alert("Transaction saved successfully.");
 });
 
+function removeTransaction(id) {
+ if(confirm("Delete this transaction?")) {
+  transactions=transactions.filter(t=>t.id!==id);
+  save();
+ }
+}
+
+function exportData() {
+ const rows=[["Date","Type","Category","Description","Amount"]];
+ transactions.forEach(t=>rows.push([
+  t.date,t.type,t.category,t.description,t.amount
+ ]));
+ const csv=rows.map(r=>r.map(v=>
+  '"'+String(v??"").replace(/"/g,'""')+'"'
+ ).join(",")).join("\n");
+ const blob=new Blob([csv],{type:"text/csv"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="DOA-financial-records.csv";
+ a.click();
+ URL.revokeObjectURL(url);
+}
 render();
 </script>
 </body>
 </html>
-
