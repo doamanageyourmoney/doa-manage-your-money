@@ -4,162 +4,264 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080d18">
-<title>DOA 3.0 | Personal Assistant</title>
+<meta name="theme-color" content="#071426">
+<title>DOA 3.0 - Your Personal Assistant</title>
 
 <style>
 :root {
-  --bg:#080d18;
-  --panel:#101a2b;
-  --panel2:#142138;
-  --blue:#548cff;
-  --cyan:#54d8e8;
-  --text:#f4f7ff;
-  --muted:#91a0b8;
-  --border:rgba(255,255,255,.09);
+  --bg:#071426;
+  --panel:#0d2036;
+  --panel2:#102943;
+  --cyan:#35d6ee;
+  --blue:#3188ff;
+  --text:#edf6ff;
+  --muted:#91a9c2;
+  --border:rgba(151,190,225,.16);
 }
-*{box-sizing:border-box}
-body{
+
+* { box-sizing:border-box; }
+
+body {
   margin:0;
-  font-family:Inter,Arial,sans-serif;
-  background:radial-gradient(ellipse at 50% -20%,#1c3761 0%,#080d18 58%);
+  min-height:100vh;
+  background:radial-gradient(ellipse at top,#12365a,#071426 65%);
   color:var(--text);
-  min-height:100vh;
+  font-family:Arial, sans-serif;
 }
-button,input{font:inherit}
-button{cursor:pointer}
-.app{
-  min-height:100vh;
+
+.app {
+  max-width:950px;
+  height:100vh;
+  height:100dvh;
+  margin:auto;
+  padding:0 15px;
   display:flex;
   flex-direction:column;
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
 }
-header{
+
+header {
+  min-height:70px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:10px 0 22px;
   border-bottom:1px solid var(--border);
 }
-.brand{display:flex;align-items:center;gap:12px}
-.logo{
-  width:46px;height:46px;border-radius:15px;
-  display:grid;place-items:center;
-  background:linear-gradient(135deg,#548cff,#42d4e7);
-  color:white;font-size:22px;font-weight:900;
-  box-shadow:0 5px 30px #367cff55;
+
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
-.brand h2{margin:0;font-size:21px;letter-spacing:2px}
-.brand small{display:block;color:var(--muted);margin-top:4px}
-.status{
-  font-size:12px;color:#73e6bb;
-  background:#14372e;padding:8px 12px;
-  border-radius:30px;
+
+.logo {
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:linear-gradient(135deg,#65f2f4,#258bff);
+  color:#061827;
+  font-size:22px;
+  font-weight:bold;
 }
-.status:before{content:"● ";font-size:9px}
-main{
-  flex:1;display:flex;flex-direction:column;
-  width:100%;max-width:850px;margin:0 auto;
+
+.brand-name {
+  font-size:19px;
+  font-weight:bold;
 }
-.welcome{text-align:center;padding:65px 15px 35px}
-.orb{
-  width:92px;height:92px;border-radius:28px;
-  margin:0 auto 25px;
-  display:grid;place-items:center;
-  font-size:39px;
-  background:linear-gradient(145deg,#264f8e,#10213d);
-  border:1px solid #6da2ff55;
-  box-shadow:0 0 60px #367cff35;
+
+.brand-sub {
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:1px;
 }
-.welcome h1{font-size:clamp(29px,6vw,43px);margin:0 0 13px}
-.welcome h1 span{
-  background:linear-gradient(90deg,#73a8ff,#57dce7);
-  -webkit-background-clip:text;color:transparent;
+
+button {
+  cursor:pointer;
 }
-.welcome p{
-  color:var(--muted);font-size:15px;
-  line-height:1.7;max-width:480px;margin:auto;
+
+.new-chat {
+  padding:10px 13px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--panel);
+  color:var(--text);
 }
-.suggestions{
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:12px;margin:0 auto 25px;width:100%;
+
+main {
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
 }
-.suggestion{
-  text-align:left;background:#101b2d;
-  border:1px solid var(--border);color:var(--text);
-  padding:17px;border-radius:15px;
-  transition:.2s;
+
+.welcome {
+  margin:auto;
+  text-align:center;
+  max-width:600px;
+  padding:25px 10px;
 }
-.suggestion:hover{border-color:#548cff;transform:translateY(-2px)}
-.suggestion strong{display:block;font-size:14px;margin-bottom:7px}
-.suggestion small{color:var(--muted);font-size:12px}
-#chat{
-  flex:1;display:none;flex-direction:column;
-  gap:18px;padding:20px 0;
+
+.welcome-icon {
+  width:70px;
+  height:70px;
+  margin:0 auto 20px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  background:var(--panel2);
+  border:1px solid #35d6ee55;
+  color:var(--cyan);
+  font-size:30px;
+  font-weight:bold;
 }
-.message{display:flex;gap:11px;align-items:flex-start}
-.avatar{
-  flex-shrink:0;width:35px;height:35px;
-  display:grid;place-items:center;border-radius:12px;
-  background:#1b3153;font-size:14px;font-weight:bold;
+
+.welcome h1 {
+  font-size:30px;
+  margin:0 0 10px;
 }
-.message.user .avatar{background:#2854a0}
-.bubble{
-  max-width:85%;padding:14px 16px;
+
+.welcome p {
+  color:var(--muted);
+  margin:0;
+}
+
+.suggestions {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:9px;
+  margin-top:25px;
+}
+
+.suggestion {
+  padding:10px 13px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--panel);
+  color:#d5eaff;
+}
+
+.messages {
+  flex:1;
+  overflow-y:auto;
+  padding:22px 2px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.message {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  max-width:90%;
+}
+
+.message.user {
+  align-self:flex-end;
+  flex-direction:row-reverse;
+}
+
+.avatar {
+  width:32px;
+  height:32px;
+  flex-shrink:0;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:#123b55;
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:bold;
+}
+
+.user .avatar {
+  background:#1d4e7d;
+  color:white;
+}
+
+.bubble {
+  padding:12px 15px;
+  border:1px solid var(--border);
+  background:var(--panel);
   border-radius:5px 16px 16px 16px;
-  background:#142138;border:1px solid var(--border);
-  font-size:14px;line-height:1.7;
-  white-space:pre-wrap;overflow-wrap:anywhere;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  line-height:1.6;
 }
-.message.user{flex-direction:row-reverse}
-.message.user .bubble{
-  background:linear-gradient(135deg,#2454a0,#193b70);
+
+.user .bubble {
+  background:#123b60;
   border-radius:16px 5px 16px 16px;
 }
-.typing{color:var(--cyan);font-size:13px;padding:8px}
-.composer{
-  position:sticky;bottom:0;
-  padding:14px 0 8px;
-  background:linear-gradient(transparent,#080d18 20%);
+
+.error {
+  color:#ff9999;
 }
-.inputbox{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;
-  background:#121e31;border:1px solid #314866;
-  border-radius:19px;
-  box-shadow:0 12px 40px #0005;
+
+.composer-wrap {
+  padding:12px 0 18px;
 }
-.inputbox:focus-within{border-color:var(--blue)}
-.inputbox input{
-  flex:1;min-width:0;background:transparent;
-  border:0;outline:0;color:white;
-  padding:10px 3px;font-size:15px;
+
+.composer {
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  padding:10px;
+  border:1px solid #31516e;
+  border-radius:18px;
+  background:var(--panel);
 }
-.inputbox input::placeholder{color:#8292ab}
-.action{
-  width:43px;height:43px;border:0;border-radius:13px;
-  color:white;background:#263c5c;font-size:18px;
+
+textarea {
+  flex:1;
+  min-height:42px;
+  max-height:150px;
+  resize:none;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:var(--text);
+  font-size:15px;
+  padding:10px 6px;
 }
-.send{
-  background:linear-gradient(135deg,#548cff,#3970d6);
+
+textarea::placeholder {
+  color:#7892ad;
 }
-.send:disabled{opacity:.45;cursor:not-allowed}
-.hint{text-align:center;color:#73839b;font-size:11px;margin-top:12px}
-footer{text-align:center;color:#63728a;font-size:11px;padding:18px 0}
-.newchat{
-  color:#c5d7f7;background:#172640;
-  border:1px solid var(--border);
-  padding:10px 14px;border-radius:12px;font-size:12px;
+
+.send {
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(135deg,#62edf0,#318dff);
+  color:#061827;
+  font-size:22px;
+  font-weight:bold;
 }
-@media(max-width:550px){
- .app{padding:14px}
- header{padding-bottom:16px}
- .brand h2{font-size:18px}
- .welcome{padding-top:48px}
- .suggestions{grid-template-columns:1fr}
- .bubble{max-width:88%;font-size:13px}
+
+.send:disabled {
+  opacity:.5;
+}
+
+.footnote {
+  text-align:center;
+  color:#7189a3;
+  font-size:11px;
+  padding-top:8px;
+}
+
+.hidden {
+  display:none !important;
+}
+
+@media(max-width:600px) {
+  .app { padding:0 12px; }
+  .message { max-width:96%; }
+  .welcome h1 { font-size:26px; }
+  .suggestion { font-size:12px; }
 }
 </style>
 </head>
@@ -171,179 +273,467 @@ footer{text-align:center;color:#63728a;font-size:11px;padding:18px 0}
   <div class="brand">
     <div class="logo">D</div>
     <div>
-      <h2>DOA</h2>
-      <small>PERSONAL AI ASSISTANT · 3.0</small>
+      <div class="brand-name">DOA <span style="color:#35d6ee">3.0</span></div>
+      <div class="brand-sub">YOUR PERSONAL ASSISTANT</div>
     </div>
   </div>
-  <button class="newchat" onclick="newChat()">＋ New chat</button>
+
+  <button class="new-chat" id="newChat">＋ New chat</button>
 </header>
 
 <main>
-  <section class="welcome" id="welcome">
-    <div class="orb">✦</div>
-    <h1>Welcome to <span>DOA</span></h1>
-    <p>Your best personal assistant. Think, plan, create and get things done with intelligent assistance.</p>
-  </section>
 
-  <section class="suggestions" id="suggestions">
-    <button class="suggestion" onclick="ask('Help me plan my day')">
-      <strong>✦ Plan my day</strong>
-      <small>Organise tasks and priorities</small>
-    </button>
-    <button class="suggestion" onclick="ask('Help me solve a problem')">
-      <strong>◈ Solve a problem</strong>
-      <small>Think through difficult decisions</small>
-    </button>
-    <button class="suggestion" onclick="ask('Help me write something professionally')">
-      <strong>✎ Writing assistant</strong>
-      <small>Create professional content</small>
-    </button>
-    <button class="suggestion" onclick="ask('Give me business ideas')">
-      <strong>⌘ Business ideas</strong>
-      <small>Explore opportunities and strategies</small>
-    </button>
-  </section>
+<section class="welcome" id="welcome">
+  <div class="welcome-icon">D</div>
+  <h1>Welcome to DOA</h1>
+  <p>Your best personal assistant. What can I help you with today?</p>
 
-  <section id="chat"></section>
-
-  <div class="composer">
-    <div class="inputbox">
-      <button class="action" title="Voice input coming later" onclick="alert('Microphone upgrade coming soon.')">🎙</button>
-      <input id="prompt" type="text" placeholder="Ask DOA anything..." autocomplete="off">
-      <button class="action send" id="send" onclick="sendMessage()">➤</button>
-    </div>
-    <div class="hint">DOA 3.0 · Your thoughts, your assistant</div>
+  <div class="suggestions">
+    <button class="suggestion" data-prompt="Help me plan my day">Plan my day</button>
+    <button class="suggestion" data-prompt="Help me manage my money">Manage my money</button>
+    <button class="suggestion" data-prompt="Help me grow my business">Grow my business</button>
+    <button class="suggestion" data-prompt="Explain something to me clearly">Learn something</button>
   </div>
+</section>
+
+<section class="messages hidden" id="messages"></section>
+
 </main>
 
-<footer>DOA 3.0 · PERSONAL INTELLIGENCE</footer>
+<div class="composer-wrap">
+  <form class="composer" id="chatForm">
+    <textarea
+      id="messageInput"
+      rows="1"
+      placeholder="Message DOA..."
+      aria-label="Message DOA"
+    ></textarea>
+
+    <button class="send" id="sendButton" type="submit">↑</button>
+  </form>
+
+  <div class="footnote">
+    DOA can make mistakes. Check important information.
+  </div>
+</div>
+
 </div>
 
 <script>
-const WORKER_URL =
- "https://soft-frog-4cf8.doa2026app.workers.dev/";
+"use strict";
 
-const chat = document.getElementById("chat");
-const promptBox = document.getElementById("prompt");
-const sendButton = document.getElementById("send");
-const welcome = document.getElementById("welcome");
-const suggestions = document.getElementById("suggestions");
+/* EXISTING DOA CLOUDFLARE WORKER */
+const WORKER_URL =
+"https://soft-frog-4cf8.doa2026app.workers.dev/";
+
+const form = document.getElementById("chatForm");
+const input = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const messagesEl = document.getElementById("messages");
+const welcomeEl = document.getElementById("welcome");
+const newChatButton = document.getElementById("newChat");
 
 let history = [];
 let busy = false;
 
-function showChat(){
- welcome.style.display="none";
- suggestions.style.display="none";
- chat.style.display="flex";
+function showConversation() {
+  welcomeEl.classList.add("hidden");
+  messagesEl.classList.remove("hidden");
 }
 
-function addMessage(role,text){
- const row=document.createElement("div");
- row.className="message "+role;
+function addMessage(role, text) {
+  showConversation();
 
- const avatar=document.createElement("div");
- avatar.className="avatar";
- avatar.textContent=role==="user"?"Y":"D";
+  const row = document.createElement("div");
+  row.className = "message " + role;
 
- const bubble=document.createElement("div");
- bubble.className="bubble";
- bubble.textContent=text;
+  const avatar = document.createElement("div");
+  avatar.className = "avatar";
+  avatar.textContent = role === "user" ? "YOU" : "D";
 
- row.append(avatar,bubble);
- chat.appendChild(row);
- chat.scrollTop=chat.scrollHeight;
- return row;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text || "";
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  return bubble;
 }
 
-function ask(text){
- promptBox.value=text;
- sendMessage();
+function setBusy(value) {
+  busy = value;
+  sendButton.disabled = value;
+  input.disabled = value;
+  sendButton.textContent = value ? "…" : "↑";
 }
 
-async function sendMessage(){
- const message=promptBox.value.trim();
- if(!message || busy)return;
+function extractText(data) {
+  if (data == null) return "";
 
- showChat();
- addMessage("user",message);
- promptBox.value="";
- busy=true;
- sendButton.disabled=true;
+  if (typeof data === "string") {
+    return data;
+  }
 
- const typing=addMessage("assistant","DOA is thinking...");
- typing.querySelector(".bubble").classList.add("typing");
+  if (Array.isArray(data)) {
+    return data.map(extractText).join("");
+  }
 
- try{
-   const response=await fetch(WORKER_URL,{
-     method:"POST",
-     headers:{"Content-Type":"application/json"},
-     body:JSON.stringify({
-       message:message,
-       prompt:message,
-       history:history,
-       messages:history
-     })
-   });
+  if (typeof data !== "object") {
+    return "";
+  }
 
-   const raw=await response.text();
-   let data;
+  const directFields = [
+    "reply",
+    "response",
+    "answer",
+    "text",
+    "output",
+    "delta",
+    "content"
+  ];
 
-   try{
-     data=JSON.parse(raw);
-   }catch{
-     throw new Error("The AI server returned an unexpected response.");
-   }
+  for (const field of directFields) {
+    if (typeof data[field] === "string") {
+      return data[field];
+    }
+  }
 
-   if(!response.ok){
-     throw new Error(data.error || data.message || "Server error: "+response.status);
-   }
+  if (data.candidates?.[0]?.content?.parts) {
+    return data.candidates[0].content.parts
+      .map(part => part.text || "")
+      .join("");
+  }
 
-   const answer=typeof data==="string"
-     ?data
-     :(data.reply || data.response || data.answer ||
-       data.text || data.output ||
-       data.result?.response || data.result?.text);
+  if (data.choices?.[0]?.delta?.content) {
+    return data.choices[0].delta.content;
+  }
 
-   if(!answer){
-     throw new Error(data.error || "No answer was received from the AI server.");
-   }
+  if (data.choices?.[0]?.message?.content) {
+    return data.choices[0].message.content;
+  }
 
-   typing.querySelector(".bubble").textContent=answer;
-   typing.querySelector(".bubble").classList.remove("typing");
+  if (data.result) return extractText(data.result);
+  if (data.data) return extractText(data.data);
 
-   history.push(
-     {role:"user",content:message},
-     {role:"assistant",content:answer}
-   );
-
- }catch(error){
-   typing.querySelector(".bubble").textContent=
-     "I'm having trouble connecting right now. Please try again.\n\n"+error.message;
-   typing.querySelector(".bubble").classList.remove("typing");
- }finally{
-   busy=false;
-   sendButton.disabled=false;
-   promptBox.focus();
-   chat.scrollTop=chat.scrollHeight;
- }
+  return "";
 }
 
-function newChat(){
- history=[];
- chat.innerHTML="";
- chat.style.display="none";
- welcome.style.display="block";
- suggestions.style.display="grid";
- promptBox.value="";
+/*
+  Supports:
+  1. Normal JSON responses
+  2. Server-Sent Events (SSE)
+  3. Multiple data: {...} chunks
+  4. Plain text stream chunks
+*/
+
+async function readWorkerResponse(response, onUpdate) {
+  const contentType =
+    (response.headers.get("content-type") || "").toLowerCase();
+
+  /* NORMAL JSON RESPONSE */
+  if (
+    contentType.includes("application/json") ||
+    !response.body ||
+    !response.body.getReader
+  ) {
+    const raw = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      throw new Error(
+        "The server response was not valid JSON or a readable stream."
+      );
+    }
+
+    if (data.success === false || data.error) {
+      throw new Error(
+        data.error || data.details || "The AI server reported an error."
+      );
+    }
+
+    const answer = extractText(data);
+
+    if (!answer) {
+      throw new Error("The AI server returned an empty answer.");
+    }
+
+    onUpdate(answer);
+    return answer;
+  }
+
+  /* STREAMING RESPONSE */
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+
+  let buffer = "";
+  let fullAnswer = "";
+  let isSSE = contentType.includes("text/event-stream");
+
+  function processSSEEvent(event) {
+    const lines = event.split(/\r?\n/);
+
+    const dataLines = lines
+      .filter(line => line.startsWith("data:"))
+      .map(line => line.slice(5).trimStart());
+
+    if (!dataLines.length) return;
+
+    const dataText = dataLines.join("\n").trim();
+
+    if (!dataText || dataText === "[DONE]") return;
+
+    let chunk = "";
+
+    try {
+      const parsed = JSON.parse(dataText);
+
+      if (parsed.error) {
+        throw new Error(parsed.error);
+      }
+
+      chunk = extractText(parsed);
+
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        chunk = dataText;
+      } else {
+        throw error;
+      }
+    }
+
+    if (chunk) {
+      fullAnswer += chunk;
+      onUpdate(fullAnswer);
+    }
+  }
+
+  while (true) {
+    const result = await reader.read();
+
+    if (result.done) break;
+
+    buffer += decoder.decode(result.value, { stream: true });
+
+    if (isSSE) {
+      let boundary;
+
+      while ((boundary = buffer.search(/\r?\n\r?\n/)) !== -1) {
+        const event = buffer.slice(0, boundary);
+        const separator = buffer.match(/\r?\n\r?\n/)[0];
+
+        buffer = buffer.slice(boundary + separator.length);
+
+        processSSEEvent(event);
+      }
+
+    } else {
+      /*
+        Some Workers send newline-separated JSON chunks.
+        Others send a single JSON response in chunks.
+      */
+      let lines = buffer.split(/\r?\n/);
+      buffer = lines.pop() || "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+
+        if (!trimmed) continue;
+
+        if (trimmed.startsWith("data:")) {
+          processSSEEvent(trimmed);
+          continue;
+        }
+
+        try {
+          const parsed = JSON.parse(trimmed);
+
+          if (parsed.error) {
+            throw new Error(parsed.error);
+          }
+
+          const chunk = extractText(parsed);
+
+          if (chunk) {
+            fullAnswer += chunk;
+            onUpdate(fullAnswer);
+          }
+
+        } catch (error) {
+          if (!(error instanceof SyntaxError)) throw error;
+        }
+      }
+    }
+  }
+
+  buffer += decoder.decode();
+
+  if (buffer.trim()) {
+    if (buffer.trim().startsWith("data:")) {
+      processSSEEvent(buffer);
+    } else {
+      try {
+        const parsed = JSON.parse(buffer.trim());
+
+        if (parsed.error) {
+          throw new Error(parsed.error);
+        }
+
+        const finalText = extractText(parsed);
+
+        if (finalText && !fullAnswer) {
+          fullAnswer = finalText;
+          onUpdate(fullAnswer);
+        }
+      } catch (error) {
+        if (!(error instanceof SyntaxError)) throw error;
+      }
+    }
+  }
+
+  if (!fullAnswer) {
+    throw new Error(
+      "The Worker stream ended without a readable answer."
+    );
+  }
+
+  return fullAnswer;
 }
 
-promptBox.addEventListener("keydown",function(e){
- if(e.key==="Enter" && !e.shiftKey){
-   e.preventDefault();
-   sendMessage();
- }
+async function sendMessage(message) {
+  if (!message || busy) return;
+
+  addMessage("user", message);
+
+  const previousHistory = history.slice();
+
+  history.push({
+    role: "user",
+    text: message
+  });
+
+  input.value = "";
+  resizeInput();
+  setBusy(true);
+
+  const answerBubble = addMessage(
+    "assistant",
+    "DOA is thinking..."
+  );
+
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream"
+      },
+      body: JSON.stringify({
+        message: message,
+        prompt: message,
+        history: previousHistory,
+        messages: previousHistory
+      })
+    });
+
+    if (!response.ok) {
+      const raw = await response.text();
+
+      let detail = raw;
+
+      try {
+        const data = JSON.parse(raw);
+        detail =
+          data.error ||
+          data.details ||
+          data.message ||
+          raw;
+      } catch {}
+
+      throw new Error(
+        detail || "Worker error: " + response.status
+      );
+    }
+
+    answerBubble.textContent = "";
+
+    const answer = await readWorkerResponse(
+      response,
+      text => {
+        answerBubble.textContent = text;
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+    );
+
+    answerBubble.textContent = answer;
+
+    history.push({
+      role: "assistant",
+      text: answer
+    });
+
+  } catch (error) {
+    answerBubble.classList.add("error");
+
+    answerBubble.textContent =
+      "I'm having trouble connecting right now. " +
+      (error.message || "Please try again.");
+
+    history = previousHistory;
+  }
+
+  setBusy(false);
+  input.focus();
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function resizeInput() {
+  input.style.height = "auto";
+
+  input.style.height =
+    Math.min(input.scrollHeight, 150) + "px";
+}
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+
+  sendMessage(input.value.trim());
+});
+
+input.addEventListener("input", resizeInput);
+
+input.addEventListener("keydown", event => {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    form.requestSubmit();
+  }
+});
+
+document.querySelectorAll(".suggestion").forEach(button => {
+  button.addEventListener("click", () => {
+    sendMessage(button.dataset.prompt || "");
+  });
+});
+
+newChatButton.addEventListener("click", () => {
+  history = [];
+
+  messagesEl.replaceChildren();
+  messagesEl.classList.add("hidden");
+
+  welcomeEl.classList.remove("hidden");
+
+  input.value = "";
+  resizeInput();
+  input.focus();
 });
 </script>
+
 </body>
 </html>
