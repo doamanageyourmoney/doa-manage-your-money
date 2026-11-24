@@ -30,10 +30,7 @@ body {
 }
 
 button { cursor:pointer; }
-
 .hidden { display:none !important; }
-
-/* PAGE 1 - ORIGINAL DOA INTERFACE */
 
 .app {
   max-width:950px;
@@ -295,7 +292,7 @@ main {
   padding-top:5px;
 }
 
-/* PAGE 2 - GUEST TOOLS */
+/* EXISTING EMBEDDED GUEST TOOLS - LEFT IN PLACE */
 
 #page2 {
   min-height:100vh;
@@ -360,9 +357,7 @@ main {
   text-align:left;
 }
 
-.guest-tool-card:active {
-  transform:scale(.98);
-}
+.guest-tool-card:active { transform:scale(.98); }
 
 .guest-tool-icon {
   display:block;
@@ -388,8 +383,6 @@ main {
   font-size:12px;
   padding:15px 5px;
 }
-
-/* GUEST TOOL WINDOW */
 
 .guest-overlay {
   position:fixed;
@@ -458,9 +451,7 @@ main {
   font-weight:bold;
 }
 
-.guest-box p {
-  line-height:1.5;
-}
+.guest-box p { line-height:1.5; }
 
 @media(max-width:600px) {
   .app { padding:0 12px; }
@@ -476,8 +467,6 @@ main {
 </head>
 
 <body>
-
-<!-- PAGE 1: EXISTING DOA AI ASSISTANT -->
 
 <section id="page1">
 <div class="app">
@@ -519,7 +508,6 @@ main {
 </main>
 
 <div class="composer-wrap">
-
   <form class="composer" id="chatForm">
 
     <textarea
@@ -553,16 +541,14 @@ main {
   <div class="footnote">
     DOA can make mistakes. Check important information.
   </div>
-
 </div>
+
 </div>
 </section>
 
-
-<!-- PAGE 2: GUEST TOOLS -->
+<!-- EMBEDDED PAGE 2 MARKUP RETAINED FOR NOW -->
 
 <section id="page2" class="hidden">
-
 <div class="guest-app">
 
   <div class="guest-header">
@@ -570,14 +556,10 @@ main {
       <div class="guest-heading">
         DOA <span style="color:#35d6ee">GUEST TOOLS</span>
       </div>
-      <div class="guest-subheading">
-        Your everyday personal tools
-      </div>
+      <div class="guest-subheading">Your everyday personal tools</div>
     </div>
 
-    <button class="page-nav" id="backPage1">
-      ← Back to DOA
-    </button>
+    <button class="page-nav" id="backPage1">← Back to DOA</button>
   </div>
 
   <div class="guest-intro">
@@ -620,28 +602,16 @@ main {
     Guest tools store their information on this device.
     They do not save transactions to your DOA financial account.
   </div>
-
 </div>
-
 </section>
 
-
-<!-- GUEST TOOL POPUP -->
-
 <div class="guest-overlay" id="guestOverlay">
-
   <div class="guest-box">
-
     <button class="guest-close" id="guestClose">✕ Close</button>
-
     <h2 id="guestTitle">DOA Tools</h2>
-
     <div id="guestContent"></div>
-
   </div>
-
 </div>
-
 
 <script>
 "use strict";
@@ -664,10 +634,14 @@ const micStatus = document.getElementById("micStatus");
 const page1 = document.getElementById("page1");
 const page2 = document.getElementById("page2");
 
+/* OPEN THE SEPARATE PAGE 2 FILE */
+
 document.getElementById("goPage2").addEventListener("click", () => {
-  page1.classList.add("hidden");
-  page2.classList.remove("hidden");
+  stopVoiceConversation();
+  window.location.href = "page2.html";
 });
+
+/* KEEP THE EMBEDDED BACK BUTTON FUNCTIONAL */
 
 document.getElementById("backPage1").addEventListener("click", () => {
   page2.classList.add("hidden");
@@ -1028,10 +1002,77 @@ function speakReply(text) {
   speechSynthesis.speak(utterance);
 }
 
+/* PAGE 2 COMMAND DETECTOR - TEXT AND VOICE */
+
+function detectGuestToolCommand(message) {
+  const text = message.toLowerCase()
+    .replace(/[^\w\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (
+    /\b(open guest tools|open page 2|show guest tools|go to page 2|open tools)\b/.test(text)
+  ) {
+    return "home";
+  }
+
+  if (
+    /\b(plan my day|daily plan|my daily plan)\b/.test(text)
+  ) {
+    return "plan";
+  }
+
+  if (
+    /\b(reminders?|my reminders)\b/.test(text) &&
+    /\b(open|show|go to|take me to|launch|start|my reminders)\b/.test(text)
+  ) {
+    return "reminders";
+  }
+
+  if (
+    /\b(calculator|calculations)\b/.test(text) &&
+    /\b(open|show|go to|take me to|launch|start|my calculator|calculator)\b/.test(text)
+  ) {
+    return "calculator";
+  }
+
+  if (
+    /\b(expenditure|expenses?|spending)\b/.test(text) &&
+    /\b(open|show|go to|take me to|launch|start|my expenditure|my expenses|expenses|expenditure)\b/.test(text)
+  ) {
+    return "expenses";
+  }
+
+  if (
+    /\b(manage my money|help me manage my money|open my money|open money management)\b/.test(text)
+  ) {
+    return "home";
+  }
+
+  return null;
+}
+
 /* SEND MESSAGE TO EXISTING WORKER */
 
 async function sendMessage(message) {
-  if (!message || busy) return;
+  if (!message) return;
+
+  /* CHECK FOR GUEST TOOL COMMANDS BEFORE SENDING TO AI */
+
+  const requestedTool = detectGuestToolCommand(message);
+
+  if (requestedTool !== null) {
+    stopVoiceConversation();
+
+    const destination = requestedTool === "home"
+      ? "page2.html"
+      : "page2.html?tool=" + encodeURIComponent(requestedTool);
+
+    window.location.href = destination;
+    return;
+  }
+
+  if (busy) return;
 
   addMessage("user", message);
 
@@ -1378,11 +1419,7 @@ if (!window.isSecureContext) {
     "Microphone access requires a secure HTTPS website.";
 }
 
-
-/* ==========================================
-   DOA PAGE 2 - GUEST TOOLS
-   LOCAL DEVICE STORAGE
-========================================== */
+/* EXISTING EMBEDDED GUEST TOOL CODE RETAINED */
 
 (() => {
 
@@ -1412,14 +1449,12 @@ if (!window.isSecureContext) {
   const title = document.getElementById("guestTitle");
 
   function openTool(name) {
-
     overlay.style.display = "flex";
 
     if (name === "reminders") showReminders();
     if (name === "plan") showPlan();
     if (name === "expenses") showExpenses();
     if (name === "calculator") showCalculator();
-
   }
 
   function closeTool() {
@@ -1439,31 +1474,18 @@ if (!window.isSecureContext) {
     return div.innerHTML;
   }
 
-
-  /* REMINDERS */
-
   function showReminders() {
-
     title.textContent = "My Reminders";
 
     content.innerHTML = `
       <p>Create a reminder on this device.</p>
-
-      <input id="reminderText"
-        placeholder="What should you remember?">
-
-      <input id="reminderTime"
-        type="datetime-local">
-
-      <button class="primary" id="addReminder">
-        Add Reminder
-      </button>
-
+      <input id="reminderText" placeholder="What should you remember?">
+      <input id="reminderTime" type="datetime-local">
+      <button class="primary" id="addReminder">Add Reminder</button>
       <div id="reminderList"></div>
     `;
 
     function render() {
-
       const list = content.querySelector("#reminderList");
       const current = storage.get("reminders");
 
@@ -1471,202 +1493,119 @@ if (!window.isSecureContext) {
         ? current.map((item, i) => `
           <div class="guest-item">
             <strong>${safe(item.text)}</strong>
-
             <p>${safe(item.time || "No date selected")}</p>
-
             <button data-delete="${i}">Delete</button>
           </div>
         `).join("")
         : "<p>No reminders yet.</p>";
-
     }
 
     content.querySelector("#addReminder").onclick = () => {
-
       const text = content.querySelector("#reminderText").value.trim();
       const time = content.querySelector("#reminderTime").value;
 
-      if (!text) {
-        return alert("Enter a reminder.");
-      }
+      if (!text) return alert("Enter a reminder.");
 
       const current = storage.get("reminders");
-
       current.push({text, time});
-
       storage.save("reminders", current);
 
       render();
-
       content.querySelector("#reminderText").value = "";
       content.querySelector("#reminderTime").value = "";
-
     };
 
     content.querySelector("#reminderList").onclick = event => {
-
       if (event.target.dataset.delete === undefined) return;
 
       const current = storage.get("reminders");
-
       current.splice(Number(event.target.dataset.delete), 1);
-
       storage.save("reminders", current);
-
       render();
-
     };
 
     render();
-
   }
 
-
-  /* MY DAILY PLAN */
-
   function showPlan() {
-
     title.textContent = "Plan My Day";
 
     content.innerHTML = `
       <p>Organise what you want to do today.</p>
-
-      <input id="planTask"
-        placeholder="Add an activity">
-
-      <button class="primary" id="addPlan">
-        Add Activity
-      </button>
-
+      <input id="planTask" placeholder="Add an activity">
+      <button class="primary" id="addPlan">Add Activity</button>
       <div id="planList"></div>
     `;
 
     function render() {
-
       const items = storage.get("plan");
 
       content.querySelector("#planList").innerHTML =
         items.length
           ? items.map((item, i) => `
             <div class="guest-item">
-
               <label>
-                <input
-                  type="checkbox"
-                  data-done="${i}"
+                <input type="checkbox" data-done="${i}"
                   ${item.done ? "checked" : ""}
-                  style="width:auto"
-                >
-
+                  style="width:auto">
                 ${safe(item.text)}
               </label>
-
-              <button data-delete="${i}">
-                Delete
-              </button>
-
+              <button data-delete="${i}">Delete</button>
             </div>
           `).join("")
           : "<p>Your daily plan is empty.</p>";
-
     }
 
     content.querySelector("#addPlan").onclick = () => {
+      const taskInput = content.querySelector("#planTask");
 
-      const input = content.querySelector("#planTask");
-
-      if (!input.value.trim()) return;
+      if (!taskInput.value.trim()) return;
 
       const items = storage.get("plan");
-
-      items.push({
-        text:input.value.trim(),
-        done:false
-      });
-
+      items.push({text:taskInput.value.trim(), done:false});
       storage.save("plan", items);
 
-      input.value = "";
-
+      taskInput.value = "";
       render();
-
     };
 
     content.querySelector("#planList").onclick = event => {
-
       const items = storage.get("plan");
 
       if (event.target.dataset.delete !== undefined) {
-
         items.splice(Number(event.target.dataset.delete), 1);
-
       } else if (event.target.dataset.done !== undefined) {
-
         const index = Number(event.target.dataset.done);
-
         items[index].done = event.target.checked;
-
       } else {
         return;
       }
 
       storage.save("plan", items);
-
       render();
-
     };
 
     render();
-
   }
 
-
-  /* DAILY EXPENSE CALCULATOR */
-
   function showExpenses() {
-
     title.textContent = "Daily Expense Calculator";
 
     content.innerHTML = `
-      <p>
-        Calculate today's expenses without saving them
-        to your financial account.
-      </p>
-
-      <input id="expenseName"
-        placeholder="Expense description">
-
-      <input id="expenseAmount"
-        type="number"
-        min="1"
-        step="1"
-        placeholder="Amount in UGX">
-
-      <button class="primary" id="addExpense">
-        Add Expense
-      </button>
-
+      <p>Calculate today's expenses without saving them to your financial account.</p>
+      <input id="expenseName" placeholder="Expense description">
+      <input id="expenseAmount" type="number" min="1" step="1" placeholder="Amount in UGX">
+      <button class="primary" id="addExpense">Add Expense</button>
       <div id="expenseList"></div>
-
-      <p>
-        Total:
-        <span class="guest-total" id="expenseTotal">
-          UGX 0
-        </span>
-      </p>
-
-      <button id="clearExpenses">
-        Clear Today's List
-      </button>
+      <p>Total: <span class="guest-total" id="expenseTotal">UGX 0</span></p>
+      <button id="clearExpenses">Clear Today's List</button>
     `;
 
     let expenses = [];
 
     function render() {
-
       const total = expenses.reduce(
-        (sum, item) => sum + item.amount,
-        0
+        (sum, item) => sum + item.amount, 0
       );
 
       content.querySelector("#expenseTotal").textContent =
@@ -1676,31 +1615,17 @@ if (!window.isSecureContext) {
         expenses.map((item, i) => `
           <div class="guest-item">
             ${safe(item.name)} — UGX ${item.amount.toLocaleString()}
-
-            <button data-delete="${i}">
-              Remove
-            </button>
+            <button data-delete="${i}">Remove</button>
           </div>
         `).join("");
-
     }
 
     content.querySelector("#addExpense").onclick = () => {
+      const name = content.querySelector("#expenseName").value.trim();
+      const amount = Number(content.querySelector("#expenseAmount").value);
 
-      const name =
-        content.querySelector("#expenseName").value.trim();
-
-      const amount =
-        Number(content.querySelector("#expenseAmount").value);
-
-      if (
-        !name ||
-        !Number.isSafeInteger(amount) ||
-        amount <= 0
-      ) {
-        return alert(
-          "Enter a description and a valid whole-number amount."
-        );
+      if (!name || !Number.isSafeInteger(amount) || amount <= 0) {
+        return alert("Enter a description and a valid whole-number amount.");
       }
 
       expenses.push({name, amount});
@@ -1709,79 +1634,48 @@ if (!window.isSecureContext) {
       content.querySelector("#expenseAmount").value = "";
 
       render();
-
     };
 
     content.querySelector("#expenseList").onclick = event => {
-
       if (event.target.dataset.delete === undefined) return;
 
       expenses.splice(Number(event.target.dataset.delete), 1);
-
       render();
-
     };
 
     content.querySelector("#clearExpenses").onclick = () => {
-
       if (!confirm("Clear today's expense list?")) return;
 
       expenses = [];
-
       render();
-
     };
 
     render();
-
   }
 
-
-  /* CALCULATOR */
-
   function showCalculator() {
-
     title.textContent = "Calculator";
 
     content.innerHTML = `
       <p>Calculate everyday amounts.</p>
-
-      <input
-        id="calcFirst"
-        type="number"
-        placeholder="First number"
-      >
-
+      <input id="calcFirst" type="number" placeholder="First number">
       <select id="calcOperator">
         <option value="+">Addition (+)</option>
         <option value="-">Subtraction (-)</option>
         <option value="*">Multiplication (×)</option>
         <option value="/">Division (÷)</option>
       </select>
-
-      <input
-        id="calcSecond"
-        type="number"
-        placeholder="Second number"
-      >
-
-      <button class="primary" id="calculate">
-        Calculate
-      </button>
-
-      <p class="guest-total" id="calcResult">
-        Result: —
-      </p>
+      <input id="calcSecond" type="number" placeholder="Second number">
+      <button class="primary" id="calculate">Calculate</button>
+      <p class="guest-total" id="calcResult">Result: —</p>
     `;
 
     content.querySelector("#calculate").onclick = () => {
-
       const firstInput = content.querySelector("#calcFirst");
       const secondInput = content.querySelector("#calcSecond");
 
       const a = Number(firstInput.value);
       const b = Number(secondInput.value);
-
       const op = content.querySelector("#calcOperator").value;
 
       if (
@@ -1806,20 +1700,13 @@ if (!window.isSecureContext) {
 
       content.querySelector("#calcResult").textContent =
         "Result: " + result.toLocaleString();
-
     };
-
   }
 
-
-  /* CONNECT PAGE 2 TOOL BUTTONS */
-
   document.querySelectorAll("[data-tool]").forEach(button => {
-
     button.addEventListener("click", () => {
       openTool(button.dataset.tool);
     });
-
   });
 
 })();
