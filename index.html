@@ -1017,7 +1017,7 @@ function detectGuestToolCommand(message) {
   }
 
   if (
-    /\b(plan my day|daily plan|my daily plan)\b/.test(text)
+    /\b(plan my day|help me plan my day|daily plan|my daily plan)\b/.test(text)
   ) {
     return "plan";
   }
@@ -1052,10 +1052,91 @@ function detectGuestToolCommand(message) {
   return null;
 }
 
+/* DOA EXIT COMMAND DETECTOR */
+
+function detectExitCommand(message) {
+  const text = message.toLowerCase()
+    .replace(/[^\w\s']/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const exitCommands = [
+    "close doa",
+    "exit doa",
+    "quit doa",
+    "goodbye doa",
+    "stop doa",
+    "i am done",
+    "i'm done",
+    "im done",
+    "i am finished",
+    "i'm finished",
+    "im finished",
+    "close the app",
+    "exit the app",
+    "end conversation",
+    "end my conversation",
+    "that's all doa",
+    "thats all doa"
+  ];
+
+  return exitCommands.includes(text);
+}
+
+/* CLOSE DOA */
+
+function exitDOA() {
+  stopVoiceConversation();
+
+  if (speechSynthesis) {
+    speechSynthesis.cancel();
+  }
+
+  history = [];
+  busy = false;
+
+  /* Try to close the browser tab */
+  window.close();
+
+  /* Fallback if Android/browser blocks closing the tab */
+  document.body.innerHTML = `
+    <div style="
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:25px;
+      background:#071426;
+      color:#edf6ff;
+      font-family:Arial,sans-serif;
+    ">
+      <div>
+        <div style="font-size:55px;margin-bottom:20px;">👋</div>
+        <h1>DOA is closed</h1>
+        <p style="color:#91a9c2;line-height:1.7;">
+          Your conversation has ended.<br>
+          Thank you for using DOA 3.0.
+        </p>
+        <p style="color:#91a9c2;font-size:13px;">
+          You can now close this browser tab.
+        </p>
+      </div>
+    </div>
+  `;
+}
+
 /* SEND MESSAGE TO EXISTING WORKER */
 
 async function sendMessage(message) {
   if (!message) return;
+
+  /* CHECK EXIT COMMAND BEFORE ANY OTHER COMMAND */
+
+  if (detectExitCommand(message)) {
+    exitDOA();
+    return;
+  }
 
   /* CHECK FOR GUEST TOOL COMMANDS BEFORE SENDING TO AI */
 
