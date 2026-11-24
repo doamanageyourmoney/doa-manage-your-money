@@ -16,56 +16,78 @@ body{
  color:#fff;
 }
 header{
- padding:22px 18px;
+ padding:18px;
  background:#10264b;
  display:flex;
  justify-content:space-between;
  align-items:center;
  gap:10px;
+ flex-wrap:wrap;
 }
 header h1{margin:0;font-size:23px}
 header p{margin:5px 0 0;color:#bdcce3;font-size:13px}
 button{
  border:0;
  border-radius:9px;
- padding:12px 16px;
+ padding:12px 15px;
  background:#d8a94e;
  color:#101b30;
  font-weight:bold;
  cursor:pointer;
 }
+button:disabled{opacity:.5;cursor:not-allowed}
 .back{background:#fff}
-main{max-width:850px;margin:auto;padding:22px 16px}
-.welcome{text-align:center;margin:15px 0 25px}
-.welcome h2{font-size:25px;margin-bottom:8px}
+main{max-width:1000px;margin:auto;padding:20px 15px}
+.welcome{text-align:center;margin:12px 0 25px}
+.welcome h2{font-size:26px;margin-bottom:8px}
 .welcome p{color:#bdcce3}
+.section-title{
+ margin:25px 0 13px;
+ color:#f2c66e;
+ font-size:18px;
+}
 .tools{
  display:grid;
  grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
- gap:13px;
+ gap:12px;
 }
 .tool{
  background:#122b52;
  border:1px solid #29466e;
  border-radius:14px;
- padding:20px 12px;
+ padding:18px 12px;
  text-align:center;
  cursor:pointer;
+ transition:.2s;
 }
-.tool .emoji{font-size:34px}
-.tool h3{margin:12px 0 5px}
-.tool p{font-size:12px;color:#bdcce3;margin:0}
+.tool:hover{border-color:#d8a94e;transform:translateY(-2px)}
+.tool .emoji{font-size:32px}
+.tool h3{margin:10px 0 5px;font-size:16px}
+.tool p{font-size:12px;color:#bdcce3;margin:0;line-height:1.5}
+.tool.premium{border-color:#8b713c;background:#172b49}
+.premium-label{
+ display:inline-block;
+ background:#d8a94e;
+ color:#17233a;
+ border-radius:20px;
+ padding:4px 9px;
+ font-size:10px;
+ font-weight:bold;
+ margin-top:10px;
+}
 .panel{
  display:none;
  margin-top:20px;
  background:#10264b;
  padding:18px;
  border-radius:14px;
+ border:1px solid #29466e;
 }
 .panel h2{margin-top:0}
-input,textarea{
+.panel h3{color:#f2c66e}
+input,textarea,select{
  width:100%;
- padding:13px;
+ padding:12px;
  margin:7px 0;
  border:1px solid #607795;
  border-radius:8px;
@@ -73,23 +95,51 @@ input,textarea{
  color:#111;
  font-size:15px;
 }
-textarea{min-height:75px;resize:vertical}
+textarea{min-height:85px;resize:vertical}
 .action{margin:7px 5px 7px 0}
 .item{
  background:#19365f;
- padding:12px;
- border-radius:8px;
- margin:9px 0;
+ padding:13px;
+ border-radius:9px;
+ margin:10px 0;
  overflow-wrap:anywhere;
 }
-.item button{padding:7px 10px;margin:5px 3px 0 0}
+.item p{color:#d4dfef;line-height:1.5}
+.item button{padding:8px 11px;margin:5px 4px 0 0}
 .result{
- font-size:22px;
+ font-size:21px;
  font-weight:bold;
  margin:14px 0;
  color:#f2c66e;
 }
+.small{font-size:12px;color:#bdcce3}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.badge{
+ display:inline-block;
+ padding:4px 8px;
+ border-radius:20px;
+ background:#d8a94e;
+ color:#17233a;
+ font-size:11px;
+ font-weight:bold;
+}
+.notice-pin{color:#f2c66e;font-weight:bold}
+.locked{
+ text-align:center;
+ padding:25px 10px;
+ background:#19365f;
+ border-radius:12px;
+}
+.locked .emoji{font-size:42px}
+.locked p{color:#bdcce3;line-height:1.6}
+hr{border:0;border-top:1px solid #385273;margin:18px 0}
 footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
+@media(max-width:500px){
+ .row{grid-template-columns:1fr}
+ header h1{font-size:20px}
+ main{padding:15px 12px}
+ .panel{padding:14px}
+}
 </style>
 </head>
 
@@ -101,95 +151,300 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
   <p>Your personal assistant</p>
  </div>
  <button class="back" onclick="location.href='index.html'">
-  Back to DOA
+  ← Back to DOA
  </button>
 </header>
 
 <main>
 
 <div class="welcome">
- <h2>Guest Tools</h2>
- <p>Simple tools to help you organize your everyday life.</p>
+ <h2>Welcome to DOA Tools</h2>
+ <p>Manage your daily activities, learning and business calculations.</p>
 </div>
 
+<h3 class="section-title">FREE TOOLS</h3>
+
 <div class="tools">
- <div class="tool" onclick="openTool('reminders')">
-  <div class="emoji">🔔</div>
-  <h3>Reminders</h3>
-  <p>Keep track of important things</p>
- </div>
 
  <div class="tool" onclick="openTool('calculator')">
   <div class="emoji">🧮</div>
-  <h3>Calculator</h3>
-  <p>Calculate quickly</p>
- </div>
-
- <div class="tool" onclick="openTool('expenses')">
-  <div class="emoji">💰</div>
-  <h3>Daily Expenses</h3>
-  <p>Track your spending</p>
+  <h3>Dealers Calculator</h3>
+  <p>Buying, selling, profit and business calculations</p>
  </div>
 
  <div class="tool" onclick="openTool('plan')">
   <div class="emoji">📅</div>
-  <h3>My Daily Plan</h3>
-  <p>Organize your day</p>
+  <h3>Daily Plan</h3>
+  <p>Organize your activities</p>
  </div>
+
+ <div class="tool" onclick="openTool('reminders')">
+  <div class="emoji">🔔</div>
+  <h3>Reminders</h3>
+  <p>Remember important things</p>
+ </div>
+
+ <div class="tool" onclick="openTool('expenses')">
+  <div class="emoji">💰</div>
+  <h3>My Expenses</h3>
+  <p>Record and track spending</p>
+ </div>
+
+ <div class="tool" onclick="openTool('class')">
+  <div class="emoji">🎓</div>
+  <h3>My Class</h3>
+  <p>Study subjects and test your knowledge</p>
+ </div>
+
+ <div class="tool" onclick="openTool('notice')">
+  <div class="emoji">📢</div>
+  <h3>My Notice</h3>
+  <p>Personal and business announcements</p>
+ </div>
+
 </div>
 
-<!-- REMINDERS -->
-<section class="panel" id="reminders">
- <h2>🔔 My Reminders</h2>
- <input id="reminderText" placeholder="What should you remember?">
- <input id="reminderTime" type="datetime-local">
- <button onclick="addReminder()">Save Reminder</button>
- <div id="reminderList"></div>
-</section>
+<h3 class="section-title">DOA PREMIUM</h3>
 
-<!-- CALCULATOR -->
+<div class="tools">
+
+ <div class="tool premium" onclick="openTool('stock')">
+  <div class="emoji">📦</div>
+  <h3>My Stock</h3>
+  <p>Manage products and inventory</p>
+  <span class="premium-label">PREMIUM</span>
+ </div>
+
+ <div class="tool premium" onclick="openTool('invoices')">
+  <div class="emoji">🧾</div>
+  <h3>Reports and Invoices</h3>
+  <p>Sales, invoices and business reports</p>
+  <span class="premium-label">PREMIUM</span>
+ </div>
+
+ <div class="tool premium" onclick="openTool('money')">
+  <div class="emoji">💳</div>
+  <h3>My Money</h3>
+  <p>Manage income and business finances</p>
+  <span class="premium-label">PREMIUM</span>
+ </div>
+
+</div>
+
+<!-- DEALERS CALCULATOR -->
+
 <section class="panel" id="calculator">
- <h2>🧮 Calculator</h2>
- <input id="calcDisplay" placeholder="Example: 25000 + 15000">
- <button onclick="calculate()">Calculate</button>
- <button class="action" onclick="document.getElementById('calcDisplay').value=''">Clear</button>
- <div class="result" id="calcResult">Result: 0</div>
-</section>
+ <h2>🧮 Dealers Calculator</h2>
+ <p class="small">Calculate business selling prices and profits.</p>
 
-<!-- DAILY EXPENSES -->
-<section class="panel" id="expenses">
- <h2>💰 Daily Expense Calculator</h2>
- <input id="expenseName" placeholder="Expense name">
- <input id="expenseAmount" type="number" min="0" placeholder="Amount (UGX)">
- <button onclick="addExpense()">Add Expense</button>
- <div id="expenseList"></div>
- <div class="result" id="expenseTotal">Total: UGX 0</div>
- <button onclick="clearExpenses()">Clear Expenses</button>
+ <label>Buying price per item (UGX)</label>
+ <input id="buyPrice" type="number" min="0" placeholder="Example: 10000">
+
+ <label>Selling price per item (UGX)</label>
+ <input id="sellPrice" type="number" min="0" placeholder="Example: 15000">
+
+ <label>Quantity</label>
+ <input id="dealQuantity" type="number" min="1" value="1">
+
+ <label>Other total expenses (UGX)</label>
+ <input id="dealExpenses" type="number" min="0" value="0">
+
+ <button onclick="calculateDeal()">Calculate Profit</button>
+ <button class="action" onclick="clearDeal()">Clear</button>
+
+ <div id="dealResult" class="result">Your results will appear here.</div>
+
+ <hr>
+
+ <h3>Other Business Calculations</h3>
+
+ <label>Original price (UGX)</label>
+ <input id="originalPrice" type="number" min="0" placeholder="Enter price">
+
+ <label>Percentage (%)</label>
+ <input id="percentage" type="number" min="0" placeholder="Enter percentage">
+
+ <button onclick="calculateMarkup()">Calculate Percentage</button>
+ <div id="percentageResult" class="result"></div>
+
+ <hr>
+
+ <label>Price before discount (UGX)</label>
+ <input id="discountPrice" type="number" min="0">
+
+ <label>Discount (%)</label>
+ <input id="discountRate" type="number" min="0" max="100">
+
+ <button onclick="calculateDiscount()">Calculate Discount</button>
+ <div id="discountResult" class="result"></div>
+
+ <hr>
+
+ <label>VAT amount or rate (%)</label>
+ <input id="vatRate" type="number" min="0" placeholder="Enter VAT rate">
+
+ <label>Price excluding VAT (UGX)</label>
+ <input id="vatPrice" type="number" min="0">
+
+ <button onclick="calculateVAT()">Calculate VAT</button>
+ <div id="vatResult" class="result"></div>
 </section>
 
 <!-- DAILY PLAN -->
+
 <section class="panel" id="plan">
  <h2>📅 My Daily Plan</h2>
+
  <input id="planDate" type="date">
  <input id="planTime" type="time">
  <textarea id="planTask" placeholder="What do you plan to do?"></textarea>
+
  <button onclick="addPlan()">Save Plan</button>
+
  <div id="planList"></div>
+</section>
+
+<!-- REMINDERS -->
+
+<section class="panel" id="reminders">
+ <h2>🔔 My Reminders</h2>
+
+ <input id="reminderText" placeholder="What should you remember?">
+ <input id="reminderTime" type="datetime-local">
+
+ <button onclick="addReminder()">Save Reminder</button>
+
+ <div id="reminderList"></div>
+</section>
+
+<!-- MY EXPENSES -->
+
+<section class="panel" id="expenses">
+ <h2>💰 My Expenses</h2>
+ <p class="small">Your expenses are saved on this device.</p>
+
+ <input id="expenseName" placeholder="Expense name">
+ <input id="expenseAmount" type="number" min="0" placeholder="Amount (UGX)">
+ <input id="expenseDate" type="date">
+
+ <button onclick="addExpense()">Add Expense</button>
+
+ <div id="expenseList"></div>
+ <div class="result" id="expenseTotal">Total: UGX 0</div>
+
+ <button class="action" onclick="clearExpenses()">Clear All Expenses</button>
+</section>
+
+<!-- MY CLASS -->
+
+<section class="panel" id="class">
+ <h2>🎓 My Class</h2>
+ <p class="small">Choose a subject, study a lesson and save your learning notes.</p>
+
+ <label>Select a subject</label>
+ <select id="classSubject" onchange="showClassSubject()">
+  <option value="Mathematics">Mathematics</option>
+  <option value="English">English</option>
+  <option value="Science">Science</option>
+  <option value="Business">Business Studies</option>
+  <option value="Accounting">Accounting</option>
+  <option value="Agriculture">Agriculture</option>
+  <option value="Computer">Computer Studies</option>
+  <option value="Technology">Technology and AI</option>
+  <option value="Geography">Geography</option>
+  <option value="History">History</option>
+  <option value="Personal Development">Personal Development</option>
+ </select>
+
+ <div class="item" id="classLesson">
+  <h3>Welcome to My Class</h3>
+  Choose a subject to begin learning.
+ </div>
+
+ <h3>My Study Notes</h3>
+ <textarea id="classNotes" placeholder="Write your learning notes here..."></textarea>
+ <button onclick="saveClassNotes()">Save Notes</button>
+
+ <h3>My Learning Progress</h3>
+ <div id="classProgress" class="item">Lessons completed: 0</div>
+</section>
+
+<!-- MY NOTICE -->
+
+<section class="panel" id="notice">
+ <h2>📢 My Notice</h2>
+ <p class="small">Create personal or business announcements.</p>
+
+ <input id="noticeTitle" placeholder="Notice title">
+ <textarea id="noticeText" placeholder="Write your notice here..."></textarea>
+
+ <div class="row">
+  <div>
+   <label>Notice date</label>
+   <input id="noticeDate" type="date">
+  </div>
+  <div>
+   <label>Expiry date (optional)</label>
+   <input id="noticeExpiry" type="date">
+  </div>
+ </div>
+
+ <button onclick="addNotice()">Publish Notice</button>
+
+ <hr>
+ <h3>My Published Notices</h3>
+ <div id="noticeList"></div>
+</section>
+
+<!-- PREMIUM PLACEHOLDERS -->
+
+<section class="panel" id="stock">
+ <h2>📦 My Stock</h2>
+ <div class="locked">
+  <div class="emoji">🔒</div>
+  <h3>DOA Premium Feature</h3>
+  <p>Manage products, stock received, stock sold, remaining quantities and low-stock alerts.</p>
+  <p>Premium access and secure business records will be connected in a later development stage.</p>
+  <span class="premium-label">COMING SOON</span>
+ </div>
+</section>
+
+<section class="panel" id="invoices">
+ <h2>🧾 Reports and Invoices</h2>
+ <div class="locked">
+  <div class="emoji">🔒</div>
+  <h3>DOA Premium Feature</h3>
+  <p>Create invoices, receipts, customer records and professional sales reports.</p>
+  <p>Premium access and PDF generation will be added in a later development stage.</p>
+  <span class="premium-label">COMING SOON</span>
+ </div>
+</section>
+
+<section class="panel" id="money">
+ <h2>💳 My Money</h2>
+ <div class="locked">
+  <div class="emoji">🔒</div>
+  <h3>DOA Premium Feature</h3>
+  <p>Manage income, expenses, budgets, debts, cash flow and financial summaries.</p>
+  <p>Secure financial records and subscription access will be added in a later development stage.</p>
+  <span class="premium-label">COMING SOON</span>
+ </div>
 </section>
 
 </main>
 
-<footer>DOA 3.0 · Personal Assistant · Guest Tools</footer>
+<footer>DOA 3.0 · Personal Assistant · Learning and Business Tools</footer>
 
 <script>
 
-/* OPEN GUEST TOOLS */
+/* OPEN TOOLS */
 
 function openTool(id){
- document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+ document.querySelectorAll('.panel').forEach(p=>{
+  p.style.display='none';
+ });
 
  const panel=document.getElementById(id);
-
  if(!panel)return;
 
  panel.style.display='block';
@@ -198,20 +453,30 @@ function openTool(id){
  if(id==='reminders')showReminders();
  if(id==='plan')showPlans();
  if(id==='expenses')showExpenses();
+ if(id==='notice')showNotices();
+ if(id==='class')showClassSubject();
 }
 
-/* LOCAL STORAGE */
+/* STORAGE */
 
 function getSaved(key){
- try{return JSON.parse(localStorage.getItem(key)||'[]')}
- catch(e){return []}
+ try{
+  const data=JSON.parse(localStorage.getItem(key)||'[]');
+  return Array.isArray(data)?data:[];
+ }catch(e){
+  return [];
+ }
 }
 
 function save(key,data){
  localStorage.setItem(key,JSON.stringify(data));
 }
 
-// REMINDERS
+function money(amount){
+ return 'UGX '+Number(amount||0).toLocaleString();
+}
+
+/* REMINDERS - ORIGINAL STORAGE KEY PRESERVED */
 
 function addReminder(){
  const text=document.getElementById('reminderText').value.trim();
@@ -223,7 +488,6 @@ function addReminder(){
  }
 
  let items=getSaved('doa_guest_reminders');
-
  items.push({id:Date.now(),text,time});
 
  save('doa_guest_reminders',items);
@@ -271,47 +535,115 @@ function deleteReminder(id){
   'doa_guest_reminders',
   getSaved('doa_guest_reminders').filter(x=>x.id!==id)
  );
-
  showReminders();
 }
 
-// CALCULATOR
+/* CALCULATOR */
 
-function calculate(){
- const expression=document.getElementById('calcDisplay').value.trim();
- const result=document.getElementById('calcResult');
+function calculateDeal(){
+ const buy=Number(document.getElementById('buyPrice').value);
+ const sell=Number(document.getElementById('sellPrice').value);
+ const quantity=Number(document.getElementById('dealQuantity').value);
+ const expenses=Number(document.getElementById('dealExpenses').value||0);
+ const result=document.getElementById('dealResult');
 
- if(!/^[0-9+\-*/().%\s]+$/.test(expression)){
-  result.textContent='Please enter a valid calculation.';
+ if(buy<=0||sell<0||quantity<=0||expenses<0){
+  result.textContent='Enter valid buying price, selling price and quantity.';
   return;
  }
 
- try{
-  const answer=Function('"use strict";return ('+expression+')')();
+ const cost=buy*quantity+expenses;
+ const revenue=sell*quantity;
+ const profit=revenue-cost;
 
-  result.textContent=Number.isFinite(answer)
-   ?'Result: '+answer
-   :'Invalid calculation';
+ result.innerHTML='';
+ const lines=[
+  'Total buying cost: '+money(buy*quantity),
+  'Other expenses: '+money(expenses),
+  'Total cost: '+money(cost),
+  'Total sales: '+money(revenue),
+  (profit>=0?'Profit: ':'Loss: ')+money(Math.abs(profit)),
+  'Profit margin: '+(revenue>0?(profit/revenue*100).toFixed(2):'0')+'%'
+ ];
 
- }catch(e){
-  result.textContent='Invalid calculation';
- }
+ lines.forEach(line=>{
+  const p=document.createElement('p');
+  p.textContent=line;
+  result.appendChild(p);
+ });
 }
 
-// DAILY EXPENSES
+function clearDeal(){
+ ['buyPrice','sellPrice','dealQuantity','dealExpenses'].forEach(id=>{
+  document.getElementById(id).value='';
+ });
+ document.getElementById('dealQuantity').value='1';
+ document.getElementById('dealExpenses').value='0';
+ document.getElementById('dealResult').textContent='Your results will appear here.';
+}
 
-let expenses=[];
+function calculateMarkup(){
+ const price=Number(document.getElementById('originalPrice').value);
+ const rate=Number(document.getElementById('percentage').value);
+
+ if(price<=0||rate<0){
+  document.getElementById('percentageResult').textContent='Enter valid values.';
+  return;
+ }
+
+ const addition=price*rate/100;
+ document.getElementById('percentageResult').textContent=
+  'Percentage amount: '+money(addition)+
+  ' | Price after addition: '+money(price+addition);
+}
+
+function calculateDiscount(){
+ const price=Number(document.getElementById('discountPrice').value);
+ const rate=Number(document.getElementById('discountRate').value);
+
+ if(price<=0||rate<0||rate>100){
+  document.getElementById('discountResult').textContent='Enter valid values. Discount must be 0–100%.';
+  return;
+ }
+
+ const discount=price*rate/100;
+ document.getElementById('discountResult').textContent=
+  'Discount: '+money(discount)+
+  ' | Final price: '+money(price-discount);
+}
+
+function calculateVAT(){
+ const price=Number(document.getElementById('vatPrice').value);
+ const rate=Number(document.getElementById('vatRate').value);
+
+ if(price<0||rate<0){
+  document.getElementById('vatResult').textContent='Enter valid values.';
+  return;
+ }
+
+ const vat=price*rate/100;
+ document.getElementById('vatResult').textContent=
+  'VAT: '+money(vat)+
+  ' | Total including VAT: '+money(price+vat);
+}
+
+/* DAILY EXPENSES - NEW PERSISTENT STORAGE KEY */
 
 function addExpense(){
  const name=document.getElementById('expenseName').value.trim();
  const amount=Number(document.getElementById('expenseAmount').value);
+ const date=document.getElementById('expenseDate').value||
+  new Date().toISOString().slice(0,10);
 
  if(!name||!Number.isFinite(amount)||amount<=0){
   alert('Enter an expense name and a valid amount.');
   return;
  }
 
- expenses.push({name,amount});
+ const items=getSaved('doa_guest_expenses');
+ items.push({id:Date.now(),name,amount,date});
+
+ save('doa_guest_expenses',items);
 
  document.getElementById('expenseName').value='';
  document.getElementById('expenseAmount').value='';
@@ -320,46 +652,54 @@ function addExpense(){
 }
 
 function showExpenses(){
+ const items=getSaved('doa_guest_expenses');
  const list=document.getElementById('expenseList');
 
  list.innerHTML='';
-
  let total=0;
 
- expenses.forEach((item,index)=>{
-  total+=item.amount;
+ if(!items.length){
+  list.textContent='No expenses recorded yet.';
+ }
+
+ items.forEach(item=>{
+  total+=Number(item.amount)||0;
 
   const div=document.createElement('div');
   div.className='item';
 
-  const detail=document.createElement('span');
-  detail.textContent=
-   item.name+' — UGX '+item.amount.toLocaleString();
+  const detail=document.createElement('p');
+  detail.textContent=item.name+' — '+money(item.amount)+
+   ' | '+(item.date||'No date');
 
   const del=document.createElement('button');
   del.textContent='Remove';
-
-  del.onclick=()=>{
-   expenses.splice(index,1);
-   showExpenses();
-  };
+  del.onclick=()=>deleteExpense(item.id);
 
   div.append(detail,del);
   list.appendChild(div);
  });
 
  document.getElementById('expenseTotal').textContent=
-  'Total: UGX '+total.toLocaleString();
+  'Total: '+money(total);
+}
+
+function deleteExpense(id){
+ save(
+  'doa_guest_expenses',
+  getSaved('doa_guest_expenses').filter(x=>x.id!==id)
+ );
+ showExpenses();
 }
 
 function clearExpenses(){
- if(confirm('Clear all expenses?')){
-  expenses=[];
+ if(confirm('Delete all saved expenses on this device?')){
+  save('doa_guest_expenses',[]);
   showExpenses();
  }
 }
 
-// DAILY PLAN
+/* DAILY PLAN - ORIGINAL STORAGE KEY PRESERVED */
 
 function addPlan(){
  const date=document.getElementById('planDate').value;
@@ -372,13 +712,11 @@ function addPlan(){
  }
 
  let items=getSaved('doa_guest_plans');
-
  items.push({id:Date.now(),date,time,task});
 
  save('doa_guest_plans',items);
 
  document.getElementById('planTask').value='';
-
  showPlans();
 }
 
@@ -402,8 +740,8 @@ function showPlans(){
 
   const detail=document.createElement('p');
   detail.textContent=
-   [item.date,item.time].filter(Boolean).join(' at ')
-   ||'No date or time set';
+   [item.date,item.time].filter(Boolean).join(' at ')||
+   'No date or time set';
 
   const del=document.createElement('button');
   del.textContent='Delete';
@@ -419,18 +757,357 @@ function deletePlan(id){
   'doa_guest_plans',
   getSaved('doa_guest_plans').filter(x=>x.id!==id)
  );
-
  showPlans();
 }
 
-/* AUTOMATICALLY OPEN THE REQUESTED TOOL FROM PAGE 1 */
+/* MY NOTICE */
 
-const requestedTool =
+function addNotice(){
+ const title=document.getElementById('noticeTitle').value.trim();
+ const text=document.getElementById('noticeText').value.trim();
+ const date=document.getElementById('noticeDate').value||
+  new Date().toISOString().slice(0,10);
+ const expiry=document.getElementById('noticeExpiry').value;
+
+ if(!title||!text){
+  alert('Enter a notice title and description.');
+  return;
+ }
+
+ if(expiry&&expiry<date){
+  alert('Expiry date cannot be earlier than the notice date.');
+  return;
+ }
+
+ const items=getSaved('doa_guest_notices');
+ items.push({
+  id:Date.now(),
+  title,
+  text,
+  date,
+  expiry,
+  pinned:false
+ });
+
+ save('doa_guest_notices',items);
+
+ document.getElementById('noticeTitle').value='';
+ document.getElementById('noticeText').value='';
+ document.getElementById('noticeExpiry').value='';
+
+ showNotices();
+}
+
+function showNotices(){
+ const items=getSaved('doa_guest_notices');
+ const list=document.getElementById('noticeList');
+
+ list.innerHTML='';
+
+ if(!items.length){
+  list.textContent='No notices published yet.';
+  return;
+ }
+
+ items.sort((a,b)=>
+  Number(Boolean(b.pinned))-Number(Boolean(a.pinned))
+ );
+
+ items.forEach(item=>{
+  const div=document.createElement('div');
+  div.className='item';
+
+  const title=document.createElement('strong');
+  title.textContent=(item.pinned?'📌 ':'')+item.title;
+
+  const detail=document.createElement('p');
+  detail.textContent=item.text;
+
+  const date=document.createElement('p');
+  date.textContent='Notice date: '+(item.date||'Not set')+
+   (item.expiry?' | Expires: '+item.expiry:'');
+
+  const pin=document.createElement('button');
+  pin.textContent=item.pinned?'Unpin':'Pin Notice';
+  pin.onclick=()=>toggleNoticePin(item.id);
+
+  const edit=document.createElement('button');
+  edit.textContent='Edit';
+  edit.onclick=()=>editNotice(item.id);
+
+  const del=document.createElement('button');
+  del.textContent='Delete';
+  del.onclick=()=>deleteNotice(item.id);
+
+  div.append(title,detail,date,pin,edit,del);
+  list.appendChild(div);
+ });
+}
+
+function toggleNoticePin(id){
+ const items=getSaved('doa_guest_notices');
+ const item=items.find(x=>x.id===id);
+ if(!item)return;
+
+ item.pinned=!item.pinned;
+ save('doa_guest_notices',items);
+ showNotices();
+}
+
+function editNotice(id){
+ const items=getSaved('doa_guest_notices');
+ const item=items.find(x=>x.id===id);
+ if(!item)return;
+
+ const title=prompt('Edit notice title:',item.title);
+ if(title===null)return;
+
+ const text=prompt('Edit notice description:',item.text);
+ if(text===null)return;
+
+ if(!title.trim()||!text.trim()){
+  alert('Title and description cannot be empty.');
+  return;
+ }
+
+ item.title=title.trim();
+ item.text=text.trim();
+
+ save('doa_guest_notices',items);
+ showNotices();
+}
+
+function deleteNotice(id){
+ if(!confirm('Delete this notice?'))return;
+
+ save(
+  'doa_guest_notices',
+  getSaved('doa_guest_notices').filter(x=>x.id!==id)
+ );
+ showNotices();
+}
+
+/* MY CLASS */
+
+const classLessons={
+ Mathematics:{
+  title:'Introduction to Mathematics',
+  lesson:'Mathematics helps us understand numbers, quantities and patterns. Addition combines numbers. Subtraction finds the difference. Multiplication is repeated addition, while division shares quantities equally.',
+  question:'What is 12 multiplied by 5?',
+  options:['50','60','70'],
+  answer:'60',
+  explanation:'12 × 5 = 60.'
+ },
+ English:{
+  title:'Introduction to English',
+  lesson:'A sentence is a group of words that expresses a complete thought. A noun names a person, place or thing. A verb describes an action or state. An adjective describes a noun.',
+  question:'Which word is a verb?',
+  options:['Run','Beautiful','Table'],
+  answer:'Run',
+  explanation:'Run is a verb because it describes an action.'
+ },
+ Science:{
+  title:'Introduction to Science',
+  lesson:'Science is the study of the natural world. It uses observation, questions and experiments to understand how things work. Plants need water, light and nutrients to grow.',
+  question:'Which is a source of light for plants?',
+  options:['The sun','A stone','Sand'],
+  answer:'The sun',
+  explanation:'Plants use sunlight for photosynthesis.'
+ },
+ Business:{
+  title:'Introduction to Business',
+  lesson:'A business provides goods or services to customers. Revenue is money received from sales. Profit is what remains after subtracting costs and expenses from revenue.',
+  question:'How do you calculate profit?',
+  options:['Cost minus sales','Sales minus total costs','Sales plus costs'],
+  answer:'Sales minus total costs',
+  explanation:'Profit = Revenue − Total costs.'
+ },
+ Accounting:{
+  title:'Introduction to Accounting',
+  lesson:'Accounting involves recording and organising financial transactions. Assets are things a business owns. Liabilities are amounts it owes. Equity represents the owners’ interest in the business.',
+  question:'Which is an example of an asset?',
+  options:['Cash owned by a business','A loan owed','Unpaid electricity bill'],
+  answer:'Cash owned by a business',
+  explanation:'Cash owned by a business is an asset.'
+ },
+ Agriculture:{
+  title:'Introduction to Agriculture',
+  lesson:'Agriculture involves growing crops and raising animals. Good farming practices include preparing soil, selecting suitable seeds, managing water and controlling pests responsibly.',
+  question:'What helps crops grow?',
+  options:['Suitable soil and water','Plastic waste','No sunlight at all'],
+  answer:'Suitable soil and water',
+  explanation:'Crops need suitable soil, water and other growing conditions.'
+ },
+ Computer:{
+  title:'Introduction to Computer Studies',
+  lesson:'A computer receives input, processes information and produces output. Hardware refers to physical parts such as a keyboard and screen. Software refers to programs and applications.',
+  question:'Which is computer hardware?',
+  options:['Keyboard','Web browser','Spreadsheet program'],
+  answer:'Keyboard',
+  explanation:'A keyboard is a physical computer device.'
+ },
+ Technology:{
+  title:'Introduction to Technology and AI',
+  lesson:'Artificial intelligence is technology that can perform tasks such as recognising patterns, generating text and assisting with problem solving. AI can support learning, but its answers should be checked.',
+  question:'What is one useful application of AI?',
+  options:['Helping explain a lesson','Replacing every human decision','Guaranteeing every answer is correct'],
+  answer:'Helping explain a lesson',
+  explanation:'AI can help explain information, but its answers need checking.'
+ },
+ Geography:{
+  title:'Introduction to Geography',
+  lesson:'Geography studies places, people, environments and the relationship between them. It includes physical geography, such as rivers and mountains, and human geography, such as cities and populations.',
+  question:'Which is a physical feature?',
+  options:['Mountain','Bank account','School timetable'],
+  answer:'Mountain',
+  explanation:'A mountain is a natural physical feature.'
+ },
+ History:{
+  title:'Introduction to History',
+  lesson:'History studies past events and human societies. Historians use sources such as documents, photographs, objects and oral accounts to investigate the past.',
+  question:'What do historians study?',
+  options:['Past events','Only future predictions','Only mathematics'],
+  answer:'Past events',
+  explanation:'History investigates events and societies from the past.'
+ },
+ 'Personal Development':{
+  title:'Introduction to Personal Development',
+  lesson:'Personal development means improving your knowledge, skills, habits and confidence. Setting realistic goals, practising regularly and reviewing progress can help you improve.',
+  question:'What helps you achieve a goal?',
+  options:['A clear plan and consistent effort','Never reviewing progress','Giving up immediately'],
+  answer:'A clear plan and consistent effort',
+  explanation:'Planning and consistent effort help people make progress.'
+ }
+};
+
+function showClassSubject(){
+ const subject=document.getElementById('classSubject').value;
+ const lesson=classLessons[subject];
+ const box=document.getElementById('classLesson');
+
+ box.innerHTML='';
+
+ const heading=document.createElement('h3');
+ heading.textContent=lesson.title;
+
+ const paragraph=document.createElement('p');
+ paragraph.textContent=lesson.lesson;
+
+ const complete=document.createElement('button');
+ complete.textContent='Mark Lesson Complete';
+ complete.onclick=()=>completeLesson(subject);
+
+ const quizTitle=document.createElement('h3');
+ quizTitle.textContent='Quick Quiz';
+
+ const question=document.createElement('p');
+ question.textContent=lesson.question;
+
+ const select=document.createElement('select');
+ select.id='classAnswer';
+
+ lesson.options.forEach(option=>{
+  const opt=document.createElement('option');
+  opt.value=option;
+  opt.textContent=option;
+  select.appendChild(opt);
+ });
+
+ const check=document.createElement('button');
+ check.textContent='Check Answer';
+ check.onclick=()=>checkClassAnswer(subject);
+
+ const feedback=document.createElement('p');
+ feedback.id='classFeedback';
+
+ box.append(
+  heading,paragraph,complete,
+  quizTitle,question,select,check,feedback
+ );
+
+ loadClassNotes();
+ showClassProgress();
+}
+
+function completeLesson(subject){
+ const completed=getSaved('doa_guest_class_completed');
+
+ if(!completed.includes(subject)){
+  completed.push(subject);
+  save('doa_guest_class_completed',completed);
+ }
+
+ showClassProgress();
+ alert('Lesson completed!');
+}
+
+function checkClassAnswer(subject){
+ const answer=document.getElementById('classAnswer').value;
+ const lesson=classLessons[subject];
+ const feedback=document.getElementById('classFeedback');
+
+ if(answer===lesson.answer){
+  feedback.textContent='Correct! '+lesson.explanation;
+  feedback.style.color='#8ee5a1';
+ }else{
+  feedback.textContent='Not quite. Try again. '+lesson.explanation;
+  feedback.style.color='#ffd080';
+ }
+}
+
+function showClassProgress(){
+ const completed=getSaved('doa_guest_class_completed');
+
+ document.getElementById('classProgress').textContent=
+  'Lessons completed: '+completed.length+
+  ' of '+Object.keys(classLessons).length+
+  ' subjects.';
+}
+
+function saveClassNotes(){
+ const subject=document.getElementById('classSubject').value;
+ const notes=document.getElementById('classNotes').value;
+
+ const all=getSaved('doa_guest_class_notes');
+ const existing=all.find(x=>x.subject===subject);
+
+ if(existing){
+  existing.notes=notes;
+ }else{
+  all.push({subject,notes});
+ }
+
+ save('doa_guest_class_notes',all);
+ alert('Your study notes have been saved.');
+}
+
+function loadClassNotes(){
+ const subject=document.getElementById('classSubject').value;
+ const all=getSaved('doa_guest_class_notes');
+ const existing=all.find(x=>x.subject===subject);
+
+ document.getElementById('classNotes').value=
+  existing?existing.notes:'';
+}
+
+/* AUTOMATIC TOOL OPENING FROM PAGE 1 */
+
+const requestedTool=
  new URLSearchParams(window.location.search).get('tool');
 
-if(
- ['reminders','calculator','expenses','plan'].includes(requestedTool)
-){
+const supportedTools=[
+ 'reminders',
+ 'calculator',
+ 'expenses',
+ 'plan',
+ 'class',
+ 'notice',
+ 'stock',
+ 'invoices',
+ 'money'
+];
+
+if(supportedTools.includes(requestedTool)){
  openTool(requestedTool);
 }
 
