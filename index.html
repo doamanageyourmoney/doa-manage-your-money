@@ -346,8 +346,8 @@ textarea::placeholder { color:#7892ad; }
       class="mic-button"
       id="micButton"
       type="button"
-      aria-label="Start microphone"
-      title="Speak to DOA"
+      aria-label="Start voice conversation"
+      title="Start voice conversation"
     >🎙</button>
 
     <button
@@ -360,7 +360,7 @@ textarea::placeholder { color:#7892ad; }
   </form>
 
   <div class="mic-status" id="micStatus">
-    Tap the microphone to speak to DOA.
+    Tap the microphone to start a voice conversation.
   </div>
 
   <div class="footnote">
@@ -383,16 +383,58 @@ const sendButton = document.getElementById("sendButton");
 const messagesEl = document.getElementById("messages");
 const welcomeEl = document.getElementById("welcome");
 const newChatButton = document.getElementById("newChat");
-
 const micButton = document.getElementById("micButton");
 const micStatus = document.getElementById("micStatus");
 
 let history = [];
 let busy = false;
 
-/* ---------------------------------
-   CHAT DISPLAY
---------------------------------- */
+/* VOICE CONVERSATION */
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+const speechSynthesis = window.speechSynthesis;
+
+let recognition = null;
+let voiceMode = false;
+let isRecording = false;
+let pendingTranscript = "";
+let restartTimer = null;
+
+function setMicRecording(recording) {
+  isRecording = recording;
+
+  micButton.classList.toggle("recording", recording);
+
+  micButton.textContent = recording
+    ? "■"
+    : (voiceMode ? "🔊" : "🎙");
+
+  micButton.title = !voiceMode
+    ? "Start voice conversation"
+    : recording
+      ? "Stop listening"
+      : "Stop voice conversation";
+}
+
+function clearRestartTimer() {
+  if (restartTimer !== null) {
+    clearTimeout(restartTimer);
+    restartTimer = null;
+  }
+}
+
+function scheduleListening(delay = 600) {
+  clearRestartTimer();
+
+  restartTimer = setTimeout(() => {
+    restartTimer = null;
+    startListening();
+  }, delay);
+}
+
+/* CHAT DISPLAY */
 
 function showConversation() {
   welcomeEl.classList.add("hidden");
@@ -429,9 +471,7 @@ function setBusy(value) {
   sendButton.textContent = value ? "…" : "↑";
 }
 
-/* ---------------------------------
-   READ AI RESPONSE
---------------------------------- */
+/* READ AI RESPONSE */
 
 function extractText(data) {
   if (data == null) return "";
@@ -540,7 +580,6 @@ async function readWorkerResponse(response, onUpdate) {
       if (parsed.error) throw new Error(parsed.error);
 
       chunk = extractText(parsed);
-
     } catch (error) {
       if (error instanceof SyntaxError) {
         chunk = dataText;
@@ -572,7 +611,6 @@ async function readWorkerResponse(response, onUpdate) {
         buffer = buffer.slice(boundary + separator.length);
         processEvent(event);
       }
-
     } else {
       const lines = buffer.split(/\r?\n/);
       buffer = lines.pop() || "";
@@ -598,7 +636,6 @@ async function readWorkerResponse(response, onUpdate) {
             fullAnswer += chunk;
             onUpdate(fullAnswer);
           }
-
         } catch (error) {
           if (!(error instanceof SyntaxError)) throw error;
         }
@@ -636,9 +673,71 @@ async function readWorkerResponse(response, onUpdate) {
   return fullAnswer;
 }
 
-/* ---------------------------------
-   SEND CHAT MESSAGE
---------------------------------- */
+/* DOA SPEAKS ITS ANSWER */
+
+function speakReply(text) {
+  if (!voiceMode) return;
+
+  if (!speechSynthesis) {
+    micStatus.textContent =
+      "Your browser does not support spoken replies.";
+
+    stopVoiceConversation();
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const cleanText = text
+    .replace(/```[\s\S]*?```/g, "Code omitted.")
+    .replace(/https?:\/\/\S+/g, "link")
+    .trim();
+
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+
+  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  const voices = speechSynthesis.getVoices();
+
+  const preferredVoice = voices.find(voice =>
+    voice.lang && voice.lang.toLowerCase().startsWith("en")
+  );
+
+  if (preferredVoice) {
+    utterance.voice = preferredVoice;
+  }
+
+  utterance.onstart = () => {
+    if (voiceMode) {
+      micStatus.textContent =
+        "DOA is speaking. Tap the microphone to interrupt.";
+    }
+  };
+
+  utterance.onend = () => {
+    if (voiceMode) {
+      micStatus.textContent =
+        "DOA has finished. Listening again...";
+
+      scheduleListening(600);
+    }
+  };
+
+  utterance.onerror = () => {
+    if (voiceMode) {
+      micStatus.textContent =
+        "Voice reply stopped. Listening again...";
+
+      scheduleListening(800);
+    }
+  };
+
+  speechSynthesis.speak(utterance);
+}
+
+/* SEND MESSAGE TO EXISTING WORKER */
 
 async function sendMessage(message) {
   if (!message || busy) return;
@@ -656,10 +755,16 @@ async function sendMessage(message) {
   resizeInput();
   setBusy(true);
 
+  if (voiceMode) {
+    micStatus.textContent = "DOA is thinking...";
+  }
+
   const answerBubble = addMessage(
     "assistant",
     "DOA is thinking..."
   );
+
+  let successfulAnswer = "";
 
   try {
     const response = await fetch(WORKER_URL, {
@@ -682,6 +787,7 @@ async function sendMessage(message) {
 
       try {
         const data = JSON.parse(raw);
+
         detail =
           data.error ||
           data.details ||
@@ -694,7 +800,7 @@ async function sendMessage(message) {
 
     answerBubble.textContent = "";
 
-    const answer = await readWorkerResponse(
+    successfulAnswer = await readWorkerResponse(
       response,
       text => {
         answerBubble.textContent = text;
@@ -702,11 +808,11 @@ async function sendMessage(message) {
       }
     );
 
-    answerBubble.textContent = answer;
+    answerBubble.textContent = successfulAnswer;
 
     history.push({
       role:"assistant",
-      text:answer
+      text:successfulAnswer
     });
 
   } catch (error) {
@@ -720,159 +826,203 @@ async function sendMessage(message) {
   }
 
   setBusy(false);
-  input.focus();
   messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  if (successfulAnswer && voiceMode) {
+    speakReply(successfulAnswer);
+  } else if (voiceMode) {
+    micStatus.textContent =
+      "I couldn't get a reply. Listening again...";
+
+    scheduleListening(1000);
+  } else {
+    input.focus();
+  }
 }
 
-/* ---------------------------------
-   MICROPHONE / SPEECH RECOGNITION
---------------------------------- */
+/* START LISTENING */
 
-const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
-let recognition = null;
-let isRecording = false;
-let speechBaseText = "";
-
-function setMicRecording(recording) {
-  isRecording = recording;
-
-  micButton.classList.toggle("recording", recording);
-
-  micButton.textContent = recording ? "■" : "🎙";
-
-  micButton.title = recording
-    ? "Stop recording"
-    : "Speak to DOA";
-}
-
-function startMicrophone() {
-  if (busy) return;
+function startListening() {
+  if (!voiceMode || busy || isRecording) return;
 
   if (!SpeechRecognition) {
     micStatus.textContent =
-      "Voice typing is not supported in this browser. Try Chrome on Android.";
+      "Voice recognition is not supported. Try Chrome on Android.";
 
+    stopVoiceConversation();
     return;
   }
 
-  if (isRecording) {
-    stopMicrophone();
-    return;
-  }
+  if (speechSynthesis && speechSynthesis.speaking) return;
 
   try {
+    pendingTranscript = "";
+
     recognition = new SpeechRecognition();
 
     recognition.lang = "en-US";
-    recognition.continuous = true;
+    recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
-    speechBaseText = input.value.trim();
+    recognition.onstart = () => {
+      if (!voiceMode) return;
 
-    micStatus.textContent = "Listening... Speak now.";
-
-    setMicRecording(true);
+      setMicRecording(true);
+      micStatus.textContent = "Listening... Talk to DOA.";
+    };
 
     recognition.onresult = event => {
-      let finalTranscript = "";
-      let interimTranscript = "";
+      let interim = "";
 
-      for (
-        let i = event.resultIndex;
-        i < event.results.length;
-        i++
-      ) {
-        const transcript = event.results[i][0].transcript;
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const result = event.results[i];
+        const transcript = result[0].transcript;
 
-        if (event.results[i].isFinal) {
-          finalTranscript += transcript;
+        if (result.isFinal) {
+          pendingTranscript += transcript + " ";
         } else {
-          interimTranscript += transcript;
+          interim += transcript;
         }
       }
 
-      const spokenText =
-        [speechBaseText, finalTranscript, interimTranscript]
-          .filter(Boolean)
-          .join(" ")
-          .trim();
-
-      input.value = spokenText;
-      resizeInput();
-
-      if (interimTranscript) {
-        micStatus.textContent = "Hearing: " + interimTranscript;
-      } else {
-        micStatus.textContent = "Speech captured. You can continue speaking.";
+      if (interim) {
+        micStatus.textContent = "Hearing: " + interim;
       }
     };
 
     recognition.onerror = event => {
+      if (!voiceMode) return;
+
+      if (event.error === "no-speech") {
+        micStatus.textContent =
+          "I didn't hear anything. Listening again...";
+        return;
+      }
+
       let message = "Microphone error. Please try again.";
 
-      if (event.error === "not-allowed" ||
-          event.error === "service-not-allowed") {
+      if (
+        event.error === "not-allowed" ||
+        event.error === "service-not-allowed"
+      ) {
         message =
-          "Microphone permission was denied. Allow microphone access in your browser settings.";
-      } else if (event.error === "no-speech") {
-        message = "No speech detected. Tap the microphone and try again.";
+          "Please allow microphone access in your browser.";
       } else if (event.error === "network") {
         message =
-          "Speech recognition needs an internet connection. Please check your connection.";
+          "Speech recognition needs an internet connection.";
       } else if (event.error === "audio-capture") {
-        message =
-          "No microphone was detected. Check your device microphone.";
+        message = "No microphone was detected.";
       }
 
       micStatus.textContent = message;
-      setMicRecording(false);
+      stopVoiceConversation();
     };
 
     recognition.onend = () => {
       setMicRecording(false);
+      recognition = null;
 
-      if (input.value.trim()) {
-        micStatus.textContent =
-          "Your speech is in the message box. Review it and press Send.";
+      if (!voiceMode) return;
+
+      const spokenMessage = pendingTranscript.trim();
+      pendingTranscript = "";
+
+      if (spokenMessage) {
+        sendMessage(spokenMessage);
       } else {
-        micStatus.textContent =
-          "Recording stopped. Tap the microphone to try again.";
+        scheduleListening(700);
       }
     };
 
     recognition.start();
 
   } catch (error) {
-    setMicRecording(false);
-
     micStatus.textContent =
-      "Could not start the microphone. Please try again.";
+      "Could not start listening. Please try again.";
+
+    stopVoiceConversation();
   }
 }
 
-function stopMicrophone() {
-  if (recognition && isRecording) {
-    recognition.stop();
+/* STOP VOICE CONVERSATION */
+
+function stopVoiceConversation() {
+  voiceMode = false;
+
+  clearRestartTimer();
+
+  if (recognition) {
+    const oldRecognition = recognition;
+    recognition = null;
+
+    try {
+      oldRecognition.stop();
+    } catch {}
   }
 
+  if (speechSynthesis) {
+    speechSynthesis.cancel();
+  }
+
+  pendingTranscript = "";
   setMicRecording(false);
+
+  micStatus.textContent =
+    "Voice conversation stopped. Tap the microphone to start again.";
 }
+
+/* MICROPHONE BUTTON */
 
 micButton.addEventListener("click", () => {
-  if (isRecording) {
-    stopMicrophone();
-  } else {
-    startMicrophone();
+
+  /* Start voice conversation */
+  if (!voiceMode) {
+    if (!SpeechRecognition) {
+      micStatus.textContent =
+        "Try Chrome on Android for voice conversation.";
+      return;
+    }
+
+    if (!speechSynthesis) {
+      micStatus.textContent =
+        "Your browser does not support spoken replies.";
+      return;
+    }
+
+    voiceMode = true;
+    micStatus.textContent = "Starting voice conversation...";
+    startListening();
+    return;
   }
+
+  /* Interrupt DOA while speaking */
+  if (speechSynthesis && speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+
+    micStatus.textContent =
+      "DOA interrupted. Listening to you...";
+
+    scheduleListening(400);
+    return;
+  }
+
+  /* Stop while listening */
+  if (isRecording) {
+    stopVoiceConversation();
+    return;
+  }
+
+  /* Stop during AI response */
+  if (busy) {
+    stopVoiceConversation();
+    return;
+  }
+
+  startListening();
 });
 
-/* ---------------------------------
-   INPUT AND NEW CHAT
---------------------------------- */
+/* INPUT AND NEW CHAT */
 
 function resizeInput() {
   input.style.height = "auto";
@@ -884,12 +1034,22 @@ function resizeInput() {
 form.addEventListener("submit", event => {
   event.preventDefault();
 
-  if (isRecording) stopMicrophone();
+  const message = input.value.trim();
 
-  micStatus.textContent =
-    "Tap the microphone to speak to DOA.";
+  if (!message || busy) return;
 
-  sendMessage(input.value.trim());
+  if (isRecording && recognition) {
+    const oldRecognition = recognition;
+    recognition = null;
+
+    try {
+      oldRecognition.stop();
+    } catch {}
+
+    setMicRecording(false);
+  }
+
+  sendMessage(message);
 });
 
 input.addEventListener("input", resizeInput);
@@ -908,7 +1068,7 @@ document.querySelectorAll(".suggestion").forEach(button => {
 });
 
 newChatButton.addEventListener("click", () => {
-  if (isRecording) stopMicrophone();
+  stopVoiceConversation();
 
   history = [];
 
@@ -921,10 +1081,11 @@ newChatButton.addEventListener("click", () => {
   resizeInput();
 
   micStatus.textContent =
-    "Tap the microphone to speak to DOA.";
+    "Tap the microphone to start a voice conversation.";
 });
 
-/* Browser security requires HTTPS for microphone access. */
+/* HTTPS IS REQUIRED FOR MICROPHONE ACCESS */
+
 if (!window.isSecureContext) {
   micStatus.textContent =
     "Microphone access requires a secure HTTPS website.";
