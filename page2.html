@@ -182,14 +182,25 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 <footer>DOA 3.0 · Personal Assistant · Guest Tools</footer>
 
 <script>
+
+/* OPEN GUEST TOOLS */
+
 function openTool(id){
  document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+
  const panel=document.getElementById(id);
+
+ if(!panel)return;
+
  panel.style.display='block';
  panel.scrollIntoView({behavior:'smooth'});
+
  if(id==='reminders')showReminders();
  if(id==='plan')showPlans();
+ if(id==='expenses')showExpenses();
 }
+
+/* LOCAL STORAGE */
 
 function getSaved(key){
  try{return JSON.parse(localStorage.getItem(key)||'[]')}
@@ -201,95 +212,144 @@ function save(key,data){
 }
 
 // REMINDERS
+
 function addReminder(){
  const text=document.getElementById('reminderText').value.trim();
  const time=document.getElementById('reminderTime').value;
- if(!text){alert('Enter a reminder first.');return}
+
+ if(!text){
+  alert('Enter a reminder first.');
+  return;
+ }
+
  let items=getSaved('doa_guest_reminders');
+
  items.push({id:Date.now(),text,time});
+
  save('doa_guest_reminders',items);
+
  document.getElementById('reminderText').value='';
  document.getElementById('reminderTime').value='';
+
  showReminders();
 }
 
 function showReminders(){
  const items=getSaved('doa_guest_reminders');
  const list=document.getElementById('reminderList');
+
  list.innerHTML='';
- if(!items.length){list.textContent='No reminders saved yet.';return}
+
+ if(!items.length){
+  list.textContent='No reminders saved yet.';
+  return;
+ }
+
  items.forEach(item=>{
   const div=document.createElement('div');
   div.className='item';
+
   const title=document.createElement('strong');
   title.textContent=item.text;
+
   const date=document.createElement('p');
-  date.textContent=item.time?new Date(item.time).toLocaleString():'No time set';
+  date.textContent=item.time
+   ?new Date(item.time).toLocaleString()
+   :'No time set';
+
   const del=document.createElement('button');
   del.textContent='Delete';
   del.onclick=()=>deleteReminder(item.id);
+
   div.append(title,date,del);
   list.appendChild(div);
  });
 }
 
 function deleteReminder(id){
- save('doa_guest_reminders',getSaved('doa_guest_reminders').filter(x=>x.id!==id));
+ save(
+  'doa_guest_reminders',
+  getSaved('doa_guest_reminders').filter(x=>x.id!==id)
+ );
+
  showReminders();
 }
 
 // CALCULATOR
+
 function calculate(){
  const expression=document.getElementById('calcDisplay').value.trim();
  const result=document.getElementById('calcResult');
+
  if(!/^[0-9+\-*/().%\s]+$/.test(expression)){
   result.textContent='Please enter a valid calculation.';
   return;
  }
+
  try{
   const answer=Function('"use strict";return ('+expression+')')();
-  result.textContent=Number.isFinite(answer)?'Result: '+answer:'Invalid calculation';
+
+  result.textContent=Number.isFinite(answer)
+   ?'Result: '+answer
+   :'Invalid calculation';
+
  }catch(e){
   result.textContent='Invalid calculation';
  }
 }
 
 // DAILY EXPENSES
+
 let expenses=[];
 
 function addExpense(){
  const name=document.getElementById('expenseName').value.trim();
  const amount=Number(document.getElementById('expenseAmount').value);
+
  if(!name||!Number.isFinite(amount)||amount<=0){
   alert('Enter an expense name and a valid amount.');
   return;
  }
+
  expenses.push({name,amount});
+
  document.getElementById('expenseName').value='';
  document.getElementById('expenseAmount').value='';
+
  showExpenses();
 }
 
 function showExpenses(){
  const list=document.getElementById('expenseList');
+
  list.innerHTML='';
+
  let total=0;
+
  expenses.forEach((item,index)=>{
   total+=item.amount;
+
   const div=document.createElement('div');
   div.className='item';
+
   const detail=document.createElement('span');
-  detail.textContent=item.name+' — UGX '+item.amount.toLocaleString();
+  detail.textContent=
+   item.name+' — UGX '+item.amount.toLocaleString();
+
   const del=document.createElement('button');
   del.textContent='Remove';
+
   del.onclick=()=>{
    expenses.splice(index,1);
    showExpenses();
   };
+
   div.append(detail,del);
   list.appendChild(div);
  });
- document.getElementById('expenseTotal').textContent='Total: UGX '+total.toLocaleString();
+
+ document.getElementById('expenseTotal').textContent=
+  'Total: UGX '+total.toLocaleString();
 }
 
 function clearExpenses(){
@@ -300,42 +360,80 @@ function clearExpenses(){
 }
 
 // DAILY PLAN
+
 function addPlan(){
  const date=document.getElementById('planDate').value;
  const time=document.getElementById('planTime').value;
  const task=document.getElementById('planTask').value.trim();
- if(!task){alert('Enter your planned activity.');return}
+
+ if(!task){
+  alert('Enter your planned activity.');
+  return;
+ }
+
  let items=getSaved('doa_guest_plans');
+
  items.push({id:Date.now(),date,time,task});
+
  save('doa_guest_plans',items);
+
  document.getElementById('planTask').value='';
+
  showPlans();
 }
 
 function showPlans(){
  const items=getSaved('doa_guest_plans');
  const list=document.getElementById('planList');
+
  list.innerHTML='';
- if(!items.length){list.textContent='No plans saved yet.';return}
+
+ if(!items.length){
+  list.textContent='No plans saved yet.';
+  return;
+ }
+
  items.forEach(item=>{
   const div=document.createElement('div');
   div.className='item';
+
   const title=document.createElement('strong');
   title.textContent=item.task;
+
   const detail=document.createElement('p');
-  detail.textContent=[item.date,item.time].filter(Boolean).join(' at ')||'No date or time set';
+  detail.textContent=
+   [item.date,item.time].filter(Boolean).join(' at ')
+   ||'No date or time set';
+
   const del=document.createElement('button');
   del.textContent='Delete';
   del.onclick=()=>deletePlan(item.id);
+
   div.append(title,detail,del);
   list.appendChild(div);
  });
 }
 
 function deletePlan(id){
- save('doa_guest_plans',getSaved('doa_guest_plans').filter(x=>x.id!==id));
+ save(
+  'doa_guest_plans',
+  getSaved('doa_guest_plans').filter(x=>x.id!==id)
+ );
+
  showPlans();
 }
+
+/* AUTOMATICALLY OPEN THE REQUESTED TOOL FROM PAGE 1 */
+
+const requestedTool =
+ new URLSearchParams(window.location.search).get('tool');
+
+if(
+ ['reminders','calculator','expenses','plan'].includes(requestedTool)
+){
+ openTool(requestedTool);
+}
+
 </script>
 
 </body>
