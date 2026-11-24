@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07152f">
+<title>DOA 3.0 - Guest Tools</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#07152f;
+ color:#fff;
+}
+header{
+ padding:22px 18px;
+ background:#10264b;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+header h1{margin:0;font-size:23px}
+header p{margin:5px 0 0;color:#bdcce3;font-size:13px}
+button{
+ border:0;
+ border-radius:9px;
+ padding:12px 16px;
+ background:#d8a94e;
+ color:#101b30;
+ font-weight:bold;
+ cursor:pointer;
+}
+.back{background:#fff}
+main{max-width:850px;margin:auto;padding:22px 16px}
+.welcome{text-align:center;margin:15px 0 25px}
+.welcome h2{font-size:25px;margin-bottom:8px}
+.welcome p{color:#bdcce3}
+.tools{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+ gap:13px;
+}
+.tool{
+ background:#122b52;
+ border:1px solid #29466e;
+ border-radius:14px;
+ padding:20px 12px;
+ text-align:center;
+ cursor:pointer;
+}
+.tool .emoji{font-size:34px}
+.tool h3{margin:12px 0 5px}
+.tool p{font-size:12px;color:#bdcce3;margin:0}
+.panel{
+ display:none;
+ margin-top:20px;
+ background:#10264b;
+ padding:18px;
+ border-radius:14px;
+}
+.panel h2{margin-top:0}
+input,textarea{
+ width:100%;
+ padding:13px;
+ margin:7px 0;
+ border:1px solid #607795;
+ border-radius:8px;
+ background:#fff;
+ color:#111;
+ font-size:15px;
+}
+textarea{min-height:75px;resize:vertical}
+.action{margin:7px 5px 7px 0}
+.item{
+ background:#19365f;
+ padding:12px;
+ border-radius:8px;
+ margin:9px 0;
+ overflow-wrap:anywhere;
+}
+.item button{padding:7px 10px;margin:5px 3px 0 0}
+.result{
+ font-size:22px;
+ font-weight:bold;
+ margin:14px 0;
+ color:#f2c66e;
+}
+footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div>
+  <h1>DOA 3.0</h1>
+  <p>Your personal assistant</p>
+ </div>
+ <button class="back" onclick="location.href='index.html'">
+  Back to DOA
+ </button>
+</header>
+
+<main>
+
+<div class="welcome">
+ <h2>Guest Tools</h2>
+ <p>Simple tools to help you organize your everyday life.</p>
+</div>
+
+<div class="tools">
+ <div class="tool" onclick="openTool('reminders')">
+  <div class="emoji">🔔</div>
+  <h3>Reminders</h3>
+  <p>Keep track of important things</p>
+ </div>
+
+ <div class="tool" onclick="openTool('calculator')">
+  <div class="emoji">🧮</div>
+  <h3>Calculator</h3>
+  <p>Calculate quickly</p>
+ </div>
+
+ <div class="tool" onclick="openTool('expenses')">
+  <div class="emoji">💰</div>
+  <h3>Daily Expenses</h3>
+  <p>Track your spending</p>
+ </div>
+
+ <div class="tool" onclick="openTool('plan')">
+  <div class="emoji">📅</div>
+  <h3>My Daily Plan</h3>
+  <p>Organize your day</p>
+ </div>
+</div>
+
+<!-- REMINDERS -->
+<section class="panel" id="reminders">
+ <h2>🔔 My Reminders</h2>
+ <input id="reminderText" placeholder="What should you remember?">
+ <input id="reminderTime" type="datetime-local">
+ <button onclick="addReminder()">Save Reminder</button>
+ <div id="reminderList"></div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="panel" id="calculator">
+ <h2>🧮 Calculator</h2>
+ <input id="calcDisplay" placeholder="Example: 25000 + 15000">
+ <button onclick="calculate()">Calculate</button>
+ <button class="action" onclick="document.getElementById('calcDisplay').value=''">Clear</button>
+ <div class="result" id="calcResult">Result: 0</div>
+</section>
+
+<!-- DAILY EXPENSES -->
+<section class="panel" id="expenses">
+ <h2>💰 Daily Expense Calculator</h2>
+ <input id="expenseName" placeholder="Expense name">
+ <input id="expenseAmount" type="number" min="0" placeholder="Amount (UGX)">
+ <button onclick="addExpense()">Add Expense</button>
+ <div id="expenseList"></div>
+ <div class="result" id="expenseTotal">Total: UGX 0</div>
+ <button onclick="clearExpenses()">Clear Expenses</button>
+</section>
+
+<!-- DAILY PLAN -->
+<section class="panel" id="plan">
+ <h2>📅 My Daily Plan</h2>
+ <input id="planDate" type="date">
+ <input id="planTime" type="time">
+ <textarea id="planTask" placeholder="What do you plan to do?"></textarea>
+ <button onclick="addPlan()">Save Plan</button>
+ <div id="planList"></div>
+</section>
+
+</main>
+
+<footer>DOA 3.0 · Personal Assistant · Guest Tools</footer>
+
+<script>
+function openTool(id){
+ document.querySelectorAll('.panel').forEach(p=>p.style.display='none');
+ const panel=document.getElementById(id);
+ panel.style.display='block';
+ panel.scrollIntoView({behavior:'smooth'});
+ if(id==='reminders')showReminders();
+ if(id==='plan')showPlans();
+}
+
+function getSaved(key){
+ try{return JSON.parse(localStorage.getItem(key)||'[]')}
+ catch(e){return []}
+}
+
+function save(key,data){
+ localStorage.setItem(key,JSON.stringify(data));
+}
+
+// REMINDERS
+function addReminder(){
+ const text=document.getElementById('reminderText').value.trim();
+ const time=document.getElementById('reminderTime').value;
+ if(!text){alert('Enter a reminder first.');return}
+ let items=getSaved('doa_guest_reminders');
+ items.push({id:Date.now(),text,time});
+ save('doa_guest_reminders',items);
+ document.getElementById('reminderText').value='';
+ document.getElementById('reminderTime').value='';
+ showReminders();
+}
+
+function showReminders(){
+ const items=getSaved('doa_guest_reminders');
+ const list=document.getElementById('reminderList');
+ list.innerHTML='';
+ if(!items.length){list.textContent='No reminders saved yet.';return}
+ items.forEach(item=>{
+  const div=document.createElement('div');
+  div.className='item';
+  const title=document.createElement('strong');
+  title.textContent=item.text;
+  const date=document.createElement('p');
+  date.textContent=item.time?new Date(item.time).toLocaleString():'No time set';
+  const del=document.createElement('button');
+  del.textContent='Delete';
+  del.onclick=()=>deleteReminder(item.id);
+  div.append(title,date,del);
+  list.appendChild(div);
+ });
+}
+
+function deleteReminder(id){
+ save('doa_guest_reminders',getSaved('doa_guest_reminders').filter(x=>x.id!==id));
+ showReminders();
+}
+
+// CALCULATOR
+function calculate(){
+ const expression=document.getElementById('calcDisplay').value.trim();
+ const result=document.getElementById('calcResult');
+ if(!/^[0-9+\-*/().%\s]+$/.test(expression)){
+  result.textContent='Please enter a valid calculation.';
+  return;
+ }
+ try{
+  const answer=Function('"use strict";return ('+expression+')')();
+  result.textContent=Number.isFinite(answer)?'Result: '+answer:'Invalid calculation';
+ }catch(e){
+  result.textContent='Invalid calculation';
+ }
+}
+
+// DAILY EXPENSES
+let expenses=[];
+
+function addExpense(){
+ const name=document.getElementById('expenseName').value.trim();
+ const amount=Number(document.getElementById('expenseAmount').value);
+ if(!name||!Number.isFinite(amount)||amount<=0){
+  alert('Enter an expense name and a valid amount.');
+  return;
+ }
+ expenses.push({name,amount});
+ document.getElementById('expenseName').value='';
+ document.getElementById('expenseAmount').value='';
+ showExpenses();
+}
+
+function showExpenses(){
+ const list=document.getElementById('expenseList');
+ list.innerHTML='';
+ let total=0;
+ expenses.forEach((item,index)=>{
+  total+=item.amount;
+  const div=document.createElement('div');
+  div.className='item';
+  const detail=document.createElement('span');
+  detail.textContent=item.name+' — UGX '+item.amount.toLocaleString();
+  const del=document.createElement('button');
+  del.textContent='Remove';
+  del.onclick=()=>{
+   expenses.splice(index,1);
+   showExpenses();
+  };
+  div.append(detail,del);
+  list.appendChild(div);
+ });
+ document.getElementById('expenseTotal').textContent='Total: UGX '+total.toLocaleString();
+}
+
+function clearExpenses(){
+ if(confirm('Clear all expenses?')){
+  expenses=[];
+  showExpenses();
+ }
+}
+
+// DAILY PLAN
+function addPlan(){
+ const date=document.getElementById('planDate').value;
+ const time=document.getElementById('planTime').value;
+ const task=document.getElementById('planTask').value.trim();
+ if(!task){alert('Enter your planned activity.');return}
+ let items=getSaved('doa_guest_plans');
+ items.push({id:Date.now(),date,time,task});
+ save('doa_guest_plans',items);
+ document.getElementById('planTask').value='';
+ showPlans();
+}
+
+function showPlans(){
+ const items=getSaved('doa_guest_plans');
+ const list=document.getElementById('planList');
+ list.innerHTML='';
+ if(!items.length){list.textContent='No plans saved yet.';return}
+ items.forEach(item=>{
+  const div=document.createElement('div');
+  div.className='item';
+  const title=document.createElement('strong');
+  title.textContent=item.task;
+  const detail=document.createElement('p');
+  detail.textContent=[item.date,item.time].filter(Boolean).join(' at ')||'No date or time set';
+  const del=document.createElement('button');
+  del.textContent='Delete';
+  del.onclick=()=>deletePlan(item.id);
+  div.append(title,detail,del);
+  list.appendChild(div);
+ });
+}
+
+function deletePlan(id){
+ save('doa_guest_plans',getSaved('doa_guest_plans').filter(x=>x.id!==id));
+ showPlans();
+}
+</script>
+
+</body>
+</html>
