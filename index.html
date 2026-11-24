@@ -4,604 +4,346 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DOA 2.0 - Personal Assistant</title>
+<meta name="theme-color" content="#080d18">
+<title>DOA 3.0 | Personal Assistant</title>
 
 <style>
+:root {
+  --bg:#080d18;
+  --panel:#101a2b;
+  --panel2:#142138;
+  --blue:#548cff;
+  --cyan:#54d8e8;
+  --text:#f4f7ff;
+  --muted:#91a0b8;
+  --border:rgba(255,255,255,.09);
+}
 *{box-sizing:border-box}
 body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#080d18;
- color:white;
- min-height:100vh;
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:radial-gradient(ellipse at 50% -20%,#1c3761 0%,#080d18 58%);
+  color:var(--text);
+  min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
 }
 header{
- padding:22px 20px;
- text-align:center;
- background:#101a2b;
- border-bottom:1px solid #26344a;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 0 22px;
+  border-bottom:1px solid var(--border);
 }
-header h2{margin:0;color:#fff;letter-spacing:3px}
-header p{margin:8px 0 0;color:#aabbd0;font-size:14px}
-nav{
- display:flex;
- justify-content:center;
- gap:12px;
- padding:15px;
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:46px;height:46px;border-radius:15px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#548cff,#42d4e7);
+  color:white;font-size:22px;font-weight:900;
+  box-shadow:0 5px 30px #367cff55;
 }
-nav button{
- background:#192840;
- color:white;
- border:1px solid #354967;
- border-radius:20px;
- padding:11px 22px;
- cursor:pointer;
+.brand h2{margin:0;font-size:21px;letter-spacing:2px}
+.brand small{display:block;color:var(--muted);margin-top:4px}
+.status{
+  font-size:12px;color:#73e6bb;
+  background:#14372e;padding:8px 12px;
+  border-radius:30px;
 }
-nav button.active{background:#b38b43;color:#080d18}
-.page{
- display:none;
- padding:25px 20px 120px;
- max-width:650px;
- margin:auto;
- text-align:center;
+.status:before{content:"● ";font-size:9px}
+main{
+  flex:1;display:flex;flex-direction:column;
+  width:100%;max-width:850px;margin:0 auto;
 }
-.page.active{display:block}
-.welcome{
- margin-top:45px;
- font-size:25px;
- font-weight:bold;
+.welcome{text-align:center;padding:65px 15px 35px}
+.orb{
+  width:92px;height:92px;border-radius:28px;
+  margin:0 auto 25px;
+  display:grid;place-items:center;
+  font-size:39px;
+  background:linear-gradient(145deg,#264f8e,#10213d);
+  border:1px solid #6da2ff55;
+  box-shadow:0 0 60px #367cff35;
 }
-.subtitle{color:#aabbd0;margin-top:12px}
-.mic-area{
- display:flex;
- justify-content:center;
- margin:55px auto 25px;
+.welcome h1{font-size:clamp(29px,6vw,43px);margin:0 0 13px}
+.welcome h1 span{
+  background:linear-gradient(90deg,#73a8ff,#57dce7);
+  -webkit-background-clip:text;color:transparent;
 }
-.mic{
- width:125px;
- height:125px;
- border-radius:50%;
- border:3px solid #d2ae68;
- background:linear-gradient(145deg,#263a56,#101a2b);
- color:#e5bd72;
- font-size:48px;
- cursor:pointer;
- box-shadow:0 0 35px #b38b4440;
+.welcome p{
+  color:var(--muted);font-size:15px;
+  line-height:1.7;max-width:480px;margin:auto;
 }
-.mic.listening{
- animation:pulse 1.2s infinite;
- background:#a13c42;
- color:white;
+.suggestions{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:12px;margin:0 auto 25px;width:100%;
 }
-@keyframes pulse{
- 50%{box-shadow:0 0 45px #ff5353}
+.suggestion{
+  text-align:left;background:#101b2d;
+  border:1px solid var(--border);color:var(--text);
+  padding:17px;border-radius:15px;
+  transition:.2s;
 }
-.status{color:#d8b776;font-size:14px;margin:18px}
-.message{
- background:#142238;
- border:1px solid #293e5c;
- padding:17px;
- border-radius:14px;
- margin:20px auto;
- text-align:left;
- line-height:1.6;
- min-height:55px;
- overflow-wrap:anywhere;
+.suggestion:hover{border-color:#548cff;transform:translateY(-2px)}
+.suggestion strong{display:block;font-size:14px;margin-bottom:7px}
+.suggestion small{color:var(--muted);font-size:12px}
+#chat{
+  flex:1;display:none;flex-direction:column;
+  gap:18px;padding:20px 0;
 }
-.chat-line{margin:0 0 14px}
-.chat-line:last-child{margin-bottom:0}
-.chat-label{color:#e5bd72;font-weight:bold}
-.input-area{
- display:flex;
- gap:8px;
- margin-top:20px;
+.message{display:flex;gap:11px;align-items:flex-start}
+.avatar{
+  flex-shrink:0;width:35px;height:35px;
+  display:grid;place-items:center;border-radius:12px;
+  background:#1b3153;font-size:14px;font-weight:bold;
 }
-input{
- flex:1;
- min-width:0;
- padding:14px;
- border-radius:10px;
- border:1px solid #344b69;
- background:#142238;
- color:white;
- font-size:15px;
+.message.user .avatar{background:#2854a0}
+.bubble{
+  max-width:85%;padding:14px 16px;
+  border-radius:5px 16px 16px 16px;
+  background:#142138;border:1px solid var(--border);
+  font-size:14px;line-height:1.7;
+  white-space:pre-wrap;overflow-wrap:anywhere;
+}
+.message.user{flex-direction:row-reverse}
+.message.user .bubble{
+  background:linear-gradient(135deg,#2454a0,#193b70);
+  border-radius:16px 5px 16px 16px;
+}
+.typing{color:var(--cyan);font-size:13px;padding:8px}
+.composer{
+  position:sticky;bottom:0;
+  padding:14px 0 8px;
+  background:linear-gradient(transparent,#080d18 20%);
+}
+.inputbox{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;
+  background:#121e31;border:1px solid #314866;
+  border-radius:19px;
+  box-shadow:0 12px 40px #0005;
+}
+.inputbox:focus-within{border-color:var(--blue)}
+.inputbox input{
+  flex:1;min-width:0;background:transparent;
+  border:0;outline:0;color:white;
+  padding:10px 3px;font-size:15px;
+}
+.inputbox input::placeholder{color:#8292ab}
+.action{
+  width:43px;height:43px;border:0;border-radius:13px;
+  color:white;background:#263c5c;font-size:18px;
 }
 .send{
- padding:12px 17px;
- background:#b38b43;
- color:#111;
- border:0;
- border-radius:10px;
- cursor:pointer;
+  background:linear-gradient(135deg,#548cff,#3970d6);
 }
-.send:disabled{opacity:.55}
-.record{
- background:#142238;
- border:1px solid #293e5c;
- padding:15px;
- border-radius:12px;
- margin:12px 0;
- text-align:left;
+.send:disabled{opacity:.45;cursor:not-allowed}
+.hint{text-align:center;color:#73839b;font-size:11px;margin-top:12px}
+footer{text-align:center;color:#63728a;font-size:11px;padding:18px 0}
+.newchat{
+  color:#c5d7f7;background:#172640;
+  border:1px solid var(--border);
+  padding:10px 14px;border-radius:12px;font-size:12px;
 }
-.record small{color:#9eb0c8}
-.delete{
- background:#803c43;
- color:white;
- border:0;
- padding:8px 12px;
- border-radius:8px;
- margin-top:8px;
-}
-.bottom-mic{
- position:fixed;
- bottom:15px;
- left:50%;
- transform:translateX(-50%);
- background:#b38b43;
- color:#101722;
- border:3px solid #e5c98c;
- width:65px;
- height:65px;
- border-radius:50%;
- font-size:27px;
- cursor:pointer;
- box-shadow:0 0 25px #b38b4460;
- z-index:10;
-}
-.bottom-mic.listening{
- background:#a13c42;
- color:white;
-}
-footer{
- text-align:center;
- color:#657890;
- font-size:12px;
- padding:15px;
+@media(max-width:550px){
+ .app{padding:14px}
+ header{padding-bottom:16px}
+ .brand h2{font-size:18px}
+ .welcome{padding-top:48px}
+ .suggestions{grid-template-columns:1fr}
+ .bubble{max-width:88%;font-size:13px}
 }
 </style>
 </head>
 
 <body>
+<div class="app">
 
 <header>
-<h2>DOA 2.0</h2>
-<p>Your intelligent personal assistant</p>
+  <div class="brand">
+    <div class="logo">D</div>
+    <div>
+      <h2>DOA</h2>
+      <small>PERSONAL AI ASSISTANT · 3.0</small>
+    </div>
+  </div>
+  <button class="newchat" onclick="newChat()">＋ New chat</button>
 </header>
 
-<nav>
-<button class="active" onclick="openPage('home',this)">Home</button>
-<button onclick="openPage('records',this)">Records</button>
-</nav>
+<main>
+  <section class="welcome" id="welcome">
+    <div class="orb">✦</div>
+    <h1>Welcome to <span>DOA</span></h1>
+    <p>Your best personal assistant. Think, plan, create and get things done with intelligent assistance.</p>
+  </section>
 
-<section id="home" class="page active">
+  <section class="suggestions" id="suggestions">
+    <button class="suggestion" onclick="ask('Help me plan my day')">
+      <strong>✦ Plan my day</strong>
+      <small>Organise tasks and priorities</small>
+    </button>
+    <button class="suggestion" onclick="ask('Help me solve a problem')">
+      <strong>◈ Solve a problem</strong>
+      <small>Think through difficult decisions</small>
+    </button>
+    <button class="suggestion" onclick="ask('Help me write something professionally')">
+      <strong>✎ Writing assistant</strong>
+      <small>Create professional content</small>
+    </button>
+    <button class="suggestion" onclick="ask('Give me business ideas')">
+      <strong>⌘ Business ideas</strong>
+      <small>Explore opportunities and strategies</small>
+    </button>
+  </section>
 
-<div class="welcome">
-Welcome to DOA,<br>
-your best personal assistant.
+  <section id="chat"></section>
+
+  <div class="composer">
+    <div class="inputbox">
+      <button class="action" title="Voice input coming later" onclick="alert('Microphone upgrade coming soon.')">🎙</button>
+      <input id="prompt" type="text" placeholder="Ask DOA anything..." autocomplete="off">
+      <button class="action send" id="send" onclick="sendMessage()">➤</button>
+    </div>
+    <div class="hint">DOA 3.0 · Your thoughts, your assistant</div>
+  </div>
+</main>
+
+<footer>DOA 3.0 · PERSONAL INTELLIGENCE</footer>
 </div>
-
-<div class="subtitle">
-I'm ready to listen. What can I do for you?
-</div>
-
-<div class="mic-area">
-<button class="mic" id="mainMic" onclick="toggleMic()">🎙</button>
-</div>
-
-<div class="status" id="status">
-Tap the microphone and talk to DOA.
-</div>
-
-<div class="message" id="conversation" aria-live="polite">
-<div class="chat-line">
-<span class="chat-label">DOA:</span>
-Hello! How can I help you today?
-</div>
-</div>
-
-<div class="input-area">
-<input id="userInput" placeholder="Type your instruction...">
-<button class="send" id="sendButton" onclick="sendText()">Send</button>
-</div>
-
-</section>
-
-<section id="records" class="page">
-
-<h2>My Records</h2>
-<p class="subtitle">Your saved information and records.</p>
-
-<div class="input-area">
-<input id="recordInput" placeholder="Enter a record...">
-<button class="send" onclick="saveRecord()">Save</button>
-</div>
-
-<div id="recordList"></div>
-
-</section>
-
-<button class="bottom-mic" id="bottomMic"
- onclick="toggleMic()" title="Talk to DOA">🎙</button>
-
-<footer>
-DOA 2.0 | Your personal assistant
-</footer>
 
 <script>
-const DOA_BACKEND =
- "https://soft-frog-4cf8.doa2026app.workers.dev";
+const WORKER_URL =
+ "https://soft-frog-4cf8.doa2026app.workers.dev/";
 
-const CHAT_ENDPOINT = DOA_BACKEND + "/chat";
+const chat = document.getElementById("chat");
+const promptBox = document.getElementById("prompt");
+const sendButton = document.getElementById("send");
+const welcome = document.getElementById("welcome");
+const suggestions = document.getElementById("suggestions");
 
-let recognition;
-let listening = false;
+let history = [];
 let busy = false;
-let chatHistory = [];
-let currentPage = "home";
 
-const statusBox = document.getElementById("status");
-const conversation = document.getElementById("conversation");
-const mainMic = document.getElementById("mainMic");
-const bottomMic = document.getElementById("bottomMic");
-const sendButton = document.getElementById("sendButton");
-
-function openPage(page,button){
- document.querySelectorAll(".page").forEach(p=>{
-  p.classList.remove("active");
- });
-
- document.getElementById(page).classList.add("active");
-
- document.querySelectorAll("nav button").forEach(b=>{
-  b.classList.remove("active");
- });
-
- if(button) button.classList.add("active");
-
- currentPage=page;
-
- if(page==="records") loadRecords();
+function showChat(){
+ welcome.style.display="none";
+ suggestions.style.display="none";
+ chat.style.display="flex";
 }
 
-function setStatus(text){
- if(statusBox) statusBox.innerText=text;
+function addMessage(role,text){
+ const row=document.createElement("div");
+ row.className="message "+role;
+
+ const avatar=document.createElement("div");
+ avatar.className="avatar";
+ avatar.textContent=role==="user"?"Y":"D";
+
+ const bubble=document.createElement("div");
+ bubble.className="bubble";
+ bubble.textContent=text;
+
+ row.append(avatar,bubble);
+ chat.appendChild(row);
+ chat.scrollTop=chat.scrollHeight;
+ return row;
 }
 
-function addMessage(who,text){
- const line=document.createElement("div");
- line.className="chat-line";
-
- const label=document.createElement("span");
- label.className="chat-label";
- label.textContent=who+": ";
-
- const content=document.createElement("span");
- content.textContent=text;
-
- line.appendChild(label);
- line.appendChild(content);
- conversation.appendChild(line);
-
- conversation.scrollTop=conversation.scrollHeight;
+function ask(text){
+ promptBox.value=text;
+ sendMessage();
 }
 
-function speak(text){
- if(!("speechSynthesis" in window)) return;
+async function sendMessage(){
+ const message=promptBox.value.trim();
+ if(!message || busy)return;
 
- window.speechSynthesis.cancel();
+ showChat();
+ addMessage("user",message);
+ promptBox.value="";
+ busy=true;
+ sendButton.disabled=true;
 
- const speech=new SpeechSynthesisUtterance(text);
- speech.lang="en-US";
- speech.rate=1;
- speech.pitch=1;
-
- window.speechSynthesis.speak(speech);
-}
-
-function reply(text){
- addMessage("DOA",text);
- speak(text);
-}
-
-function setBusy(value){
- busy=value;
- sendButton.disabled=value;
- sendButton.textContent=value?"Wait...":"Send";
-}
-
-function saveHistory(role,content){
- chatHistory.push({
-  role:role,
-  content:content
- });
-
- // Keep recent conversation context manageable.
- if(chatHistory.length>20){
-  chatHistory=chatHistory.slice(-20);
- }
-}
-
-async function askDOA(message){
- if(busy) return;
-
- setBusy(true);
- setStatus("DOA is thinking...");
+ const typing=addMessage("assistant","DOA is thinking...");
+ typing.querySelector(".bubble").classList.add("typing");
 
  try{
-  const response=await fetch(CHAT_ENDPOINT,{
-   method:"POST",
-   headers:{
-    "Content-Type":"application/json"
-   },
-   body:JSON.stringify({
-    message:message,
-    history:chatHistory
-   })
-  });
+   const response=await fetch(WORKER_URL,{
+     method:"POST",
+     headers:{"Content-Type":"application/json"},
+     body:JSON.stringify({
+       message:message,
+       prompt:message,
+       history:history,
+       messages:history
+     })
+   });
 
-  const data=await response.json();
+   const raw=await response.text();
+   let data;
 
-  if(!response.ok){
-   throw new Error(
-    data.error || data.message ||
-    "The AI service returned an error."
+   try{
+     data=JSON.parse(raw);
+   }catch{
+     throw new Error("The AI server returned an unexpected response.");
+   }
+
+   if(!response.ok){
+     throw new Error(data.error || data.message || "Server error: "+response.status);
+   }
+
+   const answer=typeof data==="string"
+     ?data
+     :(data.reply || data.response || data.answer ||
+       data.text || data.output ||
+       data.result?.response || data.result?.text);
+
+   if(!answer){
+     throw new Error(data.error || "No answer was received from the AI server.");
+   }
+
+   typing.querySelector(".bubble").textContent=answer;
+   typing.querySelector(".bubble").classList.remove("typing");
+
+   history.push(
+     {role:"user",content:message},
+     {role:"assistant",content:answer}
    );
-  }
-
-  let answer =
-   data.reply ||
-   data.response ||
-   data.answer ||
-   data.output_text;
-
-  // Support the standard Responses API output structure
-  // if the Worker returns it directly.
-  if(!answer && Array.isArray(data.output)){
-   answer=data.output
-    .flatMap(item=>item.content||[])
-    .filter(item=>item.type==="output_text")
-    .map(item=>item.text)
-    .join("\n");
-  }
-
-  if(!answer){
-   throw new Error("DOA received an unexpected response.");
-  }
-
-  answer=String(answer);
-
-  saveHistory("user",message);
-  saveHistory("assistant",answer);
-
-  reply(answer);
-  setStatus("DOA is ready to help.");
 
  }catch(error){
-  console.error("DOA connection error:",error);
-
-  reply(
-   "I'm having trouble connecting to my AI engine. " +
-   "Please check your internet connection and try again."
-  );
-
-  setStatus("AI connection problem. Please try again.");
-
+   typing.querySelector(".bubble").textContent=
+     "I'm having trouble connecting right now. Please try again.\n\n"+error.message;
+   typing.querySelector(".bubble").classList.remove("typing");
  }finally{
-  setBusy(false);
+   busy=false;
+   sendButton.disabled=false;
+   promptBox.focus();
+   chat.scrollTop=chat.scrollHeight;
  }
 }
 
-function processInstruction(text){
- const command=text.toLowerCase().trim();
-
- if(command.includes("open records") ||
-    command.includes("show records") ||
-    command.includes("go to records")){
-  openPage("records",document.querySelectorAll("nav button")[1]);
-  reply("Opening your records.");
-  return;
- }
-
- if(command.includes("open home") ||
-    command.includes("go home") ||
-    command.includes("return home")){
-  openPage("home",document.querySelectorAll("nav button")[0]);
-  reply("Welcome back to your home page.");
-  return;
- }
-
- if(command.startsWith("save record")){
-  const value=text.replace(/save record/i,"").trim();
-
-  if(value){
-   addRecord(value);
-   reply("Your record has been saved.");
-  }else{
-   reply("Please tell me what you want me to save.");
-  }
-  return;
- }
-
- if(command.includes("read records") ||
-    command.includes("list records")){
-  openPage("records",document.querySelectorAll("nav button")[1]);
-
-  const records=JSON.parse(
-   localStorage.getItem("doaRecords")||"[]"
-  );
-
-  reply(records.length?
-   "You have "+records.length+" saved records.":
-   "You do not have any saved records yet."
-  );
-  return;
- }
-
- if(command.includes("clear records")){
-  localStorage.removeItem("doaRecords");
-  loadRecords();
-  reply("All records have been cleared.");
-  return;
- }
-
- // All other questions and instructions go to the AI.
- askDOA(text);
+function newChat(){
+ history=[];
+ chat.innerHTML="";
+ chat.style.display="none";
+ welcome.style.display="block";
+ suggestions.style.display="grid";
+ promptBox.value="";
 }
 
-function sendText(){
- const input=document.getElementById("userInput");
- const words=input.value.trim();
-
- if(!words || busy) return;
-
- addMessage("You",words);
- input.value="";
-
- processInstruction(words);
-}
-
-document.getElementById("userInput")
-.addEventListener("keydown",e=>{
- if(e.key==="Enter") sendText();
+promptBox.addEventListener("keydown",function(e){
+ if(e.key==="Enter" && !e.shiftKey){
+   e.preventDefault();
+   sendMessage();
+ }
 });
-
-function toggleMic(){
- if(listening){
-  if(recognition) recognition.stop();
-  return;
- }
-
- if(busy){
-  setStatus("Please wait for DOA to finish answering.");
-  return;
- }
-
- const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
- if(!SpeechRecognition){
-  reply(
-   "Voice recognition is not supported in this browser. " +
-   "Please use Chrome on your phone."
-  );
-  return;
- }
-
- recognition=new SpeechRecognition();
- recognition.lang="en-US";
- recognition.continuous=false;
- recognition.interimResults=false;
-
- recognition.onstart=()=>{
-  listening=true;
-  mainMic.classList.add("listening");
-  bottomMic.classList.add("listening");
-  setStatus("DOA is listening...");
- };
-
- recognition.onresult=(event)=>{
-  const words=event.results[0][0].transcript.trim();
-
-  if(!words) return;
-
-  addMessage("You",words);
-  processInstruction(words);
- };
-
- recognition.onerror=(event)=>{
-  console.error("Voice recognition error:",event.error);
-  setStatus("I couldn't hear you. Please try again.");
- };
-
- recognition.onend=()=>{
-  listening=false;
-  mainMic.classList.remove("listening");
-  bottomMic.classList.remove("listening");
-
-  if(!busy){
-   setStatus("Tap the microphone to speak again.");
-  }
- };
-
- try{
-  recognition.start();
- }catch(error){
-  console.error(error);
-  setStatus("Please try tapping the microphone again.");
- }
-}
-
-function addRecord(value){
- const records=JSON.parse(
-  localStorage.getItem("doaRecords")||"[]"
- );
-
- records.push({
-  text:value,
-  date:new Date().toLocaleString()
- });
-
- localStorage.setItem("doaRecords",JSON.stringify(records));
- loadRecords();
-}
-
-function saveRecord(){
- const input=document.getElementById("recordInput");
-
- if(!input.value.trim()) return;
-
- addRecord(input.value.trim());
- input.value="";
- reply("Your record has been saved.");
-}
-
-function loadRecords(){
- const records=JSON.parse(
-  localStorage.getItem("doaRecords")||"[]"
- );
-
- const list=document.getElementById("recordList");
-
- if(!records.length){
-  list.innerHTML="<p class='subtitle'>No records saved yet.</p>";
-  return;
- }
-
- list.innerHTML=records.map((r,i)=>`
- <div class="record">
- <strong>${escapeHTML(r.text)}</strong><br>
- <small>${escapeHTML(r.date)}</small><br>
- <button class="delete" onclick="deleteRecord(${i})">
- Delete
- </button>
- </div>
- `).join("");
-}
-
-function escapeHTML(text){
- return String(text).replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- })[c]);
-}
-
-function deleteRecord(index){
- const records=JSON.parse(
-  localStorage.getItem("doaRecords")||"[]"
- );
-
- records.splice(index,1);
-
- localStorage.setItem("doaRecords",JSON.stringify(records));
- loadRecords();
-}
-
-loadRecords();
 </script>
-
 </body>
 </html>
