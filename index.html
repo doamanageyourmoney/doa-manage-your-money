@@ -26,7 +26,7 @@ body {
   min-height:100vh;
   background:radial-gradient(ellipse at top,#12365a,#071426 65%);
   color:var(--text);
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
 }
 
 .app {
@@ -76,9 +76,7 @@ header {
   letter-spacing:1px;
 }
 
-button {
-  cursor:pointer;
-}
+button { cursor:pointer; }
 
 .new-chat {
   padding:10px 13px;
@@ -196,9 +194,7 @@ main {
   border-radius:16px 5px 16px 16px;
 }
 
-.error {
-  color:#ff9999;
-}
+.error { color:#ff9999; }
 
 .composer-wrap {
   padding:12px 0 18px;
@@ -207,7 +203,7 @@ main {
 .composer {
   display:flex;
   align-items:flex-end;
-  gap:10px;
+  gap:8px;
   padding:10px;
   border:1px solid #31516e;
   border-radius:18px;
@@ -216,6 +212,7 @@ main {
 
 textarea {
   flex:1;
+  min-width:0;
   min-height:42px;
   max-height:150px;
   resize:none;
@@ -227,13 +224,41 @@ textarea {
   padding:10px 6px;
 }
 
-textarea::placeholder {
-  color:#7892ad;
+textarea::placeholder { color:#7892ad; }
+
+.mic-button {
+  width:43px;
+  height:43px;
+  flex-shrink:0;
+  border:1px solid #31516e;
+  border-radius:14px;
+  background:#142d47;
+  color:#7edff0;
+  font-size:19px;
+}
+
+.mic-button.recording {
+  background:#8b2635;
+  color:white;
+  border-color:#ff697d;
+  animation:pulse 1.2s infinite;
+}
+
+.mic-button:disabled {
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+@keyframes pulse {
+  0% { box-shadow:0 0 0 0 #ff697d66; }
+  70% { box-shadow:0 0 0 10px #ff697d00; }
+  100% { box-shadow:0 0 0 0 #ff697d00; }
 }
 
 .send {
   width:44px;
   height:44px;
+  flex-shrink:0;
   border:0;
   border-radius:14px;
   background:linear-gradient(135deg,#62edf0,#318dff);
@@ -242,20 +267,24 @@ textarea::placeholder {
   font-weight:bold;
 }
 
-.send:disabled {
-  opacity:.5;
+.send:disabled { opacity:.5; }
+
+.mic-status {
+  min-height:19px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding-top:7px;
 }
 
 .footnote {
   text-align:center;
   color:#7189a3;
   font-size:11px;
-  padding-top:8px;
+  padding-top:5px;
 }
 
-.hidden {
-  display:none !important;
-}
+.hidden { display:none !important; }
 
 @media(max-width:600px) {
   .app { padding:0 12px; }
@@ -273,7 +302,9 @@ textarea::placeholder {
   <div class="brand">
     <div class="logo">D</div>
     <div>
-      <div class="brand-name">DOA <span style="color:#35d6ee">3.0</span></div>
+      <div class="brand-name">
+        DOA <span style="color:#35d6ee">3.0</span>
+      </div>
       <div class="brand-sub">YOUR PERSONAL ASSISTANT</div>
     </div>
   </div>
@@ -301,7 +332,9 @@ textarea::placeholder {
 </main>
 
 <div class="composer-wrap">
+
   <form class="composer" id="chatForm">
+
     <textarea
       id="messageInput"
       rows="1"
@@ -309,14 +342,32 @@ textarea::placeholder {
       aria-label="Message DOA"
     ></textarea>
 
-    <button class="send" id="sendButton" type="submit">↑</button>
+    <button
+      class="mic-button"
+      id="micButton"
+      type="button"
+      aria-label="Start microphone"
+      title="Speak to DOA"
+    >🎙</button>
+
+    <button
+      class="send"
+      id="sendButton"
+      type="submit"
+      aria-label="Send message"
+    >↑</button>
+
   </form>
+
+  <div class="mic-status" id="micStatus">
+    Tap the microphone to speak to DOA.
+  </div>
 
   <div class="footnote">
     DOA can make mistakes. Check important information.
   </div>
-</div>
 
+</div>
 </div>
 
 <script>
@@ -333,8 +384,15 @@ const messagesEl = document.getElementById("messages");
 const welcomeEl = document.getElementById("welcome");
 const newChatButton = document.getElementById("newChat");
 
+const micButton = document.getElementById("micButton");
+const micStatus = document.getElementById("micStatus");
+
 let history = [];
 let busy = false;
+
+/* ---------------------------------
+   CHAT DISPLAY
+--------------------------------- */
 
 function showConversation() {
   welcomeEl.classList.add("hidden");
@@ -371,22 +429,22 @@ function setBusy(value) {
   sendButton.textContent = value ? "…" : "↑";
 }
 
+/* ---------------------------------
+   READ AI RESPONSE
+--------------------------------- */
+
 function extractText(data) {
   if (data == null) return "";
 
-  if (typeof data === "string") {
-    return data;
-  }
+  if (typeof data === "string") return data;
 
   if (Array.isArray(data)) {
     return data.map(extractText).join("");
   }
 
-  if (typeof data !== "object") {
-    return "";
-  }
+  if (typeof data !== "object") return "";
 
-  const directFields = [
+  const fields = [
     "reply",
     "response",
     "answer",
@@ -396,7 +454,7 @@ function extractText(data) {
     "content"
   ];
 
-  for (const field of directFields) {
+  for (const field of fields) {
     if (typeof data[field] === "string") {
       return data[field];
     }
@@ -422,40 +480,26 @@ function extractText(data) {
   return "";
 }
 
-/*
-  Supports:
-  1. Normal JSON responses
-  2. Server-Sent Events (SSE)
-  3. Multiple data: {...} chunks
-  4. Plain text stream chunks
-*/
-
 async function readWorkerResponse(response, onUpdate) {
   const contentType =
     (response.headers.get("content-type") || "").toLowerCase();
 
-  /* NORMAL JSON RESPONSE */
   if (
     contentType.includes("application/json") ||
     !response.body ||
     !response.body.getReader
   ) {
     const raw = await response.text();
-
     let data;
 
     try {
       data = JSON.parse(raw);
     } catch {
-      throw new Error(
-        "The server response was not valid JSON or a readable stream."
-      );
+      throw new Error("The server returned an unreadable response.");
     }
 
     if (data.success === false || data.error) {
-      throw new Error(
-        data.error || data.details || "The AI server reported an error."
-      );
+      throw new Error(data.error || data.details || "AI server error.");
     }
 
     const answer = extractText(data);
@@ -468,15 +512,14 @@ async function readWorkerResponse(response, onUpdate) {
     return answer;
   }
 
-  /* STREAMING RESPONSE */
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
 
   let buffer = "";
   let fullAnswer = "";
-  let isSSE = contentType.includes("text/event-stream");
+  const isSSE = contentType.includes("text/event-stream");
 
-  function processSSEEvent(event) {
+  function processEvent(event) {
     const lines = event.split(/\r?\n/);
 
     const dataLines = lines
@@ -494,9 +537,7 @@ async function readWorkerResponse(response, onUpdate) {
     try {
       const parsed = JSON.parse(dataText);
 
-      if (parsed.error) {
-        throw new Error(parsed.error);
-      }
+      if (parsed.error) throw new Error(parsed.error);
 
       chunk = extractText(parsed);
 
@@ -519,7 +560,7 @@ async function readWorkerResponse(response, onUpdate) {
 
     if (result.done) break;
 
-    buffer += decoder.decode(result.value, { stream: true });
+    buffer += decoder.decode(result.value, { stream:true });
 
     if (isSSE) {
       let boundary;
@@ -529,16 +570,11 @@ async function readWorkerResponse(response, onUpdate) {
         const separator = buffer.match(/\r?\n\r?\n/)[0];
 
         buffer = buffer.slice(boundary + separator.length);
-
-        processSSEEvent(event);
+        processEvent(event);
       }
 
     } else {
-      /*
-        Some Workers send newline-separated JSON chunks.
-        Others send a single JSON response in chunks.
-      */
-      let lines = buffer.split(/\r?\n/);
+      const lines = buffer.split(/\r?\n/);
       buffer = lines.pop() || "";
 
       for (const line of lines) {
@@ -547,16 +583,14 @@ async function readWorkerResponse(response, onUpdate) {
         if (!trimmed) continue;
 
         if (trimmed.startsWith("data:")) {
-          processSSEEvent(trimmed);
+          processEvent(trimmed);
           continue;
         }
 
         try {
           const parsed = JSON.parse(trimmed);
 
-          if (parsed.error) {
-            throw new Error(parsed.error);
-          }
+          if (parsed.error) throw new Error(parsed.error);
 
           const chunk = extractText(parsed);
 
@@ -576,14 +610,12 @@ async function readWorkerResponse(response, onUpdate) {
 
   if (buffer.trim()) {
     if (buffer.trim().startsWith("data:")) {
-      processSSEEvent(buffer);
+      processEvent(buffer);
     } else {
       try {
         const parsed = JSON.parse(buffer.trim());
 
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
+        if (parsed.error) throw new Error(parsed.error);
 
         const finalText = extractText(parsed);
 
@@ -598,13 +630,15 @@ async function readWorkerResponse(response, onUpdate) {
   }
 
   if (!fullAnswer) {
-    throw new Error(
-      "The Worker stream ended without a readable answer."
-    );
+    throw new Error("The Worker stream ended without a readable answer.");
   }
 
   return fullAnswer;
 }
+
+/* ---------------------------------
+   SEND CHAT MESSAGE
+--------------------------------- */
 
 async function sendMessage(message) {
   if (!message || busy) return;
@@ -614,8 +648,8 @@ async function sendMessage(message) {
   const previousHistory = history.slice();
 
   history.push({
-    role: "user",
-    text: message
+    role:"user",
+    text:message
   });
 
   input.value = "";
@@ -629,22 +663,21 @@ async function sendMessage(message) {
 
   try {
     const response = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json, text/event-stream"
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Accept":"application/json, text/event-stream"
       },
-      body: JSON.stringify({
-        message: message,
-        prompt: message,
-        history: previousHistory,
-        messages: previousHistory
+      body:JSON.stringify({
+        message:message,
+        prompt:message,
+        history:previousHistory,
+        messages:previousHistory
       })
     });
 
     if (!response.ok) {
       const raw = await response.text();
-
       let detail = raw;
 
       try {
@@ -656,9 +689,7 @@ async function sendMessage(message) {
           raw;
       } catch {}
 
-      throw new Error(
-        detail || "Worker error: " + response.status
-      );
+      throw new Error(detail || "Worker error: " + response.status);
     }
 
     answerBubble.textContent = "";
@@ -674,8 +705,8 @@ async function sendMessage(message) {
     answerBubble.textContent = answer;
 
     history.push({
-      role: "assistant",
-      text: answer
+      role:"assistant",
+      text:answer
     });
 
   } catch (error) {
@@ -693,6 +724,156 @@ async function sendMessage(message) {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
+/* ---------------------------------
+   MICROPHONE / SPEECH RECOGNITION
+--------------------------------- */
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+let recognition = null;
+let isRecording = false;
+let speechBaseText = "";
+
+function setMicRecording(recording) {
+  isRecording = recording;
+
+  micButton.classList.toggle("recording", recording);
+
+  micButton.textContent = recording ? "■" : "🎙";
+
+  micButton.title = recording
+    ? "Stop recording"
+    : "Speak to DOA";
+}
+
+function startMicrophone() {
+  if (busy) return;
+
+  if (!SpeechRecognition) {
+    micStatus.textContent =
+      "Voice typing is not supported in this browser. Try Chrome on Android.";
+
+    return;
+  }
+
+  if (isRecording) {
+    stopMicrophone();
+    return;
+  }
+
+  try {
+    recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    speechBaseText = input.value.trim();
+
+    micStatus.textContent = "Listening... Speak now.";
+
+    setMicRecording(true);
+
+    recognition.onresult = event => {
+      let finalTranscript = "";
+      let interimTranscript = "";
+
+      for (
+        let i = event.resultIndex;
+        i < event.results.length;
+        i++
+      ) {
+        const transcript = event.results[i][0].transcript;
+
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+
+      const spokenText =
+        [speechBaseText, finalTranscript, interimTranscript]
+          .filter(Boolean)
+          .join(" ")
+          .trim();
+
+      input.value = spokenText;
+      resizeInput();
+
+      if (interimTranscript) {
+        micStatus.textContent = "Hearing: " + interimTranscript;
+      } else {
+        micStatus.textContent = "Speech captured. You can continue speaking.";
+      }
+    };
+
+    recognition.onerror = event => {
+      let message = "Microphone error. Please try again.";
+
+      if (event.error === "not-allowed" ||
+          event.error === "service-not-allowed") {
+        message =
+          "Microphone permission was denied. Allow microphone access in your browser settings.";
+      } else if (event.error === "no-speech") {
+        message = "No speech detected. Tap the microphone and try again.";
+      } else if (event.error === "network") {
+        message =
+          "Speech recognition needs an internet connection. Please check your connection.";
+      } else if (event.error === "audio-capture") {
+        message =
+          "No microphone was detected. Check your device microphone.";
+      }
+
+      micStatus.textContent = message;
+      setMicRecording(false);
+    };
+
+    recognition.onend = () => {
+      setMicRecording(false);
+
+      if (input.value.trim()) {
+        micStatus.textContent =
+          "Your speech is in the message box. Review it and press Send.";
+      } else {
+        micStatus.textContent =
+          "Recording stopped. Tap the microphone to try again.";
+      }
+    };
+
+    recognition.start();
+
+  } catch (error) {
+    setMicRecording(false);
+
+    micStatus.textContent =
+      "Could not start the microphone. Please try again.";
+  }
+}
+
+function stopMicrophone() {
+  if (recognition && isRecording) {
+    recognition.stop();
+  }
+
+  setMicRecording(false);
+}
+
+micButton.addEventListener("click", () => {
+  if (isRecording) {
+    stopMicrophone();
+  } else {
+    startMicrophone();
+  }
+});
+
+/* ---------------------------------
+   INPUT AND NEW CHAT
+--------------------------------- */
+
 function resizeInput() {
   input.style.height = "auto";
 
@@ -702,6 +883,11 @@ function resizeInput() {
 
 form.addEventListener("submit", event => {
   event.preventDefault();
+
+  if (isRecording) stopMicrophone();
+
+  micStatus.textContent =
+    "Tap the microphone to speak to DOA.";
 
   sendMessage(input.value.trim());
 });
@@ -722,6 +908,8 @@ document.querySelectorAll(".suggestion").forEach(button => {
 });
 
 newChatButton.addEventListener("click", () => {
+  if (isRecording) stopMicrophone();
+
   history = [];
 
   messagesEl.replaceChildren();
@@ -731,8 +919,16 @@ newChatButton.addEventListener("click", () => {
 
   input.value = "";
   resizeInput();
-  input.focus();
+
+  micStatus.textContent =
+    "Tap the microphone to speak to DOA.";
 });
+
+/* Browser security requires HTTPS for microphone access. */
+if (!window.isSecureContext) {
+  micStatus.textContent =
+    "Microphone access requires a secure HTTPS website.";
+}
 </script>
 
 </body>
