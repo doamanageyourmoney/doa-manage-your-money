@@ -134,6 +134,53 @@ textarea{min-height:85px;resize:vertical}
 .locked p{color:#bdcce3;line-height:1.6}
 hr{border:0;border-top:1px solid #385273;margin:18px 0}
 footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
+
+/* FLOATING VOICE ASSISTANT */
+#doaFloatMic{
+ position:fixed;
+ right:18px;
+ bottom:22px;
+ width:62px;
+ height:62px;
+ border-radius:50%;
+ background:#d8a94e;
+ color:#07152f;
+ font-size:27px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ box-shadow:0 4px 18px rgba(0,0,0,.4);
+ z-index:9999;
+ border:3px solid #fff;
+ padding:0;
+}
+#doaFloatMic.listening{
+ background:#e94b4b;
+ color:white;
+ animation:doaPulse 1s infinite;
+}
+#doaVoiceStatus{
+ position:fixed;
+ right:18px;
+ bottom:94px;
+ max-width:260px;
+ background:#10264b;
+ color:white;
+ border:1px solid #d8a94e;
+ border-radius:12px;
+ padding:10px 14px;
+ font-size:13px;
+ display:none;
+ z-index:9999;
+ box-shadow:0 3px 12px rgba(0,0,0,.3);
+}
+@keyframes doaPulse{
+ 50%{
+  transform:scale(1.1);
+  box-shadow:0 0 18px #e94b4b;
+ }
+}
+
 @media(max-width:500px){
  .row{grid-template-columns:1fr}
  header h1{font-size:20px}
@@ -432,6 +479,19 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 </section>
 
 </main>
+
+<!-- FLOATING MICROPHONE -->
+
+<div id="doaVoiceStatus" role="status" aria-live="polite">
+ DOA voice assistant is ready.
+</div>
+
+<button id="doaFloatMic"
+ type="button"
+ aria-label="Start voice command"
+ title="Tap to speak">
+ 🎤
+</button>
 
 <footer>DOA 3.0 · Personal Assistant · Learning and Business Tools</footer>
 
@@ -1089,6 +1149,132 @@ function loadClassNotes(){
  document.getElementById('classNotes').value=
   existing?existing.notes:'';
 }
+
+/* FLOATING VOICE ASSISTANT */
+
+(() => {
+ const mic=document.getElementById('doaFloatMic');
+ const status=document.getElementById('doaVoiceStatus');
+
+ const SpeechRecognition=
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+ if(!SpeechRecognition){
+  mic.onclick=()=>{
+   status.style.display='block';
+   status.textContent=
+    'Voice commands are not supported by this browser. Try Chrome.';
+  };
+  return;
+ }
+
+ const recognition=new SpeechRecognition();
+ recognition.lang='en-UG';
+ recognition.continuous=false;
+ recognition.interimResults=false;
+
+ let listening=false;
+
+ function message(text){
+  status.textContent=text;
+  status.style.display='block';
+ }
+
+ function stopListening(){
+  if(listening){
+   try{recognition.stop();}catch(e){}
+  }
+ }
+
+ mic.addEventListener('click',()=>{
+  if(listening){
+   stopListening();
+   return;
+  }
+
+  try{
+   recognition.start();
+   listening=true;
+   mic.classList.add('listening');
+   mic.textContent='🔴';
+   message('DOA is listening. Speak your command.');
+  }catch(e){
+   message('Please wait a moment and try again.');
+  }
+ });
+
+ recognition.onresult=(event)=>{
+  const spoken=event.results[0][0].transcript
+   .toLowerCase().trim();
+
+  message('You said: '+spoken);
+  processVoiceCommand(spoken);
+ };
+
+ recognition.onerror=(event)=>{
+  let msg='Voice recognition failed. Please try again.';
+
+  if(event.error==='not-allowed'){
+   msg='Microphone permission denied. Allow microphone access in your browser.';
+  }else if(event.error==='no-speech'){
+   msg='No speech detected. Tap the microphone and try again.';
+  }else if(event.error==='network'){
+   msg='Voice recognition needs an internet connection.';
+  }
+
+  message(msg);
+ };
+
+ recognition.onend=()=>{
+  listening=false;
+  mic.classList.remove('listening');
+  mic.textContent='🎤';
+ };
+
+ function processVoiceCommand(command){
+
+  const commands={
+   calculator:['calculator','dealers calculator','business calculator'],
+   plan:['daily plan','my plan','open plan'],
+   reminders:['reminders','my reminders','open reminders'],
+   expenses:['expenses','my expenses','open expenses'],
+   class:['my class','class','lessons','learning'],
+   notice:['my notice','notice','announcements'],
+   stock:['my stock','stock','inventory'],
+   invoices:['invoices','reports','receipts'],
+   money:['my money','business money','finances']
+  };
+
+  for(const [tool,phrases] of Object.entries(commands)){
+   if(phrases.some(phrase=>
+    command.includes(phrase)
+   )){
+    openTool(tool);
+    message('Opening '+tool+'.');
+    return;
+   }
+  }
+
+  if(command.includes('close')||
+     command.includes('hide')){
+   document.querySelectorAll('.panel').forEach(panel=>{
+    panel.style.display='none';
+   });
+   message('Tools closed.');
+   return;
+  }
+
+  if(command.includes('help')||
+     command.includes('what can you do')){
+   message('Say: open calculator, expenses, daily plan, reminders, class, notice, stock, invoices or my money.');
+   return;
+  }
+
+  message('Command not recognised. Say "help" to see available commands.');
+ }
+
+})();
 
 /* AUTOMATIC TOOL OPENING FROM PAGE 1 */
 
