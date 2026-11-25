@@ -9,178 +9,77 @@
 
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#07152f;
- color:#fff;
-}
-header{
- padding:18px;
- background:#10264b;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- flex-wrap:wrap;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#07152f;color:#fff}
+header{padding:18px;background:#10264b;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 header h1{margin:0;font-size:23px}
 header p{margin:5px 0 0;color:#bdcce3;font-size:13px}
-button{
- border:0;
- border-radius:9px;
- padding:12px 15px;
- background:#d8a94e;
- color:#101b30;
- font-weight:bold;
- cursor:pointer;
-}
+button{border:0;border-radius:9px;padding:12px 15px;background:#d8a94e;color:#101b30;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
 .back{background:#fff}
 main{max-width:1000px;margin:auto;padding:20px 15px}
 .welcome{text-align:center;margin:12px 0 25px}
 .welcome h2{font-size:26px;margin-bottom:8px}
 .welcome p{color:#bdcce3}
-.section-title{
- margin:25px 0 13px;
- color:#f2c66e;
- font-size:18px;
-}
-.tools{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
- gap:12px;
-}
-.tool{
- background:#122b52;
- border:1px solid #29466e;
- border-radius:14px;
- padding:18px 12px;
- text-align:center;
- cursor:pointer;
- transition:.2s;
-}
+.section-title{margin:25px 0 13px;color:#f2c66e;font-size:18px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.tool{background:#122b52;border:1px solid #29466e;border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:.2s}
 .tool:hover{border-color:#d8a94e;transform:translateY(-2px)}
 .tool .emoji{font-size:32px}
 .tool h3{margin:10px 0 5px;font-size:16px}
 .tool p{font-size:12px;color:#bdcce3;margin:0;line-height:1.5}
 .tool.premium{border-color:#8b713c;background:#172b49}
-.premium-label{
- display:inline-block;
- background:#d8a94e;
- color:#17233a;
- border-radius:20px;
- padding:4px 9px;
- font-size:10px;
- font-weight:bold;
- margin-top:10px;
-}
-.panel{
- display:none;
- margin-top:20px;
- background:#10264b;
- padding:18px;
- border-radius:14px;
- border:1px solid #29466e;
-}
+.premium-label{display:inline-block;background:#d8a94e;color:#17233a;border-radius:20px;padding:4px 9px;font-size:10px;font-weight:bold;margin-top:10px}
+.panel{display:none;margin-top:20px;background:#10264b;padding:18px;border-radius:14px;border:1px solid #29466e}
 .panel h2{margin-top:0}
 .panel h3{color:#f2c66e}
-input,textarea,select{
- width:100%;
- padding:12px;
- margin:7px 0;
- border:1px solid #607795;
- border-radius:8px;
- background:#fff;
- color:#111;
- font-size:15px;
-}
+input,textarea,select{width:100%;padding:12px;margin:7px 0;border:1px solid #607795;border-radius:8px;background:#fff;color:#111;font-size:15px}
 textarea{min-height:85px;resize:vertical}
 .action{margin:7px 5px 7px 0}
-.item{
- background:#19365f;
- padding:13px;
- border-radius:9px;
- margin:10px 0;
- overflow-wrap:anywhere;
-}
+.item{background:#19365f;padding:13px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
 .item p{color:#d4dfef;line-height:1.5}
 .item button{padding:8px 11px;margin:5px 4px 0 0}
-.result{
- font-size:21px;
- font-weight:bold;
- margin:14px 0;
- color:#f2c66e;
-}
+.result{font-size:21px;font-weight:bold;margin:14px 0;color:#f2c66e}
 .small{font-size:12px;color:#bdcce3}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.badge{
- display:inline-block;
- padding:4px 8px;
- border-radius:20px;
- background:#d8a94e;
- color:#17233a;
- font-size:11px;
- font-weight:bold;
-}
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#d8a94e;color:#17233a;font-size:11px;font-weight:bold}
 .notice-pin{color:#f2c66e;font-weight:bold}
-.locked{
- text-align:center;
- padding:25px 10px;
- background:#19365f;
- border-radius:12px;
-}
+.locked{text-align:center;padding:25px 10px;background:#19365f;border-radius:12px}
 .locked .emoji{font-size:42px}
 .locked p{color:#bdcce3;line-height:1.6}
 hr{border:0;border-top:1px solid #385273;margin:18px 0}
 footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 
+/* PREMIUM TRIAL BANNER */
+#doaTrialBanner{
+ background:#19365f;
+ border:1px solid #d8a94e;
+ border-radius:14px;
+ padding:17px;
+ text-align:center;
+ margin:15px 0 25px;
+}
+#doaTrialBanner h3{color:#f2c66e;margin:0 0 8px}
+#doaTrialMessage{margin:0;color:#fff}
+#doaTrialCountdown{font-size:22px;font-weight:bold;color:#f2c66e;margin-top:10px}
+
 /* SHARED FLOATING VOICE ASSISTANT BUTTON */
 #doaFloatMic{
- position:fixed;
- right:18px;
- bottom:22px;
- width:62px;
- height:62px;
- border-radius:50%;
- background:#d8a94e;
- color:#07152f;
- font-size:27px;
- display:flex;
- align-items:center;
- justify-content:center;
- box-shadow:0 4px 18px rgba(0,0,0,.4);
- z-index:9999;
- border:3px solid #fff;
- padding:0;
+ position:fixed;right:18px;bottom:22px;width:62px;height:62px;
+ border-radius:50%;background:#d8a94e;color:#07152f;font-size:27px;
+ display:flex;align-items:center;justify-content:center;
+ box-shadow:0 4px 18px rgba(0,0,0,.4);z-index:9999;
+ border:3px solid #fff;padding:0;
 }
-#doaFloatMic.listening{
- background:#e94b4b;
- color:white;
- animation:doaPulse 1s infinite;
-}
+#doaFloatMic.listening{background:#e94b4b;color:white;animation:doaPulse 1s infinite}
 #doaVoiceStatus{
- position:fixed;
- right:18px;
- bottom:94px;
- max-width:260px;
- background:#10264b;
- color:white;
- border:1px solid #d8a94e;
- border-radius:12px;
- padding:10px 14px;
- font-size:13px;
- display:none;
- z-index:9999;
- box-shadow:0 3px 12px rgba(0,0,0,.3);
+ position:fixed;right:18px;bottom:94px;max-width:260px;
+ background:#10264b;color:white;border:1px solid #d8a94e;
+ border-radius:12px;padding:10px 14px;font-size:13px;
+ display:none;z-index:9999;box-shadow:0 3px 12px rgba(0,0,0,.3);
 }
 @keyframes doaPulse{
- 50%{
-  transform:scale(1.1);
-  box-shadow:0 0 18px #e94b4b;
- }
+ 50%{transform:scale(1.1);box-shadow:0 0 18px #e94b4b}
 }
-
 @media(max-width:500px){
  .row{grid-template-columns:1fr}
  header h1{font-size:20px}
@@ -197,9 +96,7 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
   <h1>DOA 3.0</h1>
   <p>Your personal assistant</p>
  </div>
- <button class="back" onclick="location.href='index.html'">
-  ← Back to DOA
- </button>
+ <button class="back" onclick="location.href='index.html'">← Back to DOA</button>
 </header>
 
 <main>
@@ -207,6 +104,13 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 <div class="welcome">
  <h2>Welcome to DOA Tools</h2>
  <p>Manage your daily activities, learning and business calculations.</p>
+</div>
+
+<!-- 7-DAY PREMIUM TRIAL BANNER -->
+<div id="doaTrialBanner">
+ <h3>🎉 DOA PREMIUM FREE TRIAL</h3>
+ <p id="doaTrialMessage">Activating your 7-day trial...</p>
+ <div id="doaTrialCountdown"></div>
 </div>
 
 <h3 class="section-title">FREE TOOLS</h3>
@@ -259,27 +163,26 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
   <div class="emoji">📦</div>
   <h3>My Stock</h3>
   <p>Manage products and inventory</p>
-  <span class="premium-label">PREMIUM</span>
+  <span class="premium-label">7-DAY TRIAL</span>
  </div>
 
  <div class="tool premium" onclick="openTool('invoices')">
   <div class="emoji">🧾</div>
   <h3>Reports and Invoices</h3>
   <p>Sales, invoices and business reports</p>
-  <span class="premium-label">PREMIUM</span>
+  <span class="premium-label">7-DAY TRIAL</span>
  </div>
 
  <div class="tool premium" onclick="openTool('money')">
   <div class="emoji">💳</div>
   <h3>My Money</h3>
   <p>Manage income and business finances</p>
-  <span class="premium-label">PREMIUM</span>
+  <span class="premium-label">7-DAY TRIAL</span>
  </div>
 
 </div>
 
 <!-- DEALERS CALCULATOR -->
-
 <section class="panel" id="calculator">
  <h2>🧮 Dealers Calculator</h2>
  <p class="small">Calculate business selling prices and profits.</p>
@@ -302,7 +205,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <div id="dealResult" class="result">Your results will appear here.</div>
 
  <hr>
-
  <h3>Other Business Calculations</h3>
 
  <label>Original price (UGX)</label>
@@ -315,7 +217,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <div id="percentageResult" class="result"></div>
 
  <hr>
-
  <label>Price before discount (UGX)</label>
  <input id="discountPrice" type="number" min="0">
 
@@ -326,7 +227,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <div id="discountResult" class="result"></div>
 
  <hr>
-
  <label>VAT amount or rate (%)</label>
  <input id="vatRate" type="number" min="0" placeholder="Enter VAT rate">
 
@@ -338,52 +238,38 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 </section>
 
 <!-- DAILY PLAN -->
-
 <section class="panel" id="plan">
  <h2>📅 My Daily Plan</h2>
-
  <input id="planDate" type="date">
  <input id="planTime" type="time">
  <textarea id="planTask" placeholder="What do you plan to do?"></textarea>
-
  <button onclick="addPlan()">Save Plan</button>
-
  <div id="planList"></div>
 </section>
 
 <!-- REMINDERS -->
-
 <section class="panel" id="reminders">
  <h2>🔔 My Reminders</h2>
-
  <input id="reminderText" placeholder="What should you remember?">
  <input id="reminderTime" type="datetime-local">
-
  <button onclick="addReminder()">Save Reminder</button>
-
  <div id="reminderList"></div>
 </section>
 
 <!-- MY EXPENSES -->
-
 <section class="panel" id="expenses">
  <h2>💰 My Expenses</h2>
  <p class="small">Your expenses are saved on this device.</p>
-
  <input id="expenseName" placeholder="Expense name">
  <input id="expenseAmount" type="number" min="0" placeholder="Amount (UGX)">
  <input id="expenseDate" type="date">
-
  <button onclick="addExpense()">Add Expense</button>
-
  <div id="expenseList"></div>
  <div class="result" id="expenseTotal">Total: UGX 0</div>
-
  <button class="action" onclick="clearExpenses()">Clear All Expenses</button>
 </section>
 
 <!-- MY CLASS -->
-
 <section class="panel" id="class">
  <h2>🎓 My Class</h2>
  <p class="small">Choose a subject, study a lesson and save your learning notes.</p>
@@ -417,7 +303,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 </section>
 
 <!-- MY NOTICE -->
-
 <section class="panel" id="notice">
  <h2>📢 My Notice</h2>
  <p class="small">Create personal or business announcements.</p>
@@ -437,61 +322,54 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  </div>
 
  <button onclick="addNotice()">Publish Notice</button>
-
  <hr>
  <h3>My Published Notices</h3>
  <div id="noticeList"></div>
 </section>
 
 <!-- PREMIUM PLACEHOLDERS -->
-
 <section class="panel" id="stock">
  <h2>📦 My Stock</h2>
  <div class="locked">
-  <div class="emoji">🔒</div>
-  <h3>DOA Premium Feature</h3>
-  <p>Manage products, stock received, stock sold, remaining quantities and low-stock alerts.</p>
-  <p>Premium access and secure business records will be connected in a later development stage.</p>
-  <span class="premium-label">COMING SOON</span>
+  <div class="emoji">🔓</div>
+  <h3>DOA Premium Trial Access</h3>
+  <p>Your 7-day trial gives you access to this Premium section.</p>
+  <p>Product management, stock received, stock sold, remaining quantities and low-stock alerts will be added when the Stock tool is implemented.</p>
+  <span class="premium-label">TRIAL ACCESS</span>
  </div>
 </section>
 
 <section class="panel" id="invoices">
  <h2>🧾 Reports and Invoices</h2>
  <div class="locked">
-  <div class="emoji">🔒</div>
-  <h3>DOA Premium Feature</h3>
-  <p>Create invoices, receipts, customer records and professional sales reports.</p>
-  <p>Premium access and PDF generation will be added in a later development stage.</p>
-  <span class="premium-label">COMING SOON</span>
+  <div class="emoji">🔓</div>
+  <h3>DOA Premium Trial Access</h3>
+  <p>Your 7-day trial gives you access to this Premium section.</p>
+  <p>Invoice creation, receipts, customer records and professional sales reports will be added when this tool is implemented.</p>
+  <span class="premium-label">TRIAL ACCESS</span>
  </div>
 </section>
 
 <section class="panel" id="money">
  <h2>💳 My Money</h2>
  <div class="locked">
-  <div class="emoji">🔒</div>
-  <h3>DOA Premium Feature</h3>
-  <p>Manage income, expenses, budgets, debts, cash flow and financial summaries.</p>
-  <p>Secure financial records and subscription access will be added in a later development stage.</p>
-  <span class="premium-label">COMING SOON</span>
+  <div class="emoji">🔓</div>
+  <h3>DOA Premium Trial Access</h3>
+  <p>Your 7-day trial gives you access to this Premium section.</p>
+  <p>Income, expenses, budgets, debts, cash flow and financial summaries will be added when this tool is implemented.</p>
+  <span class="premium-label">TRIAL ACCESS</span>
  </div>
 </section>
 
 </main>
 
-<!-- FLOATING MICROPHONE DISPLAY
-     The shared assistant will control this button.
-     There is no independent microphone listener on this page. -->
-
+<!-- SHARED MICROPHONE DISPLAY -->
 <div id="doaVoiceStatus" role="status" aria-live="polite">
  DOA voice assistant is ready.
 </div>
 
-<button id="doaFloatMic"
- type="button"
- aria-label="Start voice command"
- title="Tap to speak">
+<button id="doaFloatMic" type="button"
+ aria-label="Start voice command" title="Tap to speak">
  🎤
 </button>
 
@@ -499,9 +377,89 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 
 <script>
 
+/* DOA TEMPORARY 7-DAY GUEST PREMIUM TRIAL */
+
+const DOA_TRIAL_KEY = 'doa_guest_premium_trial_v1';
+const DOA_TRIAL_LENGTH = 7 * 24 * 60 * 60 * 1000;
+
+function startDOATrial(){
+ let trial;
+
+ try{
+  trial = JSON.parse(localStorage.getItem(DOA_TRIAL_KEY));
+ }catch(e){
+  trial = null;
+ }
+
+ if(!trial || !Number.isFinite(trial.startedAt) ||
+    !Number.isFinite(trial.expiresAt)){
+
+  const now = Date.now();
+
+  trial = {
+   startedAt: now,
+   expiresAt: now + DOA_TRIAL_LENGTH
+  };
+
+  localStorage.setItem(DOA_TRIAL_KEY,JSON.stringify(trial));
+ }
+
+ return trial;
+}
+
+function getDOATrial(){
+ const trial = startDOATrial();
+ const remaining = trial.expiresAt - Date.now();
+
+ return {
+  active: remaining > 0,
+  remaining: Math.max(0,remaining),
+  expiresAt: trial.expiresAt
+ };
+}
+
+function updateDOATrialDisplay(){
+ const trial = getDOATrial();
+ const message = document.getElementById('doaTrialMessage');
+ const countdown = document.getElementById('doaTrialCountdown');
+
+ if(!message || !countdown)return;
+
+ if(!trial.active){
+  message.textContent = 'Your 7-day Premium trial has expired.';
+  countdown.textContent = 'Trial ended';
+  return;
+ }
+
+ const days = Math.floor(trial.remaining / 86400000);
+ const hours = Math.floor((trial.remaining % 86400000) / 3600000);
+ const minutes = Math.floor((trial.remaining % 3600000) / 60000);
+
+ message.textContent = 'Your DOA Premium trial is active! Enjoy your trial.';
+ countdown.textContent =
+  days+' days '+hours+' hours '+minutes+' minutes remaining';
+}
+
+function isDOAPremiumTrialActive(){
+ return getDOATrial().active;
+}
+
+startDOATrial();
+updateDOATrialDisplay();
+setInterval(updateDOATrialDisplay,60000);
+
 /* OPEN TOOLS */
 
 function openTool(id){
+
+ const premiumTools = ['stock','invoices','money'];
+
+ if(premiumTools.includes(id) && !isDOAPremiumTrialActive()){
+  updateDOATrialDisplay();
+  alert('Your 7-day DOA Premium trial has expired.');
+  return;
+ }
+
  document.querySelectorAll('.panel').forEach(p=>{
   p.style.display='none';
  });
@@ -551,19 +509,16 @@ function addReminder(){
 
  let items=getSaved('doa_guest_reminders');
  items.push({id:Date.now(),text,time});
-
  save('doa_guest_reminders',items);
 
  document.getElementById('reminderText').value='';
  document.getElementById('reminderTime').value='';
-
  showReminders();
 }
 
 function showReminders(){
  const items=getSaved('doa_guest_reminders');
  const list=document.getElementById('reminderList');
-
  list.innerHTML='';
 
  if(!items.length){
@@ -579,9 +534,7 @@ function showReminders(){
   title.textContent=item.text;
 
   const date=document.createElement('p');
-  date.textContent=item.time
-   ?new Date(item.time).toLocaleString()
-   :'No time set';
+  date.textContent=item.time?new Date(item.time).toLocaleString():'No time set';
 
   const del=document.createElement('button');
   del.textContent='Delete';
@@ -593,10 +546,8 @@ function showReminders(){
 }
 
 function deleteReminder(id){
- save(
-  'doa_guest_reminders',
-  getSaved('doa_guest_reminders').filter(x=>x.id!==id)
- );
+ save('doa_guest_reminders',
+  getSaved('doa_guest_reminders').filter(x=>x.id!==id));
  showReminders();
 }
 
@@ -689,7 +640,7 @@ function calculateVAT(){
   ' | Total including VAT: '+money(price+vat);
 }
 
-/* MY EXPENSES - ORIGINAL STORAGE KEY PRESERVED */
+/* MY EXPENSES */
 
 function addExpense(){
  const name=document.getElementById('expenseName').value.trim();
@@ -704,25 +655,20 @@ function addExpense(){
 
  const items=getSaved('doa_guest_expenses');
  items.push({id:Date.now(),name,amount,date});
-
  save('doa_guest_expenses',items);
 
  document.getElementById('expenseName').value='';
  document.getElementById('expenseAmount').value='';
-
  showExpenses();
 }
 
 function showExpenses(){
  const items=getSaved('doa_guest_expenses');
  const list=document.getElementById('expenseList');
-
  list.innerHTML='';
  let total=0;
 
- if(!items.length){
-  list.textContent='No expenses recorded yet.';
- }
+ if(!items.length)list.textContent='No expenses recorded yet.';
 
  items.forEach(item=>{
   total+=Number(item.amount)||0;
@@ -731,8 +677,7 @@ function showExpenses(){
   div.className='item';
 
   const detail=document.createElement('p');
-  detail.textContent=item.name+' — '+money(item.amount)+
-   ' | '+(item.date||'No date');
+  detail.textContent=item.name+' — '+money(item.amount)+' | '+(item.date||'No date');
 
   const del=document.createElement('button');
   del.textContent='Remove';
@@ -742,15 +687,12 @@ function showExpenses(){
   list.appendChild(div);
  });
 
- document.getElementById('expenseTotal').textContent=
-  'Total: '+money(total);
+ document.getElementById('expenseTotal').textContent='Total: '+money(total);
 }
 
 function deleteExpense(id){
- save(
-  'doa_guest_expenses',
-  getSaved('doa_guest_expenses').filter(x=>x.id!==id)
- );
+ save('doa_guest_expenses',
+  getSaved('doa_guest_expenses').filter(x=>x.id!==id));
  showExpenses();
 }
 
@@ -775,7 +717,6 @@ function addPlan(){
 
  let items=getSaved('doa_guest_plans');
  items.push({id:Date.now(),date,time,task});
-
  save('doa_guest_plans',items);
 
  document.getElementById('planTask').value='';
@@ -785,7 +726,6 @@ function addPlan(){
 function showPlans(){
  const items=getSaved('doa_guest_plans');
  const list=document.getElementById('planList');
-
  list.innerHTML='';
 
  if(!items.length){
@@ -801,9 +741,7 @@ function showPlans(){
   title.textContent=item.task;
 
   const detail=document.createElement('p');
-  detail.textContent=
-   [item.date,item.time].filter(Boolean).join(' at ')||
-   'No date or time set';
+  detail.textContent=[item.date,item.time].filter(Boolean).join(' at ')||'No date or time set';
 
   const del=document.createElement('button');
   del.textContent='Delete';
@@ -815,10 +753,8 @@ function showPlans(){
 }
 
 function deletePlan(id){
- save(
-  'doa_guest_plans',
-  getSaved('doa_guest_plans').filter(x=>x.id!==id)
- );
+ save('doa_guest_plans',
+  getSaved('doa_guest_plans').filter(x=>x.id!==id));
  showPlans();
 }
 
@@ -842,28 +778,18 @@ function addNotice(){
  }
 
  const items=getSaved('doa_guest_notices');
- items.push({
-  id:Date.now(),
-  title,
-  text,
-  date,
-  expiry,
-  pinned:false
- });
-
+ items.push({id:Date.now(),title,text,date,expiry,pinned:false});
  save('doa_guest_notices',items);
 
  document.getElementById('noticeTitle').value='';
  document.getElementById('noticeText').value='';
  document.getElementById('noticeExpiry').value='';
-
  showNotices();
 }
 
 function showNotices(){
  const items=getSaved('doa_guest_notices');
  const list=document.getElementById('noticeList');
-
  list.innerHTML='';
 
  if(!items.length){
@@ -942,10 +868,8 @@ function editNotice(id){
 function deleteNotice(id){
  if(!confirm('Delete this notice?'))return;
 
- save(
-  'doa_guest_notices',
-  getSaved('doa_guest_notices').filter(x=>x.id!==id)
- );
+ save('doa_guest_notices',
+  getSaved('doa_guest_notices').filter(x=>x.id!==id));
  showNotices();
 }
 
@@ -1046,7 +970,6 @@ function showClassSubject(){
  const subject=document.getElementById('classSubject').value;
  const lesson=classLessons[subject];
  const box=document.getElementById('classLesson');
-
  box.innerHTML='';
 
  const heading=document.createElement('h3');
@@ -1082,10 +1005,7 @@ function showClassSubject(){
  const feedback=document.createElement('p');
  feedback.id='classFeedback';
 
- box.append(
-  heading,paragraph,complete,
-  quizTitle,question,select,check,feedback
- );
+ box.append(heading,paragraph,complete,quizTitle,question,select,check,feedback);
 
  loadClassNotes();
  showClassProgress();
@@ -1119,17 +1039,14 @@ function checkClassAnswer(subject){
 
 function showClassProgress(){
  const completed=getSaved('doa_guest_class_completed');
-
  document.getElementById('classProgress').textContent=
   'Lessons completed: '+completed.length+
-  ' of '+Object.keys(classLessons).length+
-  ' subjects.';
+  ' of '+Object.keys(classLessons).length+' subjects.';
 }
 
 function saveClassNotes(){
  const subject=document.getElementById('classSubject').value;
  const notes=document.getElementById('classNotes').value;
-
  const all=getSaved('doa_guest_class_notes');
  const existing=all.find(x=>x.subject===subject);
 
@@ -1147,26 +1064,16 @@ function loadClassNotes(){
  const subject=document.getElementById('classSubject').value;
  const all=getSaved('doa_guest_class_notes');
  const existing=all.find(x=>x.subject===subject);
-
- document.getElementById('classNotes').value=
-  existing?existing.notes:'';
+ document.getElementById('classNotes').value=existing?existing.notes:'';
 }
 
 /* AUTOMATIC TOOL OPENING FROM PAGE 1 */
 
-const requestedTool=
- new URLSearchParams(window.location.search).get('tool');
+const requestedTool=new URLSearchParams(window.location.search).get('tool');
 
 const supportedTools=[
- 'reminders',
- 'calculator',
- 'expenses',
- 'plan',
- 'class',
- 'notice',
- 'stock',
- 'invoices',
- 'money'
+ 'reminders','calculator','expenses','plan','class','notice',
+ 'stock','invoices','money'
 ];
 
 if(supportedTools.includes(requestedTool)){
