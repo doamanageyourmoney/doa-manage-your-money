@@ -4,530 +4,498 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#071426">
-<title>DOA 3.0 - Premium Dashboard</title>
+<meta name="theme-color" content="#07152f">
+<title>DOA - Account Access</title>
 
 <style>
-:root {
-  --bg: #071426;
-  --panel: #0d2036;
-  --panel2: #102943;
-  --gold: #d9ad55;
-  --gold2: #f1cf83;
-  --white: #f5f7fa;
-  --muted: #9aacc0;
-  --line: rgba(255,255,255,.09);
-  --green: #49c995;
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#07152f;
+ color:#fff;
+ min-height:100vh;
+ padding:20px 14px;
 }
-
-* {
-  box-sizing: border-box;
+.container{
+ width:100%;
+ max-width:440px;
+ margin:25px auto;
 }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--white);
-  font-family: Arial, Helvetica, sans-serif;
+.brand{
+ text-align:center;
+ margin-bottom:22px;
 }
-
-button {
-  font: inherit;
-  cursor: pointer;
+.brand h1{
+ margin:0;
+ font-size:32px;
+ letter-spacing:2px;
 }
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 17px 6%;
-  border-bottom: 1px solid var(--line);
-  background: #091a2e;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.brand p{
+ color:#bdc9df;
+ font-size:14px;
 }
-
-.logo {
-  font-size: 25px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--gold2);
+.card{
+ background:#fff;
+ color:#17243b;
+ border-radius:18px;
+ padding:23px;
+ box-shadow:0 12px 35px #0005;
 }
-
-.logo small {
-  display: block;
-  color: var(--muted);
-  font-size: 10px;
-  letter-spacing: 3px;
-  margin-top: 3px;
+.tabs{
+ display:flex;
+ gap:8px;
+ margin-bottom:22px;
 }
-
-.top-actions {
-  display: flex;
-  gap: 9px;
+.tabs button{
+ flex:1;
+ padding:13px 8px;
+ border:0;
+ border-radius:9px;
+ background:#e9edf4;
+ color:#26354c;
+ font-weight:bold;
 }
-
-.top-btn {
-  padding: 9px 13px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  color: var(--white);
-  background: var(--panel);
-  font-size: 12px;
+.tabs button.active{
+ background:#0b3470;
+ color:#fff;
 }
-
-.top-btn:hover {
-  border-color: var(--gold);
+h2{
+ font-size:21px;
+ margin:0 0 8px;
 }
-
-.container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 30px auto 100px;
+.description{
+ font-size:13px;
+ color:#64748b;
+ margin-bottom:20px;
+ line-height:1.5;
 }
-
-.welcome {
-  padding: 28px;
-  border: 1px solid rgba(217,173,85,.24);
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 90% 10%, rgba(217,173,85,.16), transparent 35%),
-    linear-gradient(120deg, #102943, #0b1d32);
+label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin:13px 0 6px;
 }
-
-.eyebrow {
-  color: var(--gold2);
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+input{
+ width:100%;
+ padding:14px;
+ border:1px solid #ccd5e2;
+ border-radius:9px;
+ font-size:16px;
+ outline:none;
 }
-
-.welcome h1 {
-  margin: 12px 0 8px;
-  font-size: clamp(25px, 5vw, 36px);
+input:focus{
+ border-color:#1764c0;
 }
-
-.welcome p {
-  color: var(--muted);
-  max-width: 600px;
-  line-height: 1.6;
-  font-size: 14px;
+.primary{
+ width:100%;
+ border:0;
+ background:#0b3470;
+ color:white;
+ padding:15px;
+ border-radius:9px;
+ font-size:15px;
+ font-weight:bold;
+ margin-top:20px;
 }
-
-.trial-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 9px 13px;
-  border-radius: 20px;
-  background: rgba(217,173,85,.12);
-  color: var(--gold2);
-  font-size: 12px;
-  border: 1px solid rgba(217,173,85,.22);
+.secondary{
+ width:100%;
+ border:1px solid #0b3470;
+ background:white;
+ color:#0b3470;
+ padding:13px;
+ border-radius:9px;
+ font-weight:bold;
+ margin-top:10px;
 }
-
-.section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 34px 0 16px;
+.message{
+ display:none;
+ padding:12px;
+ margin-top:14px;
+ border-radius:8px;
+ font-size:13px;
+ line-height:1.5;
 }
-
-.section-heading h2 {
-  font-size: 19px;
-  margin: 0;
+.error{
+ display:block;
+ background:#fee2e2;
+ color:#991b1b;
 }
-
-.section-heading span {
-  color: var(--muted);
-  font-size: 12px;
+.success{
+ display:block;
+ background:#dcfce7;
+ color:#166534;
 }
-
-.modules {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 17px;
+.info{
+ background:#e8f1ff;
+ color:#17427a;
+ padding:14px;
+ border-radius:10px;
+ margin:16px 0;
+ line-height:1.6;
+ font-size:14px;
 }
-
-.module {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 15px;
-  padding: 22px;
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  transition: .2s;
+.account{
+ display:none;
 }
-
-.module:hover {
-  transform: translateY(-3px);
-  border-color: rgba(217,173,85,.6);
-  background: #102943;
+.small{
+ text-align:center;
+ color:#64748b;
+ font-size:12px;
+ margin-top:20px;
+ line-height:1.6;
 }
-
-.module-icon {
-  width: 49px;
-  height: 49px;
-  display: grid;
-  place-items: center;
-  border-radius: 13px;
-  background: rgba(217,173,85,.12);
-  font-size: 25px;
-  margin-bottom: 17px;
-}
-
-.module h3 {
-  margin: 0 0 9px;
-  font-size: 17px;
-}
-
-.module p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
-  margin: 0 0 20px;
-}
-
-.module button {
-  margin-top: auto;
-  width: 100%;
-  padding: 11px;
-  border: 1px solid rgba(217,173,85,.5);
-  border-radius: 8px;
-  background: rgba(217,173,85,.1);
-  color: var(--gold2);
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.module button:hover {
-  background: var(--gold);
-  color: #071426;
-}
-
-.info-panel {
-  margin-top: 25px;
-  padding: 19px;
-  border: 1px solid var(--line);
-  border-radius: 13px;
-  background: var(--panel);
-}
-
-.info-panel h3 {
-  font-size: 15px;
-  margin: 0 0 8px;
-}
-
-.info-panel p {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.6;
-  margin: 0;
-}
-
-.footer {
-  text-align: center;
-  padding: 25px 10px;
-  color: #72869c;
-  font-size: 11px;
-}
-
-/* Module information window */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  background: rgba(0,0,0,.76);
-  padding: 20px;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-content {
-  width: 100%;
-  max-width: 420px;
-  background: #102943;
-  border: 1px solid rgba(217,173,85,.4);
-  border-radius: 16px;
-  padding: 25px;
-  text-align: center;
-}
-
-.modal-icon {
-  font-size: 36px;
-}
-
-.modal-content h2 {
-  color: var(--gold2);
-  font-size: 21px;
-}
-
-.modal-content p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.modal-content button {
-  margin-top: 12px;
-  width: 100%;
-  padding: 12px;
-  background: var(--gold);
-  color: #071426;
-  border: 0;
-  border-radius: 8px;
-  font-weight: bold;
-}
-
-/* Shared DOA assistant microphone */
-#doaFloatMic {
-  position: fixed;
-  right: 20px;
-  bottom: 22px;
-  width: 59px;
-  height: 59px;
-  border-radius: 50%;
-  border: 2px solid var(--gold2);
-  background: linear-gradient(145deg, #f0cc7d, #bd8d36);
-  color: #071426;
-  font-size: 25px;
-  box-shadow: 0 5px 25px rgba(0,0,0,.4);
-  z-index: 50;
-}
-
-#doaFloatMic:active {
-  transform: scale(.94);
-}
-
-#doaVoiceStatus {
-  display: none;
-  position: fixed;
-  right: 17px;
-  bottom: 92px;
-  max-width: 230px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: #102943;
-  border: 1px solid rgba(217,173,85,.5);
-  color: var(--gold2);
-  font-size: 12px;
-  z-index: 50;
-}
-
-@media(max-width: 750px) {
-  .modules {
-    grid-template-columns: 1fr;
-  }
-
-  .module {
-    min-height: 190px;
-  }
-
-  .container {
-    width: 92%;
-    margin-top: 20px;
-  }
-
-  .welcome {
-    padding: 22px;
-  }
-
-  .topbar {
-    padding: 14px 4%;
-  }
-
-  .top-btn {
-    padding: 8px 9px;
-    font-size: 11px;
-  }
-}
+.hidden{display:none!important}
 </style>
 </head>
 
 <body>
+<div class="container">
 
-<header class="topbar">
-  <div class="logo">
-    DOA
-    <small>YOUR PERSONAL ASSISTANT</small>
-  </div>
+ <div class="brand">
+  <h1>DOA</h1>
+  <p>Your best personal assistant</p>
+ </div>
 
-  <div class="top-actions">
-    <button class="top-btn" onclick="goToPage2()">Guest Tools</button>
-    <button class="top-btn" onclick="goHome()">Home</button>
-  </div>
-</header>
+ <div class="card">
 
-<main class="container">
+  <div id="authArea">
 
-  <section class="welcome">
-    <div class="eyebrow">DOA 3.0 · Premium</div>
+   <div class="tabs">
+    <button id="loginTab" class="active" type="button"
+      onclick="showForm('login')">Login</button>
+    <button id="registerTab" type="button"
+      onclick="showForm('register')">Create Account</button>
+   </div>
 
-    <h1>Welcome to your Premium Dashboard</h1>
-
-    <p>
-      Manage your stock, organise your business records,
-      prepare reports and keep track of your money — all
-      from one place with DOA.
-    </p>
-
-    <div class="trial-status">
-      <span>✦</span>
-      Premium Dashboard
+   <form id="loginForm">
+    <h2>Welcome back</h2>
+    <div class="description">
+     Login to access your DOA account and personal tools.
     </div>
-  </section>
 
-  <div class="section-heading">
-    <h2>Your Premium Tools</h2>
-    <span>Three management areas</span>
+    <label>Ugandan phone number</label>
+    <input id="loginPhone" type="tel"
+      placeholder="07XXXXXXXX or +2567XXXXXXXX"
+      autocomplete="tel" required>
+
+    <label>Password</label>
+    <input id="loginPassword" type="password"
+      placeholder="Enter your password"
+      autocomplete="current-password" required>
+
+    <button class="primary" type="submit" id="loginButton">
+     Login
+    </button>
+   </form>
+
+   <form id="registerForm" class="hidden">
+    <h2>Create your DOA account</h2>
+    <div class="description">
+     Register to begin your 7-day Premium trial.
+    </div>
+
+    <label>Your full name</label>
+    <input id="registerName" type="text"
+      placeholder="Enter your name" maxlength="100" required>
+
+    <label>Ugandan phone number</label>
+    <input id="registerPhone" type="tel"
+      placeholder="07XXXXXXXX or +2567XXXXXXXX"
+      autocomplete="tel" required>
+
+    <label>Email address (optional)</label>
+    <input id="registerEmail" type="email"
+      placeholder="Enter email if available"
+      autocomplete="email">
+
+    <label>Create password</label>
+    <input id="registerPassword" type="password"
+      placeholder="At least 8 characters"
+      autocomplete="new-password" minlength="8" required>
+
+    <label>Confirm password</label>
+    <input id="confirmPassword" type="password"
+      placeholder="Repeat your password"
+      autocomplete="new-password" minlength="8" required>
+
+    <button class="primary" type="submit" id="registerButton">
+     Create Account & Start Free Trial
+    </button>
+   </form>
+
   </div>
 
-  <section class="modules">
+  <div id="accountArea" class="account">
+   <h2 id="welcomeTitle">Your DOA Account</h2>
 
-    <article class="module">
-      <div class="module-icon">📦</div>
-      <h3>My Stock</h3>
-      <p>
-        Manage products, record stock received and sold,
-        monitor quantities and organise inventory.
-      </p>
-      <button onclick="openModule('stock')">
-        Open My Stock →
-      </button>
-    </article>
+   <div class="info" id="accountDetails"></div>
 
-    <article class="module">
-      <div class="module-icon">📊</div>
-      <h3>Reports & Invoices</h3>
-      <p>
-        Organise business records, prepare invoices
-        and view business performance reports.
-      </p>
-      <button onclick="openModule('reports')">
-        Open Reports & Invoices →
-      </button>
-    </article>
+   <div class="info" id="premiumDetails"></div>
 
-    <article class="module">
-      <div class="module-icon">💰</div>
-      <h3>My Money</h3>
-      <p>
-        Organise your money records, monitor income
-        and expenditure, and understand your finances.
-      </p>
-      <button onclick="openModule('money')">
-        Open My Money →
-      </button>
-    </article>
+   <div id="subscriptionNotice" class="info hidden">
+    Your 7-day Premium trial has ended.
+    A subscription is required to continue using Premium features.
+    Payment activation is not yet available on this page.
+   </div>
 
-  </section>
+   <button class="primary" type="button" onclick="goToPage2()">
+    Continue to DOA
+   </button>
 
-  <section class="info-panel">
-    <h3>Your DOA Premium Workspace</h3>
-    <p>
-      This is your premium dashboard. The three module
-      interfaces will be connected to their secure data
-      functions as we build them. Your real financial,
-      stock and invoice records should be stored and
-      protected through the DOA backend.
-    </p>
-  </section>
-
-</main>
-
-<footer class="footer">
-  DOA 3.0 · Your Personal Assistant
-</footer>
-
-<!-- Module information window -->
-<div class="modal" id="moduleModal" onclick="closeOutside(event)">
-  <div class="modal-content">
-    <div class="modal-icon" id="modalIcon">📦</div>
-    <h2 id="modalTitle">Premium Module</h2>
-    <p id="modalDescription">
-      This module will be developed next.
-    </p>
-    <button onclick="closeModule()">Close</button>
+   <button class="secondary" type="button" onclick="logout()">
+    Logout
+   </button>
   </div>
+
+  <div id="message" class="message"></div>
+
+ </div>
+
+ <div class="small">
+  Your phone number is your main account identifier.<br>
+  Keep your password private.
+ </div>
+
 </div>
 
-<!-- Shared DOA microphone -->
-<div id="doaVoiceStatus" role="status"></div>
-
-<button id="doaFloatMic" type="button"
-        aria-label="Talk to DOA"
-        title="Talk to DOA">
-  🎙️
-</button>
-
 <script>
-function goHome() {
-  window.location.href = "index.html";
+const API = "https://doa2026app.workers.dev";
+const TOKEN_KEY = "doa_token";
+const USER_KEY = "doa_user";
+
+const authArea = document.getElementById("authArea");
+const accountArea = document.getElementById("accountArea");
+const messageBox = document.getElementById("message");
+
+function showMessage(message, type="error"){
+ messageBox.textContent = message;
+ messageBox.className = "message " + type;
 }
 
-function goToPage2() {
-  window.location.href = "page2.html";
+function clearMessage(){
+ messageBox.textContent = "";
+ messageBox.className = "message";
 }
 
-const moduleDetails = {
-  stock: {
-    icon: "📦",
-    title: "My Stock",
-    description:
-      "This is the stock management area. We will build product registration, stock received, stock sold, available quantities and stock history here."
-  },
+function showForm(type){
+ clearMessage();
 
-  reports: {
-    icon: "📊",
-    title: "Reports & Invoices",
-    description:
-      "This area will handle invoices, business reports, sales summaries and organised business records."
-  },
+ document.getElementById("loginForm").classList.toggle(
+  "hidden", type !== "login"
+ );
+ document.getElementById("registerForm").classList.toggle(
+  "hidden", type !== "register"
+ );
 
-  money: {
-    icon: "💰",
-    title: "My Money",
-    description:
-      "This area will help you manage income, expenditure, balances and financial summaries."
+ document.getElementById("loginTab").classList.toggle(
+  "active", type === "login"
+ );
+ document.getElementById("registerTab").classList.toggle(
+  "active", type === "register"
+ );
+}
+
+function setLoading(button, loading, text){
+ button.disabled = loading;
+ button.textContent = loading ? "Please wait..." : text;
+}
+
+async function apiRequest(path, options={}){
+ const token = localStorage.getItem(TOKEN_KEY);
+
+ const response = await fetch(API + path, {
+  ...options,
+  headers:{
+   "Content-Type":"application/json",
+   ...(token ? {"Authorization":"Bearer " + token} : {}),
+   ...(options.headers || {})
   }
-};
+ });
 
-function openModule(name) {
-  const item = moduleDetails[name];
+ let data;
 
-  if (!item) return;
+ try{
+  data = await response.json();
+ }catch{
+  throw new Error("The server returned an invalid response.");
+ }
 
-  document.getElementById("modalIcon").textContent = item.icon;
-  document.getElementById("modalTitle").textContent = item.title;
-  document.getElementById("modalDescription").textContent =
-    item.description;
+ if(!response.ok || data.success === false){
+  throw new Error(data.error || "Request failed. Please try again.");
+ }
 
-  document.getElementById("moduleModal").classList.add("show");
+ return data;
 }
 
-function closeModule() {
-  document.getElementById("moduleModal").classList.remove("show");
+function saveLogin(data){
+ if(!data.token){
+  throw new Error("The server did not return a login token.");
+ }
+
+ localStorage.setItem(TOKEN_KEY, data.token);
+
+ if(data.user){
+  localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+ }
+
+ showAccount(data.user, data.premium);
 }
 
-function closeOutside(event) {
-  if (event.target.id === "moduleModal") {
-    closeModule();
+function showAccount(user, premium){
+ authArea.style.display = "none";
+ accountArea.style.display = "block";
+ clearMessage();
+
+ document.getElementById("welcomeTitle").textContent =
+  "Welcome, " + (user?.displayName || "DOA user");
+
+ document.getElementById("accountDetails").textContent =
+  "Phone: " + (user?.phone || "") +
+  (user?.email ? " | Email: " + user.email : "");
+
+ const premiumBox = document.getElementById("premiumDetails");
+ const notice = document.getElementById("subscriptionNotice");
+
+ if(premium?.active){
+  const expiry = premium.expiresAt
+   ? new Date(premium.expiresAt).toLocaleString()
+   : "No expiry date";
+
+  premiumBox.textContent =
+   (premium.trial
+    ? "Premium trial is active."
+    : "Premium subscription is active.") +
+   " Expiry: " + expiry;
+
+  notice.classList.add("hidden");
+ }else{
+  premiumBox.textContent =
+   "Premium access is inactive. Your account remains available.";
+
+  notice.classList.remove("hidden");
+ }
+}
+
+async function register(event){
+ event.preventDefault();
+ clearMessage();
+
+ const button = document.getElementById("registerButton");
+
+ const name = document.getElementById("registerName").value.trim();
+ const phone = document.getElementById("registerPhone").value.trim();
+ const email = document.getElementById("registerEmail").value.trim();
+ const password = document.getElementById("registerPassword").value;
+ const confirm = document.getElementById("confirmPassword").value;
+
+ if(password !== confirm){
+  showMessage("Your passwords do not match.");
+  return;
+ }
+
+ if(password.length < 8){
+  showMessage("Password must be at least 8 characters.");
+  return;
+ }
+
+ setLoading(button, true, "Create Account & Start Free Trial");
+
+ try{
+  const data = await apiRequest("/auth/register", {
+   method:"POST",
+   body:JSON.stringify({
+    displayName:name,
+    phone:phone,
+    email:email || null,
+    password:password
+   })
+  });
+
+  saveLogin(data);
+
+ }catch(error){
+  showMessage(error.message);
+ }finally{
+  setLoading(button, false, "Create Account & Start Free Trial");
+ }
+}
+
+async function login(event){
+ event.preventDefault();
+ clearMessage();
+
+ const button = document.getElementById("loginButton");
+
+ const phone = document.getElementById("loginPhone").value.trim();
+ const password = document.getElementById("loginPassword").value;
+
+ setLoading(button, true, "Login");
+
+ try{
+  const data = await apiRequest("/auth/login", {
+   method:"POST",
+   body:JSON.stringify({phone,password})
+  });
+
+  saveLogin(data);
+
+ }catch(error){
+  showMessage(error.message);
+ }finally{
+  setLoading(button, false, "Login");
+ }
+}
+
+async function logout(){
+ try{
+  await apiRequest("/auth/logout", {method:"POST"});
+ }catch(error){
+  console.log("Logout request:", error.message);
+ }
+
+ localStorage.removeItem(TOKEN_KEY);
+ localStorage.removeItem(USER_KEY);
+
+ accountArea.style.display = "none";
+ authArea.style.display = "block";
+ showForm("login");
+ showMessage("You have logged out successfully.", "success");
+}
+
+function goToPage2(){
+ window.location.href = "page2.html";
+}
+
+async function checkExistingLogin(){
+ const token = localStorage.getItem(TOKEN_KEY);
+
+ if(!token) return;
+
+ try{
+  const data = await apiRequest("/auth/me");
+
+  if(data.user){
+   localStorage.setItem(USER_KEY, JSON.stringify(data.user));
   }
+
+  showAccount(data.user, data.premium);
+
+ }catch(error){
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+ }
 }
+
+document.getElementById("loginForm").addEventListener(
+ "submit", login
+);
+
+document.getElementById("registerForm").addEventListener(
+ "submit", register
+);
+
+checkExistingLogin();
 </script>
-
-<!-- Shared assistant engine -->
-<script src="doa-assistant.js"></script>
-
 </body>
 </html>
