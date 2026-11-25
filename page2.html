@@ -50,7 +50,6 @@ textarea{min-height:85px;resize:vertical}
 hr{border:0;border-top:1px solid #385273;margin:18px 0}
 footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 
-/* PREMIUM TRIAL BANNER */
 #doaTrialBanner{
  background:#19365f;
  border:1px solid #d8a94e;
@@ -63,7 +62,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 #doaTrialMessage{margin:0;color:#fff}
 #doaTrialCountdown{font-size:22px;font-weight:bold;color:#f2c66e;margin-top:10px}
 
-/* SHARED FLOATING VOICE ASSISTANT BUTTON */
 #doaFloatMic{
  position:fixed;right:18px;bottom:22px;width:62px;height:62px;
  border-radius:50%;background:#d8a94e;color:#07152f;font-size:27px;
@@ -99,12 +97,8 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  </div>
 
  <div class="header-buttons">
-  <button onclick="location.href='page3.html'">
-   👤 Account
-  </button>
-  <button class="back" onclick="location.href='index.html'">
-   ← Back to DOA
-  </button>
+  <button onclick="location.href='page3.html'">👤 Account</button>
+  <button class="back" onclick="location.href='index.html'">← Back to DOA</button>
  </div>
 </header>
 
@@ -341,9 +335,8 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <div class="locked">
   <div class="emoji">🔓</div>
   <h3>DOA Premium Trial Access</h3>
-  <p>Your 7-day trial gives you access to this Premium section.</p>
-  <p>Product management, stock received, stock sold, remaining quantities and low-stock alerts will be added when the Stock tool is implemented.</p>
-  <span class="premium-label">TRIAL ACCESS</span>
+  <p>Product management, stock received, stock sold, remaining quantities and low-stock alerts are available in the dedicated My Stock page.</p>
+  <button onclick="openPremiumFeature('stock')">Open My Stock</button>
  </div>
 </section>
 
@@ -352,9 +345,8 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <div class="locked">
   <div class="emoji">🔓</div>
   <h3>DOA Premium Trial Access</h3>
-  <p>Your 7-day trial gives you access to this Premium section.</p>
-  <p>Invoice creation, receipts, customer records and professional sales reports will be added when this tool is implemented.</p>
-  <span class="premium-label">TRIAL ACCESS</span>
+  <p>Create invoices, manage customers and view business reports in the dedicated page.</p>
+  <button onclick="openPremiumFeature('invoices')">Open Reports and Invoices</button>
  </div>
 </section>
 
@@ -363,9 +355,8 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <div class="locked">
   <div class="emoji">🔓</div>
   <h3>DOA Premium Trial Access</h3>
-  <p>Your 7-day trial gives you access to this Premium section.</p>
-  <p>Income, expenses, budgets, debts, cash flow and financial summaries will be added when this tool is implemented.</p>
-  <span class="premium-label">TRIAL ACCESS</span>
+  <p>Manage income, expenses, budgets, debts, cash flow and financial summaries in the dedicated page.</p>
+  <button onclick="openPremiumFeature('money')">Open My Money</button>
  </div>
 </section>
 
@@ -455,15 +446,21 @@ startDOATrial();
 updateDOATrialDisplay();
 setInterval(updateDOATrialDisplay,60000);
 
-/* OPEN SELECTED PREMIUM FEATURE ON PAGE 3 */
+/* OPEN EACH PREMIUM FEATURE ON ITS OWN PAGE */
 
 function openPremiumFeature(id){
- const premiumTools = ['stock','invoices','money'];
 
- if(!premiumTools.includes(id))return;
+ const premiumPages = {
+  stock: 'page3.html',
+  money: 'page4.html',
+  invoices: 'page5.html'
+ };
 
- window.location.href =
-  'page3.html?feature='+encodeURIComponent(id);
+ const targetPage = premiumPages[id];
+
+ if(!targetPage)return;
+
+ window.location.href = targetPage;
 }
 
 /* OPEN TOOLS */
@@ -472,7 +469,6 @@ function openTool(id){
 
  const premiumTools = ['stock','invoices','money'];
 
- // Premium features open on Page 3
  if(premiumTools.includes(id)){
   openPremiumFeature(id);
   return;
