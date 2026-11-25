@@ -167,21 +167,21 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 
 <div class="tools">
 
- <div class="tool premium" onclick="openTool('stock')">
+ <div class="tool premium" onclick="openPremiumFeature('stock')">
   <div class="emoji">📦</div>
   <h3>My Stock</h3>
   <p>Manage products and inventory</p>
   <span class="premium-label">7-DAY TRIAL</span>
  </div>
 
- <div class="tool premium" onclick="openTool('invoices')">
+ <div class="tool premium" onclick="openPremiumFeature('invoices')">
   <div class="emoji">🧾</div>
   <h3>Reports and Invoices</h3>
   <p>Sales, invoices and business reports</p>
   <span class="premium-label">7-DAY TRIAL</span>
  </div>
 
- <div class="tool premium" onclick="openTool('money')">
+ <div class="tool premium" onclick="openPremiumFeature('money')">
   <div class="emoji">💳</div>
   <h3>My Money</h3>
   <p>Manage income and business finances</p>
@@ -455,15 +455,26 @@ startDOATrial();
 updateDOATrialDisplay();
 setInterval(updateDOATrialDisplay,60000);
 
+/* OPEN SELECTED PREMIUM FEATURE ON PAGE 3 */
+
+function openPremiumFeature(id){
+ const premiumTools = ['stock','invoices','money'];
+
+ if(!premiumTools.includes(id))return;
+
+ window.location.href =
+  'page3.html?feature='+encodeURIComponent(id);
+}
+
 /* OPEN TOOLS */
 
 function openTool(id){
 
  const premiumTools = ['stock','invoices','money'];
 
- if(premiumTools.includes(id) && !isDOAPremiumTrialActive()){
-  updateDOATrialDisplay();
-  alert('Your 7-day DOA Premium trial has expired.');
+ // Premium features open on Page 3
+ if(premiumTools.includes(id)){
+  openPremiumFeature(id);
   return;
  }
 
