@@ -9,190 +9,49 @@
 
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#07152f;
- color:#fff;
- min-height:100vh;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#07152f;color:#fff;min-height:100vh}
 button,input,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
-
-header{
- background:#0c2042;
- padding:16px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- border-bottom:1px solid #294267;
-}
+header{background:#0c2042;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px solid #294267}
 .logo{font-size:21px;font-weight:bold}
 .header-actions{display:flex;gap:8px;flex-wrap:wrap}
-.header-actions button{
- background:#203b63;
- color:white;
- border:0;
- padding:9px 12px;
- border-radius:8px;
-}
-
-.container{
- width:100%;
- max-width:1050px;
- margin:auto;
- padding:18px;
-}
-.panel{
- background:#10264a;
- border:1px solid #29466e;
- border-radius:13px;
- padding:18px;
- margin-bottom:16px;
-}
+.header-actions button{background:#203b63;color:white;border:0;padding:9px 12px;border-radius:8px}
+.container{width:100%;max-width:1050px;margin:auto;padding:18px}
+.panel{background:#10264a;border:1px solid #29466e;border-radius:13px;padding:18px;margin-bottom:16px}
 h1,h2,h3{margin-top:0}
 h1{font-size:24px}
 h2{font-size:20px}
 h3{font-size:17px}
 .muted{color:#b9c9df;font-size:14px}
-.trial{
- background:#123c38;
- border:1px solid #277d68;
- padding:12px;
- border-radius:10px;
- margin-bottom:15px;
- color:#c8fff0;
-}
-.tabs{
- display:flex;
- gap:8px;
- overflow-x:auto;
- margin:15px 0;
-}
-.tabs button{
- flex:1;
- min-width:110px;
- padding:12px 8px;
- border:1px solid #345276;
- background:#142e54;
- color:white;
- border-radius:9px;
-}
-.tabs button.active{
- background:#e6ad39;
- color:#07152f;
- border-color:#e6ad39;
- font-weight:bold;
-}
-input,select{
- width:100%;
- padding:12px;
- margin:7px 0 12px;
- border:1px solid #466184;
- border-radius:8px;
- background:#071a36;
- color:white;
-}
+.trial{background:#123c38;border:1px solid #277d68;padding:12px;border-radius:10px;margin-bottom:15px;color:#c8fff0}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin:15px 0}
+.tabs button{flex:1;min-width:110px;padding:12px 8px;border:1px solid #345276;background:#142e54;color:white;border-radius:9px}
+.tabs button.active{background:#e6ad39;color:#07152f;border-color:#e6ad39;font-weight:bold}
+input,select{width:100%;padding:12px;margin:7px 0 12px;border:1px solid #466184;border-radius:8px;background:#071a36;color:white}
 input::placeholder{color:#aabbd1}
-.primary{
- width:100%;
- padding:12px;
- background:#e6ad39;
- color:#07152f;
- border:0;
- border-radius:8px;
- font-weight:bold;
- margin-top:6px;
-}
-.secondary{
- padding:10px 14px;
- background:#29466e;
- color:white;
- border:0;
- border-radius:8px;
-}
-.danger{
- background:#8b3030;
- color:white;
- border:0;
- border-radius:7px;
- padding:8px 10px;
-}
-.grid{
- display:grid;
- grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
- gap:10px;
- margin:14px 0;
-}
-.stat{
- background:#0a1d3a;
- border:1px solid #29466e;
- padding:14px;
- border-radius:10px;
-}
-.stat strong{
- display:block;
- font-size:21px;
- margin-top:7px;
- color:#f1bd51;
-}
-.record{
- background:#0a1d3a;
- border:1px solid #29466e;
- border-radius:9px;
- padding:13px;
- margin:10px 0;
-}
-.record-top{
- display:flex;
- justify-content:space-between;
- align-items:flex-start;
- gap:10px;
-}
+.primary{width:100%;padding:12px;background:#e6ad39;color:#07152f;border:0;border-radius:8px;font-weight:bold;margin-top:6px}
+.secondary{padding:10px 14px;background:#29466e;color:white;border:0;border-radius:8px}
+.danger{background:#8b3030;color:white;border:0;border-radius:7px;padding:8px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0}
+.stat{background:#0a1d3a;border:1px solid #29466e;padding:14px;border-radius:10px}
+.stat strong{display:block;font-size:21px;margin-top:7px;color:#f1bd51}
+.record{background:#0a1d3a;border:1px solid #29466e;border-radius:9px;padding:13px;margin:10px 0}
+.record-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .record p{margin:6px 0;color:#c3d1e4;font-size:14px}
 .amount{font-weight:bold;color:#f1bd51}
-.empty{
- text-align:center;
- color:#aebfd5;
- padding:20px;
-}
-.notice{
- padding:12px;
- background:#3b2c12;
- border:1px solid #85652a;
- border-radius:8px;
- color:#ffe3a0;
- margin:12px 0;
-}
-.auth-card{
- max-width:480px;
- margin:35px auto;
-}
+.empty{text-align:center;color:#aebfd5;padding:20px}
+.notice{padding:12px;background:#3b2c12;border:1px solid #85652a;border-radius:8px;color:#ffe3a0;margin:12px 0}
+.auth-card{max-width:480px;margin:35px auto}
 .auth-card h1{text-align:center}
-.auth-switch{
- text-align:center;
- margin-top:15px;
- color:#d4e1f2;
-}
-.auth-switch button{
- color:#f1bd51;
- background:none;
- border:0;
- text-decoration:underline;
-}
-footer{
- text-align:center;
- padding:20px;
- color:#91a6c3;
- font-size:12px;
-}
+.auth-switch{text-align:center;margin-top:15px;color:#d4e1f2}
+.auth-switch button{color:#f1bd51;background:none;border:0;text-decoration:underline}
+footer{text-align:center;padding:20px;color:#91a6c3;font-size:12px}
 @media(max-width:500px){
- .container{padding:12px}
- header{padding:12px}
- .logo{font-size:18px}
- .panel{padding:14px}
+.container{padding:12px}
+header{padding:12px}
+.logo{font-size:18px}
+.panel{padding:14px}
 }
 </style>
 </head>
@@ -207,23 +66,17 @@ footer{
  </div>
 </header>
 
-<!-- AUTHENTICATION -->
 <div id="authScreen" class="container hidden">
  <div class="panel auth-card">
   <h1 id="authTitle">Welcome Back</h1>
-  <p class="muted" style="text-align:center">
-   Sign in or create your DOA account.
-  </p>
+  <p class="muted" style="text-align:center">Sign in or create your DOA account.</p>
 
   <div id="loginForm">
    <label>Ugandan phone number</label>
    <input id="loginPhone" type="tel" placeholder="e.g. 0781234567">
-
    <label>Password</label>
    <input id="loginPassword" type="password" placeholder="Enter password">
-
    <button class="primary" onclick="login()">Login</button>
-
    <div class="auth-switch">
     Don't have an account?
     <button onclick="showRegister()">Create account</button>
@@ -233,54 +86,36 @@ footer{
   <div id="registerForm" class="hidden">
    <label>Full name</label>
    <input id="registerName" type="text" placeholder="Your full name">
-
    <label>Ugandan phone number</label>
    <input id="registerPhone" type="tel" placeholder="e.g. 0781234567">
-
    <label>Email (optional)</label>
    <input id="registerEmail" type="email" placeholder="Email address">
-
    <label>Create password</label>
    <input id="registerPassword" type="password" placeholder="Create password">
-
    <label>Confirm password</label>
    <input id="registerConfirm" type="password" placeholder="Confirm password">
-
    <button class="primary" onclick="register()">Create Account</button>
-
    <div class="auth-switch">
     Already have an account?
     <button onclick="showLogin()">Login</button>
    </div>
   </div>
-
   <p id="authMessage" class="muted"></p>
  </div>
 </div>
 
-<!-- SUBSCRIPTION REQUIRED -->
 <div id="subscriptionScreen" class="container hidden">
  <div class="panel auth-card">
   <h1>Trial Completed</h1>
-  <p>
-   Your 7-day Premium trial has ended. Create an account or log in,
-   then activate a subscription to continue using Premium features.
-  </p>
-  <div class="notice">
-   Your Premium features require an active subscription after the trial.
-  </div>
+  <p>Your 7-day Premium trial has ended. Create an account or log in, then activate a subscription to continue using Premium features.</p>
+  <div class="notice">Your Premium features require an active subscription after the trial.</div>
   <button class="primary" onclick="showLogin()">Login</button>
-  <button class="secondary" style="width:100%;margin-top:10px"
-   onclick="showRegister()">Create Account</button>
-  <p class="muted" style="margin-top:15px">
-   Subscription payment activation will be connected separately.
-  </p>
+  <button class="secondary" style="width:100%;margin-top:10px" onclick="showRegister()">Create Account</button>
+  <p class="muted" style="margin-top:15px">Subscription payment activation will be connected separately.</p>
  </div>
 </div>
 
-<!-- PREMIUM APP -->
 <main id="appScreen" class="container hidden">
-
  <div class="panel">
   <h1>DOA Premium Features</h1>
   <p class="muted">Manage your stock, invoices, income and expenses.</p>
@@ -303,7 +138,6 @@ footer{
   </div>
  </div>
 
- <!-- MY STOCK -->
  <section id="feature-stock" class="feature-section">
   <div class="panel">
    <h2>My Stock</h2>
@@ -318,16 +152,12 @@ footer{
    <h3>Add a product</h3>
    <label>Product name</label>
    <input id="stockName" placeholder="Product name">
-
    <label>Quantity</label>
    <input id="stockQuantity" type="number" min="0" placeholder="Quantity">
-
    <label>Buying price per unit (UGX)</label>
    <input id="stockBuying" type="number" min="0" placeholder="Buying price">
-
    <label>Selling price per unit (UGX)</label>
    <input id="stockSelling" type="number" min="0" placeholder="Selling price">
-
    <button class="primary" onclick="addStock()">Add Product</button>
   </div>
 
@@ -337,37 +167,27 @@ footer{
   </div>
  </section>
 
- <!-- REPORTS AND INVOICES -->
  <section id="feature-invoices" class="feature-section hidden">
   <div class="panel">
    <h2>Reports and Invoices</h2>
    <p class="muted">Create invoices and view your sales records.</p>
-
    <div class="grid">
     <div class="stat">Invoices<strong id="invoiceCount">0</strong></div>
     <div class="stat">Total sales<strong id="invoiceTotal">UGX 0</strong></div>
    </div>
-
    <h3>Create an invoice</h3>
-
    <label>Customer name</label>
    <input id="customerName" placeholder="Customer name">
-
    <label>Customer phone (optional)</label>
    <input id="customerPhone" type="tel" placeholder="Customer phone">
-
    <label>Product or service</label>
    <input id="invoiceItem" placeholder="Product or service">
-
    <label>Quantity</label>
    <input id="invoiceQuantity" type="number" min="1" value="1">
-
    <label>Unit price (UGX)</label>
    <input id="invoicePrice" type="number" min="0" placeholder="Unit price">
-
    <button class="primary" onclick="createInvoice()">Save Invoice</button>
   </div>
-
   <div class="panel">
    <div class="record-top">
     <h3>Sales Report</h3>
@@ -377,38 +197,29 @@ footer{
   </div>
  </section>
 
- <!-- MY MONEY -->
  <section id="feature-money" class="feature-section hidden">
   <div class="panel">
    <h2>My Money</h2>
    <p class="muted">Record your income and expenses.</p>
-
    <div class="grid">
     <div class="stat">Income<strong id="moneyIncome">UGX 0</strong></div>
     <div class="stat">Expenses<strong id="moneyExpenses">UGX 0</strong></div>
     <div class="stat">Balance<strong id="moneyBalance">UGX 0</strong></div>
    </div>
-
    <h3>Add a money record</h3>
-
    <label>Record type</label>
    <select id="moneyType">
     <option value="income">Income</option>
     <option value="expense">Expense</option>
    </select>
-
    <label>Description</label>
    <input id="moneyDescription" placeholder="What was the money for?">
-
    <label>Amount (UGX)</label>
    <input id="moneyAmount" type="number" min="1" placeholder="Amount">
-
    <label>Date</label>
    <input id="moneyDate" type="date">
-
    <button class="primary" onclick="addMoneyRecord()">Save Record</button>
   </div>
-
   <div class="panel">
    <h3>Money Records</h3>
    <div id="moneyList"></div>
@@ -418,22 +229,15 @@ footer{
  <div class="panel">
   <button class="secondary" style="width:100%" onclick="logout()">Logout</button>
  </div>
-
 </main>
 
 <footer>DOA 3.0 - Your Personal Assistant</footer>
 
 <script>
-/* ==================================
-   DOA 3.0 PAGE 3 CONFIGURATION
-================================== */
-
 const API_BASE = "https://doa2026app.workers.dev";
-
 const TOKEN_KEY = "doa_token";
 const USER_KEY = "doa_user";
 const TRIAL_KEY = "doa_guest_premium_trial_v1";
-
 const STOCK_KEY = "doa_p3_stock";
 const INVOICE_KEY = "doa_p3_invoices";
 const MONEY_KEY = "doa_p3_money";
@@ -446,18 +250,9 @@ let selectedFeature =
  new URLSearchParams(window.location.search).get("feature") || "stock";
 
 const validFeatures = ["stock","invoices","money"];
+if(!validFeatures.includes(selectedFeature)) selectedFeature = "stock";
 
-if(!validFeatures.includes(selectedFeature)){
- selectedFeature = "stock";
-}
-
-/* ==================================
-   GENERAL HELPERS
-================================== */
-
-function byId(id){
- return document.getElementById(id);
-}
+function byId(id){return document.getElementById(id)}
 
 function money(value){
  return "UGX " + Number(value || 0).toLocaleString("en-UG");
@@ -467,9 +262,7 @@ function readData(key){
  try{
   const data = JSON.parse(localStorage.getItem(key) || "[]");
   return Array.isArray(data) ? data : [];
- }catch(error){
-  return [];
- }
+ }catch(error){return []}
 }
 
 function saveData(key,data){
@@ -477,19 +270,12 @@ function saveData(key,data){
 }
 
 function makeId(){
- return Date.now().toString(36) +
-  Math.random().toString(36).slice(2,8);
+ return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
 }
 
 function escapeHTML(value){
  return String(value ?? "").replace(/[&<>"']/g,function(char){
-  return {
-   "&":"&amp;",
-   "<":"&lt;",
-   ">":"&gt;",
-   '"':"&quot;",
-   "'":"&#39;"
-  }[char];
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char];
  });
 }
 
@@ -497,91 +283,55 @@ function setMessage(message){
  byId("authMessage").textContent = message;
 }
 
-/* ==================================
-   API CONNECTION
-================================== */
-
 async function apiRequest(path,options={}){
  const headers = {
   "Content-Type":"application/json",
   ...(options.headers || {})
  };
-
  const token = localStorage.getItem(TOKEN_KEY);
+ if(token) headers.Authorization = "Bearer " + token;
 
- if(token){
-  headers.Authorization = "Bearer " + token;
- }
-
- const response = await fetch(API_BASE + path,{
-  ...options,
-  headers
- });
-
+ const response = await fetch(API_BASE + path,{...options,headers});
  let data = {};
-
- try{
-  data = await response.json();
- }catch(error){
-  data = {};
- }
+ try{data = await response.json()}catch(error){data = {}}
 
  if(!response.ok){
   throw new Error(data.error || data.message || "Request failed.");
  }
-
  return data;
 }
 
-/* ==================================
-   SHARED 7-DAY TRIAL
-================================== */
+/* TRIAL */
 
 function getTrial(){
  try{
   const trial = JSON.parse(localStorage.getItem(TRIAL_KEY) || "null");
-
-  if(!trial || !trial.startedAt || !trial.expiresAt){
-   return null;
-  }
-
+  if(!trial || !trial.startedAt || !trial.expiresAt) return null;
   return trial;
- }catch(error){
-  return null;
- }
+ }catch(error){return null}
 }
 
 function trialIsActive(){
  const trial = getTrial();
-
- if(!trial) return false;
-
- return Number(trial.expiresAt) > Date.now();
+ return !!trial && Number(trial.expiresAt) > Date.now();
 }
 
 function updateTrialDisplay(){
  const trial = getTrial();
-
  if(!trial || !trialIsActive()){
   byId("trialNotice").classList.add("hidden");
   return;
  }
-
  byId("trialNotice").classList.remove("hidden");
-
  const remaining = Number(trial.expiresAt) - Date.now();
-
  const days = Math.floor(remaining / 86400000);
  const hours = Math.floor((remaining % 86400000) / 3600000);
  const minutes = Math.floor((remaining % 3600000) / 60000);
-
  byId("trialRemaining").textContent =
   days + " days, " + hours + " hours, " + minutes + " minutes remaining";
 }
 
-/* ==================================
-   SCREEN CONTROL
-================================== */
+/* SCREEN CONTROL */
 
 function hideAllScreens(){
  byId("authScreen").classList.add("hidden");
@@ -618,11 +368,7 @@ function showSubscription(){
 }
 
 function showAccount(){
- if(trialIsActive() || premiumActive){
-  showLogin();
- }else{
-  showLogin();
- }
+ showLogin();
 }
 
 function showApp(){
@@ -641,16 +387,9 @@ function showApp(){
  refreshAll();
 }
 
-/* ==================================
-   ACCESS CHECK
-   ACTIVE TRIAL IS CHECKED FIRST
-================================== */
+/* ACCESS CHECK */
 
 async function checkAccess(){
-
- // FIRST: Allow the active shared 7-day trial.
- // No login is required during this period.
-
  if(trialIsActive()){
   currentUser = null;
   premiumActive = false;
@@ -659,67 +398,44 @@ async function checkAccess(){
   return;
  }
 
- // SECOND: Trial expired. Check account login.
-
  const token = localStorage.getItem(TOKEN_KEY);
 
  if(token){
   try{
    const data = await apiRequest("/auth/me");
-
    currentUser = data.user || null;
 
    const status = await apiRequest("/api/subscription/status");
-
-   premiumActive = !!status.active;
+   premiumActive = !!(status.active || (status.premium && status.premium.active));
 
    if(premiumActive){
     accessReady = true;
     showApp();
     return;
    }
-
    showSubscription();
    return;
-
   }catch(error){
    localStorage.removeItem(TOKEN_KEY);
    localStorage.removeItem(USER_KEY);
-
    currentUser = null;
    premiumActive = false;
   }
  }
-
- // No active trial and no valid subscription.
  showAuth();
 }
 
-/* ==================================
-   UGANDAN PHONE NUMBER
-================================== */
+/* PHONE NUMBER */
 
 function normalizePhone(value){
  let phone = String(value || "").replace(/[\s\-()]/g,"");
-
- if(phone.startsWith("+256")){
-  phone = phone.slice(1);
- }
-
- if(phone.startsWith("256") && phone.length === 12){
-  return phone;
- }
-
- if(phone.startsWith("0") && phone.length === 10){
-  return "256" + phone.slice(1);
- }
-
+ if(phone.startsWith("+256")) phone = phone.slice(1);
+ if(phone.startsWith("256") && phone.length === 12) return phone;
+ if(phone.startsWith("0") && phone.length === 10) return "256" + phone.slice(1);
  return null;
 }
 
-/* ==================================
-   REGISTER
-================================== */
+/* REGISTER */
 
 async function register(){
  const name = byId("registerName").value.trim();
@@ -732,35 +448,23 @@ async function register(){
   setMessage("Please fill in your name, phone number and password.");
   return;
  }
-
  if(password.length < 8){
   setMessage("Password must contain at least 8 characters.");
   return;
  }
-
  if(password !== confirm){
   setMessage("Passwords do not match.");
   return;
  }
 
  setMessage("Creating your account...");
-
  try{
   const data = await apiRequest("/auth/register",{
    method:"POST",
-   body:JSON.stringify({
-    name,
-    fullName:name,
-    phone,
-    email:email || null,
-    password
-   })
+   body:JSON.stringify({name,fullName:name,phone,email:email || null,password})
   });
 
-  if(data.token){
-   localStorage.setItem(TOKEN_KEY,data.token);
-  }
-
+  if(data.token) localStorage.setItem(TOKEN_KEY,data.token);
   if(data.user){
    localStorage.setItem(USER_KEY,JSON.stringify(data.user));
    currentUser = data.user;
@@ -778,15 +482,12 @@ async function register(){
    showLogin();
    setMessage("Account created. Please log in.");
   }
-
  }catch(error){
   setMessage(error.message || "Could not create account.");
  }
 }
 
-/* ==================================
-   LOGIN
-================================== */
+/* LOGIN */
 
 async function login(){
  const phone = normalizePhone(byId("loginPhone").value);
@@ -798,47 +499,34 @@ async function login(){
  }
 
  setMessage("Logging in...");
-
  try{
   const data = await apiRequest("/auth/login",{
    method:"POST",
    body:JSON.stringify({phone,password})
   });
 
-  if(data.token){
-   localStorage.setItem(TOKEN_KEY,data.token);
-  }
-
+  if(data.token) localStorage.setItem(TOKEN_KEY,data.token);
   if(data.user){
    localStorage.setItem(USER_KEY,JSON.stringify(data.user));
    currentUser = data.user;
   }
-
   await checkAccess();
-
  }catch(error){
   setMessage(error.message || "Login failed.");
  }
 }
 
-/* ==================================
-   LOGOUT
-================================== */
+/* LOGOUT */
 
 async function logout(){
  const token = localStorage.getItem(TOKEN_KEY);
-
  if(token){
-  try{
-   await apiRequest("/auth/logout",{method:"POST"});
-  }catch(error){
-   // Local logout continues even if the server is unavailable.
-  }
+  try{await apiRequest("/auth/logout",{method:"POST"})}
+  catch(error){}
  }
 
  localStorage.removeItem(TOKEN_KEY);
  localStorage.removeItem(USER_KEY);
-
  currentUser = null;
  premiumActive = false;
 
@@ -850,32 +538,23 @@ async function logout(){
  }
 }
 
-/* ==================================
-   PREMIUM FEATURE NAVIGATION
-================================== */
+/* FEATURE NAVIGATION */
 
 function openFeature(feature){
  if(!validFeatures.includes(feature)) return;
-
  selectedFeature = feature;
 
- history.replaceState(
-  null,
-  "",
-  "page3.html?feature=" + encodeURIComponent(feature)
- );
+ history.replaceState(null,"","page3.html?feature=" + encodeURIComponent(feature));
 
  document.querySelectorAll(".feature-section").forEach(section=>{
   section.classList.add("hidden");
  });
-
  document.querySelectorAll(".tabs button").forEach(button=>{
   button.classList.remove("active");
  });
 
  byId("feature-" + feature).classList.remove("hidden");
  byId("tab-" + feature).classList.add("active");
-
  refreshAll();
 }
 
@@ -883,11 +562,9 @@ function goBack(){
  window.location.href = "page2.html";
 }
 
-/* ==================================
-   MY STOCK
-================================== */
+/* MY STOCK - CLOUDFLARE AND PHONE COPY */
 
-function addStock(){
+async function addStock(){
  const name = byId("stockName").value.trim();
  const quantity = Number(byId("stockQuantity").value);
  const buying = Number(byId("stockBuying").value);
@@ -900,41 +577,90 @@ function addStock(){
   return;
  }
 
- const stock = readData(STOCK_KEY);
+ const token = localStorage.getItem(TOKEN_KEY);
 
- stock.push({
-  id:makeId(),
-  name,
-  quantity,
-  buying,
-  selling,
-  createdAt:new Date().toISOString()
- });
+ try{
+  if(token){
+   await apiRequest("/api/stock",{
+    method:"POST",
+    body:JSON.stringify({
+     name,
+     unit:"pieces",
+     quantityOnHand:quantity,
+     costPrice:buying,
+     sellingPrice:selling
+    })
+   });
+  }else{
+   const stock = readData(STOCK_KEY);
+   stock.push({
+    id:makeId(),name,quantity,buying,selling,
+    createdAt:new Date().toISOString()
+   });
+   saveData(STOCK_KEY,stock);
+  }
 
- saveData(STOCK_KEY,stock);
+  byId("stockName").value = "";
+  byId("stockQuantity").value = "";
+  byId("stockBuying").value = "";
+  byId("stockSelling").value = "";
 
- byId("stockName").value = "";
- byId("stockQuantity").value = "";
- byId("stockBuying").value = "";
- byId("stockSelling").value = "";
-
- refreshStock();
+  await refreshStock();
+ }catch(error){
+  alert("Could not save product: " + error.message);
+ }
 }
 
-function deleteStock(id){
+async function deleteStock(id){
  if(!confirm("Delete this product?")) return;
 
- const stock = readData(STOCK_KEY).filter(item=>item.id !== id);
- saveData(STOCK_KEY,stock);
- refreshStock();
+ const token = localStorage.getItem(TOKEN_KEY);
+
+ try{
+  if(token){
+   await apiRequest("/api/stock/" + encodeURIComponent(id),{
+    method:"DELETE"
+   });
+  }
+
+  const stock = readData(STOCK_KEY).filter(item=>String(item.id) !== String(id));
+  saveData(STOCK_KEY,stock);
+  await refreshStock();
+ }catch(error){
+  alert("Could not delete product: " + error.message);
+ }
 }
 
-function refreshStock(){
- const stock = readData(STOCK_KEY);
+async function refreshStock(){
+ let stock = readData(STOCK_KEY);
+ const token = localStorage.getItem(TOKEN_KEY);
 
- const units = stock.reduce((sum,item)=>sum + Number(item.quantity || 0),0);
- const value = stock.reduce((sum,item)=>sum +
-  Number(item.quantity || 0) * Number(item.buying || 0),0);
+ if(token){
+  try{
+   const data = await apiRequest("/api/stock");
+   const products = Array.isArray(data) ? data :
+    (data.products || data.stock || data.data || []);
+
+   stock = products.map(item=>({
+    id:item.id,
+    name:item.name,
+    quantity:Number(item.quantity_on_hand ?? item.quantity ?? 0),
+    buying:Number(item.cost_price ?? item.buying ?? 0),
+    selling:Number(item.selling_price ?? item.selling ?? 0),
+    createdAt:item.created_at || item.createdAt || ""
+   }));
+
+   saveData(STOCK_KEY,stock);
+  }catch(error){
+   console.error("Cloud stock retrieval failed:",error);
+  }
+ }
+
+ const units = stock.reduce((sum,item)=>
+  sum + Number(item.quantity || 0),0);
+
+ const value = stock.reduce((sum,item)=>
+  sum + Number(item.quantity || 0) * Number(item.buying || 0),0);
 
  byId("stockCount").textContent = stock.length;
  byId("stockUnits").textContent = units.toLocaleString("en-UG");
@@ -950,7 +676,7 @@ function refreshStock(){
   <div class="record">
    <div class="record-top">
     <strong>${escapeHTML(item.name)}</strong>
-    <button class="danger" onclick="deleteStock('${item.id}')">Delete</button>
+    <button class="danger" onclick="deleteStock('${escapeHTML(item.id)}')">Delete</button>
    </div>
    <p>Quantity: ${Number(item.quantity).toLocaleString("en-UG")}</p>
    <p>Buying price: ${money(item.buying)}</p>
@@ -960,9 +686,7 @@ function refreshStock(){
  `).join("");
 }
 
-/* ==================================
-   REPORTS AND INVOICES
-================================== */
+/* REPORTS AND INVOICES - EXISTING LOCAL STORAGE */
 
 function createInvoice(){
  const customer = byId("customerName").value.trim();
@@ -978,19 +702,10 @@ function createInvoice(){
  }
 
  const invoices = readData(INVOICE_KEY);
-
  invoices.push({
-  id:makeId(),
-  number:"DOA-" + Date.now(),
-  customer,
-  phone,
-  item,
-  quantity,
-  price,
-  total:quantity * price,
-  date:new Date().toISOString()
+  id:makeId(),number:"DOA-" + Date.now(),customer,phone,item,
+  quantity,price,total:quantity*price,date:new Date().toISOString()
  });
-
  saveData(INVOICE_KEY,invoices);
 
  byId("customerName").value = "";
@@ -998,13 +713,11 @@ function createInvoice(){
  byId("invoiceItem").value = "";
  byId("invoiceQuantity").value = "1";
  byId("invoicePrice").value = "";
-
  refreshInvoices();
 }
 
 function deleteInvoice(id){
  if(!confirm("Delete this invoice?")) return;
-
  const invoices = readData(INVOICE_KEY).filter(item=>item.id !== id);
  saveData(INVOICE_KEY,invoices);
  refreshInvoices();
@@ -1012,50 +725,34 @@ function deleteInvoice(id){
 
 function invoicePrintHTML(invoice){
  return `
- <html>
- <head>
-  <title>DOA Invoice</title>
-  <style>
-   body{font-family:Arial;padding:30px;color:#222}
-   h1{color:#142e54}
-   table{width:100%;border-collapse:collapse;margin-top:20px}
-   td,th{border:1px solid #ccc;padding:10px;text-align:left}
-  </style>
- </head>
- <body>
-  <h1>DOA 3.0</h1>
-  <h2>INVOICE</h2>
-  <p>Invoice: ${escapeHTML(invoice.number)}</p>
-  <p>Date: ${escapeHTML(new Date(invoice.date).toLocaleDateString())}</p>
-  <p>Customer: ${escapeHTML(invoice.customer)}</p>
-  <p>Phone: ${escapeHTML(invoice.phone || "-")}</p>
-  <table>
-   <tr><th>Item</th><th>Quantity</th><th>Unit price</th><th>Total</th></tr>
-   <tr>
-    <td>${escapeHTML(invoice.item)}</td>
-    <td>${invoice.quantity}</td>
-    <td>${money(invoice.price)}</td>
-    <td>${money(invoice.total)}</td>
-   </tr>
-  </table>
-  <h3>Total: ${money(invoice.total)}</h3>
-  <p>Thank you for your business.</p>
-  <script>window.onload=function(){window.print()}<\/script>
- </body>
- </html>`;
+ <html><head><title>DOA Invoice</title>
+ <style>
+ body{font-family:Arial;padding:30px;color:#222}
+ h1{color:#142e54}
+ table{width:100%;border-collapse:collapse;margin-top:20px}
+ td,th{border:1px solid #ccc;padding:10px;text-align:left}
+ </style></head><body>
+ <h1>DOA 3.0</h1><h2>INVOICE</h2>
+ <p>Invoice: ${escapeHTML(invoice.number)}</p>
+ <p>Date: ${escapeHTML(new Date(invoice.date).toLocaleDateString())}</p>
+ <p>Customer: ${escapeHTML(invoice.customer)}</p>
+ <p>Phone: ${escapeHTML(invoice.phone || "-")}</p>
+ <table>
+ <tr><th>Item</th><th>Quantity</th><th>Unit price</th><th>Total</th></tr>
+ <tr><td>${escapeHTML(invoice.item)}</td><td>${invoice.quantity}</td>
+ <td>${money(invoice.price)}</td><td>${money(invoice.total)}</td></tr>
+ </table>
+ <h3>Total: ${money(invoice.total)}</h3>
+ <p>Thank you for your business.</p>
+ <script>window.onload=function(){window.print()}<\/script>
+ </body></html>`;
 }
 
 function printInvoice(id){
  const invoice = readData(INVOICE_KEY).find(item=>item.id === id);
  if(!invoice) return;
-
  const win = window.open("","_blank");
-
- if(!win){
-  alert("Allow pop-ups to print invoices.");
-  return;
- }
-
+ if(!win){alert("Allow pop-ups to print invoices.");return}
  win.document.open();
  win.document.write(invoicePrintHTML(invoice));
  win.document.close();
@@ -1063,90 +760,63 @@ function printInvoice(id){
 
 function printReport(){
  const invoices = readData(INVOICE_KEY);
- const total = invoices.reduce((sum,item)=>sum + Number(item.total || 0),0);
-
+ const total = invoices.reduce((sum,item)=>sum+Number(item.total||0),0);
  const rows = invoices.map(item=>`
-  <tr>
-   <td>${escapeHTML(item.number)}</td>
-   <td>${escapeHTML(item.customer)}</td>
-   <td>${escapeHTML(item.item)}</td>
-   <td>${item.quantity}</td>
-   <td>${money(item.total)}</td>
-  </tr>
+ <tr><td>${escapeHTML(item.number)}</td><td>${escapeHTML(item.customer)}</td>
+ <td>${escapeHTML(item.item)}</td><td>${item.quantity}</td><td>${money(item.total)}</td></tr>
  `).join("");
 
  const win = window.open("","_blank");
-
- if(!win){
-  alert("Allow pop-ups to print reports.");
-  return;
- }
+ if(!win){alert("Allow pop-ups to print reports.");return}
 
  win.document.open();
  win.document.write(`
-  <html>
-  <head>
-   <title>DOA Sales Report</title>
-   <style>
-    body{font-family:Arial;padding:25px}
-    table{width:100%;border-collapse:collapse}
-    td,th{border:1px solid #ccc;padding:9px;text-align:left}
-   </style>
-  </head>
-  <body>
-   <h1>DOA 3.0 - Sales Report</h1>
-   <p>Generated: ${new Date().toLocaleString()}</p>
-   <table>
-    <tr><th>Invoice</th><th>Customer</th><th>Item</th><th>Qty</th><th>Total</th></tr>
-    ${rows}
-   </table>
-   <h3>Total sales: ${money(total)}</h3>
-   <script>window.onload=function(){window.print()}<\/script>
-  </body>
-  </html>
- `);
+ <html><head><title>DOA Sales Report</title>
+ <style>body{font-family:Arial;padding:25px}
+ table{width:100%;border-collapse:collapse}
+ td,th{border:1px solid #ccc;padding:9px;text-align:left}</style>
+ </head><body>
+ <h1>DOA 3.0 - Sales Report</h1>
+ <p>Generated: ${new Date().toLocaleString()}</p>
+ <table><tr><th>Invoice</th><th>Customer</th><th>Item</th><th>Qty</th><th>Total</th></tr>
+ ${rows}</table><h3>Total sales: ${money(total)}</h3>
+ <script>window.onload=function(){window.print()}<\/script>
+ </body></html>`);
  win.document.close();
 }
 
 function refreshInvoices(){
  const invoices = readData(INVOICE_KEY);
-
- const total = invoices.reduce((sum,item)=>sum + Number(item.total || 0),0);
-
+ const total = invoices.reduce((sum,item)=>sum+Number(item.total||0),0);
  byId("invoiceCount").textContent = invoices.length;
  byId("invoiceTotal").textContent = money(total);
 
  if(!invoices.length){
-  byId("invoiceList").innerHTML =
-   '<div class="empty">No invoices created yet.</div>';
+  byId("invoiceList").innerHTML = '<div class="empty">No invoices created yet.</div>';
   return;
  }
 
  byId("invoiceList").innerHTML = [...invoices].reverse().map(item=>`
-  <div class="record">
-   <div class="record-top">
-    <strong>${escapeHTML(item.number)}</strong>
-    <button class="danger" onclick="deleteInvoice('${item.id}')">Delete</button>
-   </div>
-   <p>Customer: ${escapeHTML(item.customer)}</p>
-   <p>Item: ${escapeHTML(item.item)}</p>
-   <p>Quantity: ${item.quantity}</p>
-   <p class="amount">Total: ${money(item.total)}</p>
-   <button class="secondary" onclick="printInvoice('${item.id}')">Print Invoice</button>
+ <div class="record">
+  <div class="record-top">
+   <strong>${escapeHTML(item.number)}</strong>
+   <button class="danger" onclick="deleteInvoice('${item.id}')">Delete</button>
   </div>
- `).join("");
+  <p>Customer: ${escapeHTML(item.customer)}</p>
+  <p>Item: ${escapeHTML(item.item)}</p>
+  <p>Quantity: ${item.quantity}</p>
+  <p class="amount">Total: ${money(item.total)}</p>
+  <button class="secondary" onclick="printInvoice('${item.id}')">Print Invoice</button>
+ </div>`).join("");
 }
 
-/* ==================================
-   MY MONEY
-================================== */
+/* MY MONEY - EXISTING LOCAL STORAGE */
 
 function addMoneyRecord(){
  const type = byId("moneyType").value;
  const description = byId("moneyDescription").value.trim();
  const amount = Number(byId("moneyAmount").value);
- const date = byId("moneyDate").value ||
-  new Date().toISOString().slice(0,10);
+ const date = byId("moneyDate").value || new Date().toISOString().slice(0,10);
 
  if(!description || !Number.isFinite(amount) || amount <= 0){
   alert("Enter a description and a valid amount.");
@@ -1154,26 +824,16 @@ function addMoneyRecord(){
  }
 
  const records = readData(MONEY_KEY);
-
- records.push({
-  id:makeId(),
-  type,
-  description,
-  amount,
-  date
- });
-
+ records.push({id:makeId(),type,description,amount,date});
  saveData(MONEY_KEY,records);
 
  byId("moneyDescription").value = "";
  byId("moneyAmount").value = "";
-
  refreshMoney();
 }
 
 function deleteMoneyRecord(id){
  if(!confirm("Delete this money record?")) return;
-
  const records = readData(MONEY_KEY).filter(item=>item.id !== id);
  saveData(MONEY_KEY,records);
  refreshMoney();
@@ -1181,41 +841,33 @@ function deleteMoneyRecord(id){
 
 function refreshMoney(){
  const records = readData(MONEY_KEY);
-
- const income = records
-  .filter(item=>item.type === "income")
-  .reduce((sum,item)=>sum + Number(item.amount || 0),0);
-
- const expenses = records
-  .filter(item=>item.type === "expense")
-  .reduce((sum,item)=>sum + Number(item.amount || 0),0);
+ const income = records.filter(item=>item.type==="income")
+  .reduce((sum,item)=>sum+Number(item.amount||0),0);
+ const expenses = records.filter(item=>item.type==="expense")
+  .reduce((sum,item)=>sum+Number(item.amount||0),0);
 
  byId("moneyIncome").textContent = money(income);
  byId("moneyExpenses").textContent = money(expenses);
- byId("moneyBalance").textContent = money(income - expenses);
+ byId("moneyBalance").textContent = money(income-expenses);
 
  if(!records.length){
-  byId("moneyList").innerHTML =
-   '<div class="empty">No money records added yet.</div>';
+  byId("moneyList").innerHTML = '<div class="empty">No money records added yet.</div>';
   return;
  }
 
  byId("moneyList").innerHTML = [...records].reverse().map(item=>`
-  <div class="record">
-   <div class="record-top">
-    <strong>${item.type === "income" ? "Income" : "Expense"}</strong>
-    <button class="danger" onclick="deleteMoneyRecord('${item.id}')">Delete</button>
-   </div>
-   <p>${escapeHTML(item.description)}</p>
-   <p>Date: ${escapeHTML(item.date)}</p>
-   <p class="amount">${money(item.amount)}</p>
+ <div class="record">
+  <div class="record-top">
+   <strong>${item.type==="income"?"Income":"Expense"}</strong>
+   <button class="danger" onclick="deleteMoneyRecord('${item.id}')">Delete</button>
   </div>
- `).join("");
+  <p>${escapeHTML(item.description)}</p>
+  <p>Date: ${escapeHTML(item.date)}</p>
+  <p class="amount">${money(item.amount)}</p>
+ </div>`).join("");
 }
 
-/* ==================================
-   REFRESH ALL FEATURES
-================================== */
+/* REFRESH */
 
 function refreshAll(){
  refreshStock();
@@ -1223,23 +875,18 @@ function refreshAll(){
  refreshMoney();
 }
 
-/* ==================================
-   START PAGE
-================================== */
+/* START PAGE */
 
 byId("moneyDate").value = new Date().toISOString().slice(0,10);
-
 checkAccess();
 
 setInterval(function(){
  if(trialIsActive()){
   updateTrialDisplay();
  }else if(accessReady && !premiumActive){
-  // Trial has expired while the user was using the app.
   showAuth();
  }
 },30000);
-
 </script>
 
 </body>
