@@ -5,81 +5,194 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#07152f">
-<title>DOA 3.0 - Premium Tools</title>
+<title>DOA 3.0 - Premium Features</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;font-family:Arial,sans-serif;
- background:#07152f;color:white;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#07152f;
+ color:#fff;
+ min-height:100vh;
 }
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
 header{
- background:#10264b;padding:17px;
- display:flex;justify-content:space-between;
- align-items:center;gap:10px;flex-wrap:wrap;
-}
-header h1{margin:0;font-size:22px}
-header p{margin:5px 0 0;color:#bdcce3;font-size:12px}
-button{
- border:0;border-radius:9px;padding:12px 15px;
- background:#d8a94e;color:#101b30;
- font-weight:bold;cursor:pointer;margin:4px 3px 4px 0;
-}
-button.secondary{background:white;color:#10264b}
-button.danger{background:#b83232;color:white}
-button:disabled{opacity:.5}
-main{max-width:950px;margin:auto;padding:17px 13px}
-.card{
- background:#10264b;border:1px solid #29466e;
- border-radius:14px;padding:17px;margin:14px 0;
-}
-h2{margin-top:0;color:#f2c66e}
-h3{color:#f2c66e}
-label{display:block;margin:12px 0 5px;font-size:13px}
-input,select,textarea{
- width:100%;padding:12px;margin:5px 0;
- border:1px solid #9aabc1;border-radius:8px;
- font-size:15px;background:white;color:#111;
-}
-textarea{min-height:75px}
-.grid{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+ background:#0c2042;
+ padding:16px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
  gap:10px;
+ border-bottom:1px solid #294267;
+}
+.logo{font-size:21px;font-weight:bold}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}
+.header-actions button{
+ background:#203b63;
+ color:white;
+ border:0;
+ padding:9px 12px;
+ border-radius:8px;
+}
+
+.container{
+ width:100%;
+ max-width:1050px;
+ margin:auto;
+ padding:18px;
+}
+.panel{
+ background:#10264a;
+ border:1px solid #29466e;
+ border-radius:13px;
+ padding:18px;
+ margin-bottom:16px;
+}
+h1,h2,h3{margin-top:0}
+h1{font-size:24px}
+h2{font-size:20px}
+h3{font-size:17px}
+.muted{color:#b9c9df;font-size:14px}
+.trial{
+ background:#123c38;
+ border:1px solid #277d68;
+ padding:12px;
+ border-radius:10px;
+ margin-bottom:15px;
+ color:#c8fff0;
+}
+.tabs{
+ display:flex;
+ gap:8px;
+ overflow-x:auto;
+ margin:15px 0;
+}
+.tabs button{
+ flex:1;
+ min-width:110px;
+ padding:12px 8px;
+ border:1px solid #345276;
+ background:#142e54;
+ color:white;
+ border-radius:9px;
+}
+.tabs button.active{
+ background:#e6ad39;
+ color:#07152f;
+ border-color:#e6ad39;
+ font-weight:bold;
+}
+input,select{
+ width:100%;
+ padding:12px;
+ margin:7px 0 12px;
+ border:1px solid #466184;
+ border-radius:8px;
+ background:#071a36;
+ color:white;
+}
+input::placeholder{color:#aabbd1}
+.primary{
+ width:100%;
+ padding:12px;
+ background:#e6ad39;
+ color:#07152f;
+ border:0;
+ border-radius:8px;
+ font-weight:bold;
+ margin-top:6px;
+}
+.secondary{
+ padding:10px 14px;
+ background:#29466e;
+ color:white;
+ border:0;
+ border-radius:8px;
+}
+.danger{
+ background:#8b3030;
+ color:white;
+ border:0;
+ border-radius:7px;
+ padding:8px 10px;
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+ gap:10px;
+ margin:14px 0;
 }
 .stat{
- background:#19365f;padding:15px;border-radius:10px;
- margin:5px 0;
+ background:#0a1d3a;
+ border:1px solid #29466e;
+ padding:14px;
+ border-radius:10px;
 }
-.stat strong{display:block;font-size:20px;color:#f2c66e;margin-top:7px}
-.item{
- background:#19365f;padding:13px;border-radius:9px;
- margin:10px 0;overflow-wrap:anywhere;
+.stat strong{
+ display:block;
+ font-size:21px;
+ margin-top:7px;
+ color:#f1bd51;
 }
-.item p{color:#d4dfef;line-height:1.5}
-.small{font-size:12px;color:#bdcce3;line-height:1.5}
-.hidden{display:none!important}
-.message{
- padding:12px;border-radius:8px;margin:12px 0;
- background:#19365f;line-height:1.5;
+.record{
+ background:#0a1d3a;
+ border:1px solid #29466e;
+ border-radius:9px;
+ padding:13px;
+ margin:10px 0;
 }
-.error{background:#fee2e2;color:#991b1b}
-.success{background:#dcfce7;color:#166534}
-#authCard{max-width:480px;margin:25px auto}
-#authCard .authForm{display:none}
-#authCard .authForm.active{display:block}
-.tabs{display:flex;gap:8px;margin-bottom:15px}
-.tabs button{flex:1;background:#e9edf4;color:#17243b}
-.tabs button.active{background:#d8a94e}
-#appArea{display:none}
-#trialNotice{
- background:#19365f;border:1px solid #d8a94e;
- border-radius:10px;padding:12px;margin-bottom:15px;
+.record-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:10px;
 }
-footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
+.record p{margin:6px 0;color:#c3d1e4;font-size:14px}
+.amount{font-weight:bold;color:#f1bd51}
+.empty{
+ text-align:center;
+ color:#aebfd5;
+ padding:20px;
+}
+.notice{
+ padding:12px;
+ background:#3b2c12;
+ border:1px solid #85652a;
+ border-radius:8px;
+ color:#ffe3a0;
+ margin:12px 0;
+}
+.auth-card{
+ max-width:480px;
+ margin:35px auto;
+}
+.auth-card h1{text-align:center}
+.auth-switch{
+ text-align:center;
+ margin-top:15px;
+ color:#d4e1f2;
+}
+.auth-switch button{
+ color:#f1bd51;
+ background:none;
+ border:0;
+ text-decoration:underline;
+}
+footer{
+ text-align:center;
+ padding:20px;
+ color:#91a6c3;
+ font-size:12px;
+}
 @media(max-width:500px){
- header h1{font-size:19px}
- main{padding:12px}
- .card{padding:13px}
+ .container{padding:12px}
+ header{padding:12px}
+ .logo{font-size:18px}
+ .panel{padding:14px}
 }
 </style>
 </head>
@@ -87,563 +200,481 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 <body>
 
 <header>
- <div>
-  <h1>DOA 3.0</h1>
-  <p>Premium Business Tools</p>
- </div>
- <div>
-  <button class="secondary" onclick="showAccount()">👤 Account</button>
-  <button class="secondary" onclick="goBack()">← Page 2</button>
+ <div class="logo">DOA 3.0</div>
+ <div class="header-actions">
+  <button onclick="showAccount()">Account</button>
+  <button onclick="goBack()">Back to DOA</button>
  </div>
 </header>
 
-<main>
+<!-- AUTHENTICATION -->
+<div id="authScreen" class="container hidden">
+ <div class="panel auth-card">
+  <h1 id="authTitle">Welcome Back</h1>
+  <p class="muted" style="text-align:center">
+   Sign in or create your DOA account.
+  </p>
 
-<!-- ACCOUNT ACCESS -->
-<section id="authCard" class="card">
- <h2>DOA Account Access</h2>
- <p class="small">
- Create an account or log in to continue using Premium features
- after your free trial expires.
- </p>
+  <div id="loginForm">
+   <label>Ugandan phone number</label>
+   <input id="loginPhone" type="tel" placeholder="e.g. 0781234567">
 
- <div class="tabs">
-  <button id="loginTab" class="active" onclick="showForm('login')">Login</button>
-  <button id="registerTab" onclick="showForm('register')">Create Account</button>
+   <label>Password</label>
+   <input id="loginPassword" type="password" placeholder="Enter password">
+
+   <button class="primary" onclick="login()">Login</button>
+
+   <div class="auth-switch">
+    Don't have an account?
+    <button onclick="showRegister()">Create account</button>
+   </div>
+  </div>
+
+  <div id="registerForm" class="hidden">
+   <label>Full name</label>
+   <input id="registerName" type="text" placeholder="Your full name">
+
+   <label>Ugandan phone number</label>
+   <input id="registerPhone" type="tel" placeholder="e.g. 0781234567">
+
+   <label>Email (optional)</label>
+   <input id="registerEmail" type="email" placeholder="Email address">
+
+   <label>Create password</label>
+   <input id="registerPassword" type="password" placeholder="Create password">
+
+   <label>Confirm password</label>
+   <input id="registerConfirm" type="password" placeholder="Confirm password">
+
+   <button class="primary" onclick="register()">Create Account</button>
+
+   <div class="auth-switch">
+    Already have an account?
+    <button onclick="showLogin()">Login</button>
+   </div>
+  </div>
+
+  <p id="authMessage" class="muted"></p>
+ </div>
+</div>
+
+<!-- SUBSCRIPTION REQUIRED -->
+<div id="subscriptionScreen" class="container hidden">
+ <div class="panel auth-card">
+  <h1>Trial Completed</h1>
+  <p>
+   Your 7-day Premium trial has ended. Create an account or log in,
+   then activate a subscription to continue using Premium features.
+  </p>
+  <div class="notice">
+   Your Premium features require an active subscription after the trial.
+  </div>
+  <button class="primary" onclick="showLogin()">Login</button>
+  <button class="secondary" style="width:100%;margin-top:10px"
+   onclick="showRegister()">Create Account</button>
+  <p class="muted" style="margin-top:15px">
+   Subscription payment activation will be connected separately.
+  </p>
+ </div>
+</div>
+
+<!-- PREMIUM APP -->
+<main id="appScreen" class="container hidden">
+
+ <div class="panel">
+  <h1>DOA Premium Features</h1>
+  <p class="muted">Manage your stock, invoices, income and expenses.</p>
+
+  <div id="trialNotice" class="trial hidden">
+   <strong>7-Day Premium Trial Active</strong>
+   <div id="trialRemaining" style="margin-top:5px"></div>
+   <small>You can use all three Premium features during your trial.</small>
+  </div>
+
+  <div id="subscriptionNotice" class="trial hidden">
+   <strong>Premium subscription active</strong>
+   <div class="muted">Your Premium access is enabled.</div>
+  </div>
+
+  <div class="tabs">
+   <button id="tab-stock" onclick="openFeature('stock')">My Stock</button>
+   <button id="tab-invoices" onclick="openFeature('invoices')">Reports & Invoices</button>
+   <button id="tab-money" onclick="openFeature('money')">My Money</button>
+  </div>
  </div>
 
- <form id="loginForm" class="authForm active">
-  <label>Ugandan phone number</label>
-  <input id="loginPhone" type="tel"
-   placeholder="07XXXXXXXX or +2567XXXXXXXX" required>
+ <!-- MY STOCK -->
+ <section id="feature-stock" class="feature-section">
+  <div class="panel">
+   <h2>My Stock</h2>
+   <p class="muted">Add and manage your products.</p>
 
-  <label>Password</label>
-  <input id="loginPassword" type="password"
-   autocomplete="current-password" required>
+   <div class="grid">
+    <div class="stat">Products<strong id="stockCount">0</strong></div>
+    <div class="stat">Total units<strong id="stockUnits">0</strong></div>
+    <div class="stat">Stock value<strong id="stockValue">UGX 0</strong></div>
+   </div>
 
-  <button type="submit" id="loginButton">Login</button>
- </form>
+   <h3>Add a product</h3>
+   <label>Product name</label>
+   <input id="stockName" placeholder="Product name">
 
- <form id="registerForm" class="authForm">
-  <label>Full name</label>
-  <input id="registerName" required maxlength="100">
+   <label>Quantity</label>
+   <input id="stockQuantity" type="number" min="0" placeholder="Quantity">
 
-  <label>Ugandan phone number</label>
-  <input id="registerPhone" type="tel"
-   placeholder="07XXXXXXXX or +2567XXXXXXXX" required>
+   <label>Buying price per unit (UGX)</label>
+   <input id="stockBuying" type="number" min="0" placeholder="Buying price">
 
-  <label>Email address (optional)</label>
-  <input id="registerEmail" type="email">
+   <label>Selling price per unit (UGX)</label>
+   <input id="stockSelling" type="number" min="0" placeholder="Selling price">
 
-  <label>Create password</label>
-  <input id="registerPassword" type="password"
-   minlength="8" autocomplete="new-password" required>
+   <button class="primary" onclick="addStock()">Add Product</button>
+  </div>
 
-  <label>Confirm password</label>
-  <input id="confirmPassword" type="password"
-   minlength="8" autocomplete="new-password" required>
+  <div class="panel">
+   <h3>My Products</h3>
+   <div id="stockList"></div>
+  </div>
+ </section>
 
-  <button type="submit" id="registerButton">
-   Create Account
-  </button>
- </form>
+ <!-- REPORTS AND INVOICES -->
+ <section id="feature-invoices" class="feature-section hidden">
+  <div class="panel">
+   <h2>Reports and Invoices</h2>
+   <p class="muted">Create invoices and view your sales records.</p>
 
- <div id="authMessage" class="message hidden"></div>
-</section>
+   <div class="grid">
+    <div class="stat">Invoices<strong id="invoiceCount">0</strong></div>
+    <div class="stat">Total sales<strong id="invoiceTotal">UGX 0</strong></div>
+   </div>
 
-<!-- SUBSCRIPTION MESSAGE -->
-<section id="subscriptionCard" class="card hidden">
- <h2>Premium Subscription Required</h2>
- <p>
- Your free 7-day Premium trial has ended. Create an account or log in
- before subscribing to continue using Premium features.
- </p>
- <p class="small">
- Subscription payment activation is not yet connected.
- You can access your account, but Premium access requires an active
- subscription.
- </p>
- <button onclick="showAuth()">Login or Create Account</button>
-</section>
+   <h3>Create an invoice</h3>
 
-<!-- PREMIUM APPLICATION -->
-<section id="appArea">
+   <label>Customer name</label>
+   <input id="customerName" placeholder="Customer name">
 
- <div id="trialNotice">
-  <strong>🎉 DOA Premium Trial</strong>
-  <div id="trialText" class="small"></div>
+   <label>Customer phone (optional)</label>
+   <input id="customerPhone" type="tel" placeholder="Customer phone">
+
+   <label>Product or service</label>
+   <input id="invoiceItem" placeholder="Product or service">
+
+   <label>Quantity</label>
+   <input id="invoiceQuantity" type="number" min="1" value="1">
+
+   <label>Unit price (UGX)</label>
+   <input id="invoicePrice" type="number" min="0" placeholder="Unit price">
+
+   <button class="primary" onclick="createInvoice()">Save Invoice</button>
+  </div>
+
+  <div class="panel">
+   <div class="record-top">
+    <h3>Sales Report</h3>
+    <button class="secondary" onclick="printReport()">Print Report</button>
+   </div>
+   <div id="invoiceList"></div>
+  </div>
+ </section>
+
+ <!-- MY MONEY -->
+ <section id="feature-money" class="feature-section hidden">
+  <div class="panel">
+   <h2>My Money</h2>
+   <p class="muted">Record your income and expenses.</p>
+
+   <div class="grid">
+    <div class="stat">Income<strong id="moneyIncome">UGX 0</strong></div>
+    <div class="stat">Expenses<strong id="moneyExpenses">UGX 0</strong></div>
+    <div class="stat">Balance<strong id="moneyBalance">UGX 0</strong></div>
+   </div>
+
+   <h3>Add a money record</h3>
+
+   <label>Record type</label>
+   <select id="moneyType">
+    <option value="income">Income</option>
+    <option value="expense">Expense</option>
+   </select>
+
+   <label>Description</label>
+   <input id="moneyDescription" placeholder="What was the money for?">
+
+   <label>Amount (UGX)</label>
+   <input id="moneyAmount" type="number" min="1" placeholder="Amount">
+
+   <label>Date</label>
+   <input id="moneyDate" type="date">
+
+   <button class="primary" onclick="addMoneyRecord()">Save Record</button>
+  </div>
+
+  <div class="panel">
+   <h3>Money Records</h3>
+   <div id="moneyList"></div>
+  </div>
+ </section>
+
+ <div class="panel">
+  <button class="secondary" style="width:100%" onclick="logout()">Logout</button>
  </div>
-
- <div class="card">
-  <div class="grid">
-   <button onclick="openFeature('stock')">📦 My Stock</button>
-   <button onclick="openFeature('invoices')">🧾 Reports and Invoices</button>
-   <button onclick="openFeature('money')">💳 My Money</button>
-  </div>
- </div>
-
- <!-- STOCK -->
- <section id="stockScreen" class="featureScreen card hidden">
-  <h2>📦 My Stock</h2>
-  <p class="small">Add and manage your business products.</p>
-
-  <label>Product name</label>
-  <input id="stockName" placeholder="Enter product name">
-
-  <div class="grid">
-   <div>
-    <label>Quantity</label>
-    <input id="stockQuantity" type="number" min="1" placeholder="Quantity">
-   </div>
-   <div>
-    <label>Buying price per item (UGX)</label>
-    <input id="stockBuying" type="number" min="0" placeholder="Buying price">
-   </div>
-   <div>
-    <label>Selling price per item (UGX)</label>
-    <input id="stockSelling" type="number" min="0" placeholder="Selling price">
-   </div>
-  </div>
-
-  <button onclick="addStock()">Add Product</button>
-
-  <div class="grid">
-   <div class="stat">Products<strong id="stockCount">0</strong></div>
-   <div class="stat">Total Units<strong id="stockUnits">0</strong></div>
-   <div class="stat">Stock Value<strong id="stockValue">UGX 0</strong></div>
-  </div>
-
-  <h3>My Products</h3>
-  <div id="stockList"></div>
- </section>
-
- <!-- INVOICES AND REPORTS -->
- <section id="invoicesScreen" class="featureScreen card hidden">
-  <h2>🧾 Reports and Invoices</h2>
-  <p class="small">Create simple sales invoices and view your records.</p>
-
-  <h3>Create Invoice</h3>
-
-  <label>Customer name</label>
-  <input id="invoiceCustomer" placeholder="Customer name">
-
-  <label>Customer phone (optional)</label>
-  <input id="invoicePhone" placeholder="Customer phone">
-
-  <label>Product or service</label>
-  <input id="invoiceProduct" placeholder="Description">
-
-  <div class="grid">
-   <div>
-    <label>Quantity</label>
-    <input id="invoiceQuantity" type="number" min="1" value="1">
-   </div>
-   <div>
-    <label>Price per item (UGX)</label>
-    <input id="invoicePrice" type="number" min="0" placeholder="Price">
-   </div>
-  </div>
-
-  <button onclick="createInvoice()">Save Invoice</button>
-
-  <h3>Sales Summary</h3>
-  <div class="grid">
-   <div class="stat">Invoices<strong id="invoiceCount">0</strong></div>
-   <div class="stat">Total Sales<strong id="invoiceTotal">UGX 0</strong></div>
-  </div>
-
-  <h3>Invoice Records</h3>
-  <div id="invoiceList"></div>
-
-  <button class="secondary" onclick="printInvoices()">Print Invoice Records</button>
- </section>
-
- <!-- MONEY -->
- <section id="moneyScreen" class="featureScreen card hidden">
-  <h2>💳 My Money</h2>
-  <p class="small">Record your income and expenses.</p>
-
-  <label>Transaction type</label>
-  <select id="moneyType">
-   <option value="income">Income</option>
-   <option value="expense">Expense</option>
-  </select>
-
-  <label>Description</label>
-  <input id="moneyDescription" placeholder="What was the transaction?">
-
-  <label>Amount (UGX)</label>
-  <input id="moneyAmount" type="number" min="1" placeholder="Enter amount">
-
-  <label>Date</label>
-  <input id="moneyDate" type="date">
-
-  <button onclick="addMoneyRecord()">Save Transaction</button>
-
-  <h3>Financial Summary</h3>
-  <div class="grid">
-   <div class="stat">Income<strong id="moneyIncome">UGX 0</strong></div>
-   <div class="stat">Expenses<strong id="moneyExpenses">UGX 0</strong></div>
-   <div class="stat">Balance<strong id="moneyBalance">UGX 0</strong></div>
-  </div>
-
-  <h3>Transaction History</h3>
-  <div id="moneyList"></div>
- </section>
-
- <!-- ACCOUNT DETAILS -->
- <section id="accountScreen" class="card hidden">
-  <h2>My DOA Account</h2>
-  <div id="accountDetails" class="item">Guest trial access</div>
-  <button onclick="logout()">Logout</button>
- </section>
-
-</section>
 
 </main>
 
-<footer>DOA 3.0 · Your Best Personal Assistant</footer>
+<footer>DOA 3.0 - Your Personal Assistant</footer>
 
 <script>
-const API = "https://doa2026app.workers.dev";
+/* ==================================
+   DOA 3.0 PAGE 3 CONFIGURATION
+================================== */
+
+const API_BASE = "https://doa2026app.workers.dev";
+
 const TOKEN_KEY = "doa_token";
 const USER_KEY = "doa_user";
 const TRIAL_KEY = "doa_guest_premium_trial_v1";
 
-let selectedFeature =
- new URLSearchParams(location.search).get("feature") || "stock";
-
-const validFeatures = ["stock","invoices","money"];
+const STOCK_KEY = "doa_p3_stock";
+const INVOICE_KEY = "doa_p3_invoices";
+const MONEY_KEY = "doa_p3_money";
 
 let currentUser = null;
 let premiumActive = false;
 let accessReady = false;
 
-/* GENERAL HELPERS */
+let selectedFeature =
+ new URLSearchParams(window.location.search).get("feature") || "stock";
+
+const validFeatures = ["stock","invoices","money"];
+
+if(!validFeatures.includes(selectedFeature)){
+ selectedFeature = "stock";
+}
+
+/* ==================================
+   GENERAL HELPERS
+================================== */
+
+function byId(id){
+ return document.getElementById(id);
+}
 
 function money(value){
- return "UGX " + Number(value || 0).toLocaleString();
+ return "UGX " + Number(value || 0).toLocaleString("en-UG");
 }
 
 function readData(key){
  try{
-  const value = JSON.parse(localStorage.getItem(key) || "[]");
-  return Array.isArray(value) ? value : [];
- }catch(e){
+  const data = JSON.parse(localStorage.getItem(key) || "[]");
+  return Array.isArray(data) ? data : [];
+ }catch(error){
   return [];
  }
 }
 
-function writeData(key,value){
- localStorage.setItem(key,JSON.stringify(value));
+function saveData(key,data){
+ localStorage.setItem(key,JSON.stringify(data));
 }
+
+function makeId(){
+ return Date.now().toString(36) +
+  Math.random().toString(36).slice(2,8);
+}
+
+function escapeHTML(value){
+ return String(value ?? "").replace(/[&<>"']/g,function(char){
+  return {
+   "&":"&amp;",
+   "<":"&lt;",
+   ">":"&gt;",
+   '"':"&quot;",
+   "'":"&#39;"
+  }[char];
+ });
+}
+
+function setMessage(message){
+ byId("authMessage").textContent = message;
+}
+
+/* ==================================
+   API CONNECTION
+================================== */
+
+async function apiRequest(path,options={}){
+ const headers = {
+  "Content-Type":"application/json",
+  ...(options.headers || {})
+ };
+
+ const token = localStorage.getItem(TOKEN_KEY);
+
+ if(token){
+  headers.Authorization = "Bearer " + token;
+ }
+
+ const response = await fetch(API_BASE + path,{
+  ...options,
+  headers
+ });
+
+ let data = {};
+
+ try{
+  data = await response.json();
+ }catch(error){
+  data = {};
+ }
+
+ if(!response.ok){
+  throw new Error(data.error || data.message || "Request failed.");
+ }
+
+ return data;
+}
+
+/* ==================================
+   SHARED 7-DAY TRIAL
+================================== */
 
 function getTrial(){
  try{
   const trial = JSON.parse(localStorage.getItem(TRIAL_KEY) || "null");
-  if(!trial || !Number.isFinite(trial.expiresAt)) return null;
+
+  if(!trial || !trial.startedAt || !trial.expiresAt){
+   return null;
+  }
+
   return trial;
- }catch(e){
+ }catch(error){
   return null;
  }
 }
 
 function trialIsActive(){
  const trial = getTrial();
- return !!trial && trial.expiresAt > Date.now();
+
+ if(!trial) return false;
+
+ return Number(trial.expiresAt) > Date.now();
 }
 
-function trialRemaining(){
+function updateTrialDisplay(){
  const trial = getTrial();
- return trial ? Math.max(0,trial.expiresAt-Date.now()) : 0;
-}
 
-function updateTrialText(){
- const remaining = trialRemaining();
- const box = document.getElementById("trialText");
-
- if(!trialIsActive()){
-  box.textContent = "Trial expired.";
+ if(!trial || !trialIsActive()){
+  byId("trialNotice").classList.add("hidden");
   return;
  }
 
- const days = Math.floor(remaining/86400000);
- const hours = Math.floor((remaining%86400000)/3600000);
- const minutes = Math.floor((remaining%3600000)/60000);
+ byId("trialNotice").classList.remove("hidden");
 
- box.textContent = days+" days, "+hours+" hours and "+
-  minutes+" minutes remaining.";
+ const remaining = Number(trial.expiresAt) - Date.now();
+
+ const days = Math.floor(remaining / 86400000);
+ const hours = Math.floor((remaining % 86400000) / 3600000);
+ const minutes = Math.floor((remaining % 3600000) / 60000);
+
+ byId("trialRemaining").textContent =
+  days + " days, " + hours + " hours, " + minutes + " minutes remaining";
 }
+
+/* ==================================
+   SCREEN CONTROL
+================================== */
 
 function hideAllScreens(){
- document.querySelectorAll(".featureScreen").forEach(screen=>{
-  screen.classList.add("hidden");
- });
- document.getElementById("accountScreen").classList.add("hidden");
+ byId("authScreen").classList.add("hidden");
+ byId("subscriptionScreen").classList.add("hidden");
+ byId("appScreen").classList.add("hidden");
 }
 
-function openFeature(feature){
- if(!validFeatures.includes(feature)) return;
-
- selectedFeature = feature;
-
+function showLogin(){
  hideAllScreens();
-
- const screen = document.getElementById(feature+"Screen");
- if(screen) screen.classList.remove("hidden");
-
- if(feature==="stock") renderStock();
- if(feature==="invoices") renderInvoices();
- if(feature==="money") renderMoney();
-
- history.replaceState(null,"",
-  "page3.html?feature="+encodeURIComponent(feature));
+ byId("authScreen").classList.remove("hidden");
+ byId("loginForm").classList.remove("hidden");
+ byId("registerForm").classList.add("hidden");
+ byId("authTitle").textContent = "Welcome Back";
+ setMessage("");
 }
 
-function goBack(){
- location.href = "page2.html";
-}
-
-function showAccount(){
- if(!accessReady){
-  showAuth();
-  return;
- }
-
+function showRegister(){
  hideAllScreens();
-
- const account = document.getElementById("accountScreen");
- account.classList.remove("hidden");
-
- const details = document.getElementById("accountDetails");
-
- if(currentUser){
-  details.textContent =
-   "Name: "+(currentUser.displayName || "")+
-   " | Phone: "+(currentUser.phone || "");
- }else{
-  details.textContent =
-   "You are using DOA Premium through your guest trial.";
- }
+ byId("authScreen").classList.remove("hidden");
+ byId("loginForm").classList.add("hidden");
+ byId("registerForm").classList.remove("hidden");
+ byId("authTitle").textContent = "Create Your Account";
+ setMessage("");
 }
 
 function showAuth(){
- document.getElementById("appArea").style.display="none";
- document.getElementById("subscriptionCard").classList.add("hidden");
- document.getElementById("authCard").classList.remove("hidden");
+ accessReady = false;
+ showLogin();
 }
 
 function showSubscription(){
- document.getElementById("appArea").style.display="none";
- document.getElementById("authCard").classList.add("hidden");
- document.getElementById("subscriptionCard").classList.remove("hidden");
+ hideAllScreens();
+ byId("subscriptionScreen").classList.remove("hidden");
+}
+
+function showAccount(){
+ if(trialIsActive() || premiumActive){
+  showLogin();
+ }else{
+  showLogin();
+ }
 }
 
 function showApp(){
- document.getElementById("authCard").classList.add("hidden");
- document.getElementById("subscriptionCard").classList.add("hidden");
- document.getElementById("appArea").style.display="block";
-
- document.getElementById("trialNotice").style.display =
-  trialIsActive() ? "block" : "none";
-
- updateTrialText();
- openFeature(selectedFeature);
-}
-
-/* ACCOUNT AND LOGIN */
-
-function showForm(type){
- document.getElementById("loginForm").classList.toggle(
-  "active",type==="login"
- );
- document.getElementById("registerForm").classList.toggle(
-  "active",type==="register"
- );
-
- document.getElementById("loginTab").classList.toggle(
-  "active",type==="login"
- );
- document.getElementById("registerTab").classList.toggle(
-  "active",type==="register"
- );
-
- document.getElementById("authMessage").classList.add("hidden");
-}
-
-function authMessage(message,type){
- const box = document.getElementById("authMessage");
- box.textContent = message;
- box.className = "message "+type;
- box.classList.remove("hidden");
-}
-
-async function apiRequest(path,options={}){
- const token = localStorage.getItem(TOKEN_KEY);
-
- const response = await fetch(API+path,{
-  ...options,
-  headers:{
-   "Content-Type":"application/json",
-   ...(token ? {"Authorization":"Bearer "+token} : {}),
-   ...(options.headers || {})
-  }
- });
-
- let data;
- try{
-  data = await response.json();
- }catch(e){
-  throw new Error("The server returned an invalid response.");
- }
-
- if(!response.ok || data.success===false){
-  throw new Error(data.error || "Request failed.");
- }
-
- return data;
-}
-
-function saveLogin(data){
- if(!data.token){
-  throw new Error("The server did not return a login token.");
- }
-
- localStorage.setItem(TOKEN_KEY,data.token);
-
- if(data.user){
-  localStorage.setItem(USER_KEY,JSON.stringify(data.user));
- }
-
- currentUser = data.user || null;
- premiumActive = !!data.premium?.active;
-}
-
-async function register(event){
- event.preventDefault();
-
- const button = document.getElementById("registerButton");
- button.disabled = true;
- button.textContent = "Creating account...";
-
- const name = document.getElementById("registerName").value.trim();
- const phone = document.getElementById("registerPhone").value.trim();
- const email = document.getElementById("registerEmail").value.trim();
- const password = document.getElementById("registerPassword").value;
- const confirm = document.getElementById("confirmPassword").value;
-
- if(password!==confirm){
-  authMessage("Your passwords do not match.","error");
-  button.disabled=false;
-  button.textContent="Create Account";
-  return;
- }
-
- if(password.length<8){
-  authMessage("Password must be at least 8 characters.","error");
-  button.disabled=false;
-  button.textContent="Create Account";
-  return;
- }
-
- try{
-  const data = await apiRequest("/auth/register",{
-   method:"POST",
-   body:JSON.stringify({
-    displayName:name,
-    phone:phone,
-    email:email || null,
-    password:password
-   })
-  });
-
-  saveLogin(data);
-
-  if(trialIsActive() || premiumActive){
-   accessReady=true;
-   showApp();
-  }else{
-   showSubscription();
-  }
-
- }catch(error){
-  authMessage(error.message,"error");
- }finally{
-  button.disabled=false;
-  button.textContent="Create Account";
- }
-}
-
-async function login(event){
- event.preventDefault();
-
- const button = document.getElementById("loginButton");
- button.disabled=true;
- button.textContent="Logging in...";
-
- const phone = document.getElementById("loginPhone").value.trim();
- const password = document.getElementById("loginPassword").value;
-
- try{
-  const data = await apiRequest("/auth/login",{
-   method:"POST",
-   body:JSON.stringify({phone,password})
-  });
-
-  saveLogin(data);
-
-  // Refresh the account's premium status.
-  const status = await apiRequest("/api/subscription/status");
-  premiumActive = !!status.active;
-
-  if(trialIsActive() || premiumActive){
-   accessReady=true;
-   showApp();
-  }else{
-   showSubscription();
-  }
-
- }catch(error){
-  authMessage(error.message,"error");
- }finally{
-  button.disabled=false;
-  button.textContent="Login";
- }
-}
-
-async function logout(){
- try{
-  await apiRequest("/auth/logout",{method:"POST"});
- }catch(e){}
-
- localStorage.removeItem(TOKEN_KEY);
- localStorage.removeItem(USER_KEY);
-
- currentUser=null;
- premiumActive=false;
- accessReady=false;
+ hideAllScreens();
+ byId("appScreen").classList.remove("hidden");
 
  if(trialIsActive()){
-  showApp();
+  updateTrialDisplay();
+  byId("subscriptionNotice").classList.add("hidden");
  }else{
-  showAuth();
+  byId("trialNotice").classList.add("hidden");
+  byId("subscriptionNotice").classList.remove("hidden");
  }
+
+ openFeature(selectedFeature);
+ refreshAll();
 }
 
+/* ==================================
+   ACCESS CHECK
+   ACTIVE TRIAL IS CHECKED FIRST
+================================== */
+
 async function checkAccess(){
+
+ // FIRST: Allow the active shared 7-day trial.
+ // No login is required during this period.
+
+ if(trialIsActive()){
+  currentUser = null;
+  premiumActive = false;
+  accessReady = true;
+  showApp();
+  return;
+ }
+
+ // SECOND: Trial expired. Check account login.
+
  const token = localStorage.getItem(TOKEN_KEY);
 
  if(token){
   try{
    const data = await apiRequest("/auth/me");
 
-   currentUser=data.user || null;
+   currentUser = data.user || null;
 
    const status = await apiRequest("/api/subscription/status");
-   premiumActive=!!status.active;
 
-   if(trialIsActive() || premiumActive){
-    accessReady=true;
+   premiumActive = !!status.active;
+
+   if(premiumActive){
+    accessReady = true;
     showApp();
     return;
    }
@@ -654,369 +685,561 @@ async function checkAccess(){
   }catch(error){
    localStorage.removeItem(TOKEN_KEY);
    localStorage.removeItem(USER_KEY);
+
+   currentUser = null;
+   premiumActive = false;
   }
  }
 
- // Allow guest access while the Page 2 trial is active.
- if(trialIsActive()){
-  accessReady=true;
-  showApp();
-  return;
- }
-
- // Expired trial: account creation or login is required.
+ // No active trial and no valid subscription.
  showAuth();
 }
 
-document.getElementById("loginForm").addEventListener("submit",login);
-document.getElementById("registerForm").addEventListener("submit",register);
+/* ==================================
+   UGANDAN PHONE NUMBER
+================================== */
 
-/* MY STOCK */
+function normalizePhone(value){
+ let phone = String(value || "").replace(/[\s\-()]/g,"");
+
+ if(phone.startsWith("+256")){
+  phone = phone.slice(1);
+ }
+
+ if(phone.startsWith("256") && phone.length === 12){
+  return phone;
+ }
+
+ if(phone.startsWith("0") && phone.length === 10){
+  return "256" + phone.slice(1);
+ }
+
+ return null;
+}
+
+/* ==================================
+   REGISTER
+================================== */
+
+async function register(){
+ const name = byId("registerName").value.trim();
+ const phone = normalizePhone(byId("registerPhone").value);
+ const email = byId("registerEmail").value.trim();
+ const password = byId("registerPassword").value;
+ const confirm = byId("registerConfirm").value;
+
+ if(!name || !phone || !password){
+  setMessage("Please fill in your name, phone number and password.");
+  return;
+ }
+
+ if(password.length < 8){
+  setMessage("Password must contain at least 8 characters.");
+  return;
+ }
+
+ if(password !== confirm){
+  setMessage("Passwords do not match.");
+  return;
+ }
+
+ setMessage("Creating your account...");
+
+ try{
+  const data = await apiRequest("/auth/register",{
+   method:"POST",
+   body:JSON.stringify({
+    name,
+    fullName:name,
+    phone,
+    email:email || null,
+    password
+   })
+  });
+
+  if(data.token){
+   localStorage.setItem(TOKEN_KEY,data.token);
+  }
+
+  if(data.user){
+   localStorage.setItem(USER_KEY,JSON.stringify(data.user));
+   currentUser = data.user;
+  }
+
+  if(trialIsActive()){
+   accessReady = true;
+   showApp();
+   return;
+  }
+
+  if(data.token){
+   await checkAccess();
+  }else{
+   showLogin();
+   setMessage("Account created. Please log in.");
+  }
+
+ }catch(error){
+  setMessage(error.message || "Could not create account.");
+ }
+}
+
+/* ==================================
+   LOGIN
+================================== */
+
+async function login(){
+ const phone = normalizePhone(byId("loginPhone").value);
+ const password = byId("loginPassword").value;
+
+ if(!phone || !password){
+  setMessage("Enter a valid Ugandan phone number and password.");
+  return;
+ }
+
+ setMessage("Logging in...");
+
+ try{
+  const data = await apiRequest("/auth/login",{
+   method:"POST",
+   body:JSON.stringify({phone,password})
+  });
+
+  if(data.token){
+   localStorage.setItem(TOKEN_KEY,data.token);
+  }
+
+  if(data.user){
+   localStorage.setItem(USER_KEY,JSON.stringify(data.user));
+   currentUser = data.user;
+  }
+
+  await checkAccess();
+
+ }catch(error){
+  setMessage(error.message || "Login failed.");
+ }
+}
+
+/* ==================================
+   LOGOUT
+================================== */
+
+async function logout(){
+ const token = localStorage.getItem(TOKEN_KEY);
+
+ if(token){
+  try{
+   await apiRequest("/auth/logout",{method:"POST"});
+  }catch(error){
+   // Local logout continues even if the server is unavailable.
+  }
+ }
+
+ localStorage.removeItem(TOKEN_KEY);
+ localStorage.removeItem(USER_KEY);
+
+ currentUser = null;
+ premiumActive = false;
+
+ if(trialIsActive()){
+  accessReady = true;
+  showApp();
+ }else{
+  showLogin();
+ }
+}
+
+/* ==================================
+   PREMIUM FEATURE NAVIGATION
+================================== */
+
+function openFeature(feature){
+ if(!validFeatures.includes(feature)) return;
+
+ selectedFeature = feature;
+
+ history.replaceState(
+  null,
+  "",
+  "page3.html?feature=" + encodeURIComponent(feature)
+ );
+
+ document.querySelectorAll(".feature-section").forEach(section=>{
+  section.classList.add("hidden");
+ });
+
+ document.querySelectorAll(".tabs button").forEach(button=>{
+  button.classList.remove("active");
+ });
+
+ byId("feature-" + feature).classList.remove("hidden");
+ byId("tab-" + feature).classList.add("active");
+
+ refreshAll();
+}
+
+function goBack(){
+ window.location.href = "page2.html";
+}
+
+/* ==================================
+   MY STOCK
+================================== */
 
 function addStock(){
- const name=document.getElementById("stockName").value.trim();
- const quantity=Number(document.getElementById("stockQuantity").value);
- const buying=Number(document.getElementById("stockBuying").value);
- const selling=Number(document.getElementById("stockSelling").value);
+ const name = byId("stockName").value.trim();
+ const quantity = Number(byId("stockQuantity").value);
+ const buying = Number(byId("stockBuying").value);
+ const selling = Number(byId("stockSelling").value);
 
- if(!name || !Number.isInteger(quantity) || quantity<1 ||
-    buying<0 || selling<0){
-  alert("Enter a product name, valid quantity and prices.");
+ if(!name || !Number.isFinite(quantity) || quantity < 0 ||
+    !Number.isFinite(buying) || buying < 0 ||
+    !Number.isFinite(selling) || selling < 0){
+  alert("Enter valid product details.");
   return;
  }
 
- const items=readData("doa_p3_stock");
+ const stock = readData(STOCK_KEY);
 
- items.push({
-  id:Date.now(),
-  name:name,
-  quantity:quantity,
-  buying:buying,
-  selling:selling
+ stock.push({
+  id:makeId(),
+  name,
+  quantity,
+  buying,
+  selling,
+  createdAt:new Date().toISOString()
  });
 
- writeData("doa_p3_stock",items);
+ saveData(STOCK_KEY,stock);
 
- document.getElementById("stockName").value="";
- document.getElementById("stockQuantity").value="";
- document.getElementById("stockBuying").value="";
- document.getElementById("stockSelling").value="";
+ byId("stockName").value = "";
+ byId("stockQuantity").value = "";
+ byId("stockBuying").value = "";
+ byId("stockSelling").value = "";
 
- renderStock();
+ refreshStock();
 }
 
-function renderStock(){
- const items=readData("doa_p3_stock");
- const list=document.getElementById("stockList");
- list.innerHTML="";
+function deleteStock(id){
+ if(!confirm("Delete this product?")) return;
 
- let units=0;
- let value=0;
-
- items.forEach(item=>{
-  units+=Number(item.quantity)||0;
-  value+=(Number(item.quantity)||0)*(Number(item.buying)||0);
-
-  const div=document.createElement("div");
-  div.className="item";
-
-  const title=document.createElement("strong");
-  title.textContent=item.name;
-
-  const detail=document.createElement("p");
-  detail.textContent=
-   "Quantity: "+item.quantity+
-   " | Buying price: "+money(item.buying)+
-   " | Selling price: "+money(item.selling);
-
-  const del=document.createElement("button");
-  del.className="danger";
-  del.textContent="Delete";
-  del.onclick=()=>{
-   if(confirm("Delete this product?")){
-    writeData("doa_p3_stock",
-     readData("doa_p3_stock").filter(x=>x.id!==item.id));
-    renderStock();
-   }
-  };
-
-  div.append(title,detail,del);
-  list.appendChild(div);
- });
-
- if(!items.length) list.textContent="No products added yet.";
-
- document.getElementById("stockCount").textContent=items.length;
- document.getElementById("stockUnits").textContent=units;
- document.getElementById("stockValue").textContent=money(value);
+ const stock = readData(STOCK_KEY).filter(item=>item.id !== id);
+ saveData(STOCK_KEY,stock);
+ refreshStock();
 }
 
-/* REPORTS AND INVOICES */
+function refreshStock(){
+ const stock = readData(STOCK_KEY);
+
+ const units = stock.reduce((sum,item)=>sum + Number(item.quantity || 0),0);
+ const value = stock.reduce((sum,item)=>sum +
+  Number(item.quantity || 0) * Number(item.buying || 0),0);
+
+ byId("stockCount").textContent = stock.length;
+ byId("stockUnits").textContent = units.toLocaleString("en-UG");
+ byId("stockValue").textContent = money(value);
+
+ if(!stock.length){
+  byId("stockList").innerHTML =
+   '<div class="empty">No products added yet.</div>';
+  return;
+ }
+
+ byId("stockList").innerHTML = stock.map(item=>`
+  <div class="record">
+   <div class="record-top">
+    <strong>${escapeHTML(item.name)}</strong>
+    <button class="danger" onclick="deleteStock('${item.id}')">Delete</button>
+   </div>
+   <p>Quantity: ${Number(item.quantity).toLocaleString("en-UG")}</p>
+   <p>Buying price: ${money(item.buying)}</p>
+   <p>Selling price: ${money(item.selling)}</p>
+   <p class="amount">Stock value: ${money(item.quantity * item.buying)}</p>
+  </div>
+ `).join("");
+}
+
+/* ==================================
+   REPORTS AND INVOICES
+================================== */
 
 function createInvoice(){
- const customer=document.getElementById("invoiceCustomer").value.trim();
- const phone=document.getElementById("invoicePhone").value.trim();
- const product=document.getElementById("invoiceProduct").value.trim();
- const quantity=Number(document.getElementById("invoiceQuantity").value);
- const price=Number(document.getElementById("invoicePrice").value);
+ const customer = byId("customerName").value.trim();
+ const phone = byId("customerPhone").value.trim();
+ const item = byId("invoiceItem").value.trim();
+ const quantity = Number(byId("invoiceQuantity").value);
+ const price = Number(byId("invoicePrice").value);
 
- if(!customer || !product || !Number.isInteger(quantity) ||
-    quantity<1 || price<=0){
-  alert("Enter the customer, product, quantity and valid price.");
+ if(!customer || !item || !Number.isFinite(quantity) || quantity <= 0 ||
+    !Number.isFinite(price) || price < 0){
+  alert("Please enter valid invoice details.");
   return;
  }
 
- const items=readData("doa_p3_invoices");
+ const invoices = readData(INVOICE_KEY);
 
- items.unshift({
-  id:Date.now(),
-  number:"DOA-"+Date.now(),
-  customer:customer,
-  phone:phone,
-  product:product,
-  quantity:quantity,
-  price:price,
-  total:quantity*price,
-  date:new Date().toISOString().slice(0,10)
+ invoices.push({
+  id:makeId(),
+  number:"DOA-" + Date.now(),
+  customer,
+  phone,
+  item,
+  quantity,
+  price,
+  total:quantity * price,
+  date:new Date().toISOString()
  });
 
- writeData("doa_p3_invoices",items);
+ saveData(INVOICE_KEY,invoices);
 
- document.getElementById("invoiceCustomer").value="";
- document.getElementById("invoicePhone").value="";
- document.getElementById("invoiceProduct").value="";
- document.getElementById("invoiceQuantity").value="1";
- document.getElementById("invoicePrice").value="";
+ byId("customerName").value = "";
+ byId("customerPhone").value = "";
+ byId("invoiceItem").value = "";
+ byId("invoiceQuantity").value = "1";
+ byId("invoicePrice").value = "";
 
- renderInvoices();
- alert("Invoice saved successfully.");
+ refreshInvoices();
 }
 
-function renderInvoices(){
- const items=readData("doa_p3_invoices");
- const list=document.getElementById("invoiceList");
- list.innerHTML="";
+function deleteInvoice(id){
+ if(!confirm("Delete this invoice?")) return;
 
- let total=0;
- items.forEach(item=>total+=Number(item.total)||0);
-
- document.getElementById("invoiceCount").textContent=items.length;
- document.getElementById("invoiceTotal").textContent=money(total);
-
- items.forEach(item=>{
-  const div=document.createElement("div");
-  div.className="item";
-
-  const title=document.createElement("strong");
-  title.textContent=item.number;
-
-  const detail=document.createElement("p");
-  detail.textContent=
-   "Customer: "+item.customer+
-   " | Product: "+item.product+
-   " | Quantity: "+item.quantity+
-   " | Total: "+money(item.total)+
-   " | Date: "+item.date;
-
-  const print=document.createElement("button");
-  print.textContent="Print";
-  print.onclick=()=>printOneInvoice(item);
-
-  const del=document.createElement("button");
-  del.className="danger";
-  del.textContent="Delete";
-  del.onclick=()=>{
-   if(confirm("Delete this invoice?")){
-    writeData("doa_p3_invoices",
-     readData("doa_p3_invoices").filter(x=>x.id!==item.id));
-    renderInvoices();
-   }
-  };
-
-  div.append(title,detail,print,del);
-  list.appendChild(div);
- });
-
- if(!items.length) list.textContent="No invoices created yet.";
+ const invoices = readData(INVOICE_KEY).filter(item=>item.id !== id);
+ saveData(INVOICE_KEY,invoices);
+ refreshInvoices();
 }
 
-function printOneInvoice(item){
- const w=window.open("","_blank");
- if(!w){
+function invoicePrintHTML(invoice){
+ return `
+ <html>
+ <head>
+  <title>DOA Invoice</title>
+  <style>
+   body{font-family:Arial;padding:30px;color:#222}
+   h1{color:#142e54}
+   table{width:100%;border-collapse:collapse;margin-top:20px}
+   td,th{border:1px solid #ccc;padding:10px;text-align:left}
+  </style>
+ </head>
+ <body>
+  <h1>DOA 3.0</h1>
+  <h2>INVOICE</h2>
+  <p>Invoice: ${escapeHTML(invoice.number)}</p>
+  <p>Date: ${escapeHTML(new Date(invoice.date).toLocaleDateString())}</p>
+  <p>Customer: ${escapeHTML(invoice.customer)}</p>
+  <p>Phone: ${escapeHTML(invoice.phone || "-")}</p>
+  <table>
+   <tr><th>Item</th><th>Quantity</th><th>Unit price</th><th>Total</th></tr>
+   <tr>
+    <td>${escapeHTML(invoice.item)}</td>
+    <td>${invoice.quantity}</td>
+    <td>${money(invoice.price)}</td>
+    <td>${money(invoice.total)}</td>
+   </tr>
+  </table>
+  <h3>Total: ${money(invoice.total)}</h3>
+  <p>Thank you for your business.</p>
+  <script>window.onload=function(){window.print()}<\/script>
+ </body>
+ </html>`;
+}
+
+function printInvoice(id){
+ const invoice = readData(INVOICE_KEY).find(item=>item.id === id);
+ if(!invoice) return;
+
+ const win = window.open("","_blank");
+
+ if(!win){
   alert("Allow pop-ups to print invoices.");
   return;
  }
 
- w.document.write(`
-  <html><head><title>${item.number}</title>
-  <style>body{font-family:Arial;padding:30px}
-  h1{color:#17345e}table{width:100%;border-collapse:collapse}
-  td,th{padding:12px;border:1px solid #ccc;text-align:left}
-  </style></head><body>
-  <h1>DOA 3.0</h1>
-  <h2>SALES INVOICE</h2>
-  <p>Invoice: ${item.number}</p>
-  <p>Date: ${item.date}</p>
-  <p>Customer: ${escapeHTML(item.customer)}</p>
-  <p>Phone: ${escapeHTML(item.phone || "-")}</p>
-  <table><tr><th>Description</th><th>Quantity</th>
-  <th>Unit Price</th><th>Total</th></tr>
-  <tr><td>${escapeHTML(item.product)}</td>
-  <td>${item.quantity}</td><td>${money(item.price)}</td>
-  <td>${money(item.total)}</td></tr></table>
-  <h3>Total: ${money(item.total)}</h3>
-  <p>Thank you for your business.</p>
-  </body></html>
- `);
-
- w.document.close();
- w.print();
+ win.document.open();
+ win.document.write(invoicePrintHTML(invoice));
+ win.document.close();
 }
 
-function escapeHTML(value){
- return String(value).replace(/[&<>"']/g,char=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#39;"
- }[char]));
-}
+function printReport(){
+ const invoices = readData(INVOICE_KEY);
+ const total = invoices.reduce((sum,item)=>sum + Number(item.total || 0),0);
 
-function printInvoices(){
- const items=readData("doa_p3_invoices");
+ const rows = invoices.map(item=>`
+  <tr>
+   <td>${escapeHTML(item.number)}</td>
+   <td>${escapeHTML(item.customer)}</td>
+   <td>${escapeHTML(item.item)}</td>
+   <td>${item.quantity}</td>
+   <td>${money(item.total)}</td>
+  </tr>
+ `).join("");
 
- if(!items.length){
-  alert("There are no invoices to print.");
+ const win = window.open("","_blank");
+
+ if(!win){
+  alert("Allow pop-ups to print reports.");
   return;
  }
 
- const w=window.open("","_blank");
- if(!w){
-  alert("Allow pop-ups to print records.");
+ win.document.open();
+ win.document.write(`
+  <html>
+  <head>
+   <title>DOA Sales Report</title>
+   <style>
+    body{font-family:Arial;padding:25px}
+    table{width:100%;border-collapse:collapse}
+    td,th{border:1px solid #ccc;padding:9px;text-align:left}
+   </style>
+  </head>
+  <body>
+   <h1>DOA 3.0 - Sales Report</h1>
+   <p>Generated: ${new Date().toLocaleString()}</p>
+   <table>
+    <tr><th>Invoice</th><th>Customer</th><th>Item</th><th>Qty</th><th>Total</th></tr>
+    ${rows}
+   </table>
+   <h3>Total sales: ${money(total)}</h3>
+   <script>window.onload=function(){window.print()}<\/script>
+  </body>
+  </html>
+ `);
+ win.document.close();
+}
+
+function refreshInvoices(){
+ const invoices = readData(INVOICE_KEY);
+
+ const total = invoices.reduce((sum,item)=>sum + Number(item.total || 0),0);
+
+ byId("invoiceCount").textContent = invoices.length;
+ byId("invoiceTotal").textContent = money(total);
+
+ if(!invoices.length){
+  byId("invoiceList").innerHTML =
+   '<div class="empty">No invoices created yet.</div>';
   return;
  }
 
- let rows="";
- let total=0;
-
- items.forEach(item=>{
-  total+=Number(item.total)||0;
-  rows+="<tr><td>"+escapeHTML(item.number)+
-   "</td><td>"+escapeHTML(item.customer)+
-   "</td><td>"+escapeHTML(item.product)+
-   "</td><td>"+item.quantity+
-   "</td><td>"+money(item.total)+
-   "</td><td>"+item.date+"</td></tr>";
- });
-
- w.document.write(`
-  <html><head><title>DOA Sales Report</title>
-  <style>body{font-family:Arial;padding:20px}
-  table{width:100%;border-collapse:collapse}
-  th,td{border:1px solid #aaa;padding:8px;text-align:left}
-  </style></head><body>
-  <h1>DOA 3.0 Sales Report</h1>
-  <table><tr><th>Invoice</th><th>Customer</th>
-  <th>Product</th><th>Qty</th><th>Total</th><th>Date</th></tr>
-  ${rows}</table>
-  <h3>Total sales: ${money(total)}</h3>
-  </body></html>
- `);
-
- w.document.close();
- w.print();
+ byId("invoiceList").innerHTML = [...invoices].reverse().map(item=>`
+  <div class="record">
+   <div class="record-top">
+    <strong>${escapeHTML(item.number)}</strong>
+    <button class="danger" onclick="deleteInvoice('${item.id}')">Delete</button>
+   </div>
+   <p>Customer: ${escapeHTML(item.customer)}</p>
+   <p>Item: ${escapeHTML(item.item)}</p>
+   <p>Quantity: ${item.quantity}</p>
+   <p class="amount">Total: ${money(item.total)}</p>
+   <button class="secondary" onclick="printInvoice('${item.id}')">Print Invoice</button>
+  </div>
+ `).join("");
 }
 
-/* MY MONEY */
+/* ==================================
+   MY MONEY
+================================== */
 
 function addMoneyRecord(){
- const type=document.getElementById("moneyType").value;
- const description=document.getElementById("moneyDescription").value.trim();
- const amount=Number(document.getElementById("moneyAmount").value);
- const date=document.getElementById("moneyDate").value ||
+ const type = byId("moneyType").value;
+ const description = byId("moneyDescription").value.trim();
+ const amount = Number(byId("moneyAmount").value);
+ const date = byId("moneyDate").value ||
   new Date().toISOString().slice(0,10);
 
- if(!description || !Number.isFinite(amount) || amount<=0){
-  alert("Enter a description and valid amount.");
+ if(!description || !Number.isFinite(amount) || amount <= 0){
+  alert("Enter a description and a valid amount.");
   return;
  }
 
- const items=readData("doa_p3_money");
+ const records = readData(MONEY_KEY);
 
- items.unshift({
-  id:Date.now(),
-  type:type,
-  description:description,
-  amount:amount,
-  date:date
+ records.push({
+  id:makeId(),
+  type,
+  description,
+  amount,
+  date
  });
 
- writeData("doa_p3_money",items);
+ saveData(MONEY_KEY,records);
 
- document.getElementById("moneyDescription").value="";
- document.getElementById("moneyAmount").value="";
+ byId("moneyDescription").value = "";
+ byId("moneyAmount").value = "";
 
- renderMoney();
+ refreshMoney();
 }
 
-function renderMoney(){
- const items=readData("doa_p3_money");
- const list=document.getElementById("moneyList");
- list.innerHTML="";
+function deleteMoneyRecord(id){
+ if(!confirm("Delete this money record?")) return;
 
- let income=0;
- let expenses=0;
-
- items.forEach(item=>{
-  if(item.type==="income") income+=Number(item.amount)||0;
-  else expenses+=Number(item.amount)||0;
-
-  const div=document.createElement("div");
-  div.className="item";
-
-  const title=document.createElement("strong");
-  title.textContent=(item.type==="income"?"Income: ":"Expense: ")+
-   item.description;
-
-  const detail=document.createElement("p");
-  detail.textContent=money(item.amount)+" | "+item.date;
-
-  const del=document.createElement("button");
-  del.className="danger";
-  del.textContent="Delete";
-  del.onclick=()=>{
-   if(confirm("Delete this transaction?")){
-    writeData("doa_p3_money",
-     readData("doa_p3_money").filter(x=>x.id!==item.id));
-    renderMoney();
-   }
-  };
-
-  div.append(title,detail,del);
-  list.appendChild(div);
- });
-
- if(!items.length) list.textContent="No transactions recorded yet.";
-
- document.getElementById("moneyIncome").textContent=money(income);
- document.getElementById("moneyExpenses").textContent=money(expenses);
- document.getElementById("moneyBalance").textContent=money(income-expenses);
+ const records = readData(MONEY_KEY).filter(item=>item.id !== id);
+ saveData(MONEY_KEY,records);
+ refreshMoney();
 }
 
-/* START */
+function refreshMoney(){
+ const records = readData(MONEY_KEY);
 
-if(!validFeatures.includes(selectedFeature)){
- selectedFeature="stock";
+ const income = records
+  .filter(item=>item.type === "income")
+  .reduce((sum,item)=>sum + Number(item.amount || 0),0);
+
+ const expenses = records
+  .filter(item=>item.type === "expense")
+  .reduce((sum,item)=>sum + Number(item.amount || 0),0);
+
+ byId("moneyIncome").textContent = money(income);
+ byId("moneyExpenses").textContent = money(expenses);
+ byId("moneyBalance").textContent = money(income - expenses);
+
+ if(!records.length){
+  byId("moneyList").innerHTML =
+   '<div class="empty">No money records added yet.</div>';
+  return;
+ }
+
+ byId("moneyList").innerHTML = [...records].reverse().map(item=>`
+  <div class="record">
+   <div class="record-top">
+    <strong>${item.type === "income" ? "Income" : "Expense"}</strong>
+    <button class="danger" onclick="deleteMoneyRecord('${item.id}')">Delete</button>
+   </div>
+   <p>${escapeHTML(item.description)}</p>
+   <p>Date: ${escapeHTML(item.date)}</p>
+   <p class="amount">${money(item.amount)}</p>
+  </div>
+ `).join("");
 }
+
+/* ==================================
+   REFRESH ALL FEATURES
+================================== */
+
+function refreshAll(){
+ refreshStock();
+ refreshInvoices();
+ refreshMoney();
+}
+
+/* ==================================
+   START PAGE
+================================== */
+
+byId("moneyDate").value = new Date().toISOString().slice(0,10);
 
 checkAccess();
 
-setInterval(()=>{
+setInterval(function(){
  if(trialIsActive()){
-  updateTrialText();
- }else if(!currentUser && accessReady){
-  accessReady=false;
+  updateTrialDisplay();
+ }else if(accessReady && !premiumActive){
+  // Trial has expired while the user was using the app.
   showAuth();
  }
 },30000);
+
 </script>
 
 </body>
