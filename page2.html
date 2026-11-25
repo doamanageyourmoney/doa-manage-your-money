@@ -16,6 +16,7 @@ header p{margin:5px 0 0;color:#bdcce3;font-size:13px}
 button{border:0;border-radius:9px;padding:12px 15px;background:#d8a94e;color:#101b30;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
 .back{background:#fff}
+.header-buttons{display:flex;gap:8px;flex-wrap:wrap}
 main{max-width:1000px;margin:auto;padding:20px 15px}
 .welcome{text-align:center;margin:12px 0 25px}
 .welcome h2{font-size:26px;margin-bottom:8px}
@@ -96,7 +97,15 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
   <h1>DOA 3.0</h1>
   <p>Your personal assistant</p>
  </div>
- <button class="back" onclick="location.href='index.html'">← Back to DOA</button>
+
+ <div class="header-buttons">
+  <button onclick="location.href='page3.html'">
+   👤 Account
+  </button>
+  <button class="back" onclick="location.href='index.html'">
+   ← Back to DOA
+  </button>
+ </div>
 </header>
 
 <main>
@@ -106,7 +115,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
  <p>Manage your daily activities, learning and business calculations.</p>
 </div>
 
-<!-- 7-DAY PREMIUM TRIAL BANNER -->
 <div id="doaTrialBanner">
  <h3>🎉 DOA PREMIUM FREE TRIAL</h3>
  <p id="doaTrialMessage">Activating your 7-day trial...</p>
@@ -363,7 +371,6 @@ footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 
 </main>
 
-<!-- SHARED MICROPHONE DISPLAY -->
 <div id="doaVoiceStatus" role="status" aria-live="polite">
  DOA voice assistant is ready.
 </div>
@@ -1103,7 +1110,6 @@ if(expenseDraft==='true'){
 
 </script>
 
-<!-- SHARED ASSISTANT ENGINE -->
 <script src="doa-assistant.js"></script>
 
 </body>
