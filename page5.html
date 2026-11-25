@@ -1,1 +1,659 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>DOA - Invoices & Reports</title>
+
+<style>
+:root {
+  --bg:#071426;
+  --panel:#0d2038;
+  --panel2:#102945;
+  --line:#203b59;
+  --text:#f4f7fb;
+  --muted:#a8b8ca;
+  --green:#55c7a5;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+.app{
+  max-width:1100px;
+  margin:auto;
+  padding:20px 15px 45px;
+}
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo{
+  background:var(--green);
+  color:#06251d;
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  font-size:22px;
+}
+h1{font-size:22px;margin:0}
+.subtitle{color:var(--muted);font-size:13px;margin-top:5px}
+.page-label{
+  border:1px solid #285b55;
+  color:#8fe2c7;
+  border-radius:20px;
+  padding:7px 12px;
+  font-size:12px;
+}
+.hero{
+  background:linear-gradient(120deg,#123b47,#102945);
+  border:1px solid #286052;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:22px;
+}
+.hero h2{margin:0 0 8px}
+.hero p{color:#b5c9d2;line-height:1.6;margin:0}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+}
+.card{
+  background:linear-gradient(150deg,#102945,#0c1e34);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:18px;
+  min-height:120px;
+  text-align:left;
+  color:white;
+}
+.card .icon{font-size:27px;display:block;margin-bottom:12px}
+.card strong{font-size:15px}
+.card small{display:block;color:var(--muted);margin-top:6px}
+button{cursor:pointer;font-family:inherit}
+.btn{
+  background:var(--green);
+  color:#06251d;
+  border:0;
+  border-radius:9px;
+  padding:11px 15px;
+  font-weight:bold;
+}
+.secondary{
+  background:#183652;
+  border:1px solid #31506d;
+  color:white;
+  padding:10px 14px;
+  border-radius:9px;
+}
+.back{
+  background:none;
+  color:#b8c9d9;
+  border:0;
+  padding:10px 0;
+  font-size:15px;
+}
+.hidden{display:none!important}
+.section{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:17px;
+  margin:17px 0;
+}
+input,select{
+  width:100%;
+  padding:11px;
+  margin:7px 0 14px;
+  border:1px solid #36516b;
+  border-radius:8px;
+  background:#08182a;
+  color:white;
+}
+label{font-size:13px;color:var(--muted)}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:12px 0;
+  font-size:13px;
+}
+th,td{
+  border-bottom:1px solid var(--line);
+  padding:10px 5px;
+  text-align:left;
+}
+th{color:var(--muted)}
+.table-wrap{overflow-x:auto}
+.total{text-align:right;line-height:2}
+.invoice-paper{
+  background:white;
+  color:#172333;
+  padding:22px;
+  border-radius:8px;
+  margin-top:15px;
+}
+.invoice-paper h2{color:#102945}
+.invoice-paper table th,.invoice-paper table td{
+  border-bottom:1px solid #ddd;
+  color:#172333;
+}
+.invoice-paper th{color:#445}
+.invoice-paper input{
+  background:white;
+  color:#172333;
+}
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:15px;
+  font-size:11px;
+}
+.paid{background:#174a3d;color:#a6f0d5}
+.unpaid{background:#55302c;color:#ffd1c5}
+@media(max-width:550px){
+  .grid{gap:9px}
+  .card{padding:13px}
+  .app{padding:15px 12px}
+}
+@media print{
+  body{background:white;color:black}
+  header,#home,#workspace>.back,.no-print{display:none!important}
+  #workspace{display:block!important}
+  #invoicePaper{display:block!important}
+  .invoice-paper{border:0;margin:0;padding:10px}
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+
+<header>
+  <div class="brand">
+    <div class="logo">D</div>
+    <div>
+      <h1>DOA Invoices & Reports</h1>
+      <div class="subtitle">Business documents and reporting</div>
+    </div>
+  </div>
+  <div class="page-label">PAGE 5</div>
+</header>
+
+<section id="home">
+
+  <div class="hero">
+    <h2>Invoices & Reports</h2>
+    <p>
+      Create professional invoices, track payments
+      and review your business performance.
+    </p>
+  </div>
+
+  <div class="grid">
+
+    <button class="card" onclick="createInvoice()">
+      <span class="icon">📄</span>
+      <strong>Create Invoice</strong>
+      <small>Prepare a new invoice</small>
+    </button>
+
+    <button class="card" onclick="showHistory()">
+      <span class="icon">📚</span>
+      <strong>Invoice History</strong>
+      <small>View previous invoices</small>
+    </button>
+
+    <button class="card" onclick="showReports()">
+      <span class="icon">📊</span>
+      <strong>Sales Reports</strong>
+      <small>View sales performance</small>
+    </button>
+
+    <button class="card" onclick="showPayments()">
+      <span class="icon">💳</span>
+      <strong>Payments</strong>
+      <small>Track paid and unpaid invoices</small>
+    </button>
+
+  </div>
+
+</section>
+
+<section id="workspace" class="hidden">
+
+  <button class="back no-print" onclick="goHome()">
+    ← Back
+  </button>
+
+  <h2 id="sectionTitle"></h2>
+
+  <div id="sectionContent"></div>
+
+</section>
+
+</main>
+
+<script>
+
+const KEY="doa_invoices_v1";
+
+let invoices=[];
+
+try{
+  invoices=JSON.parse(localStorage.getItem(KEY)||"[]");
+  if(!Array.isArray(invoices))invoices=[];
+}catch(e){invoices=[]}
+
+let currentItems=[];
+
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(invoices));
+}
+
+function money(n){
+  return "UGX "+Number(n||0).toLocaleString("en-UG");
+}
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function goHome(){
+  document.getElementById("home").classList.remove("hidden");
+  document.getElementById("workspace").classList.add("hidden");
+}
+
+function openSection(title,html){
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("workspace").classList.remove("hidden");
+  document.getElementById("sectionTitle").textContent=title;
+  document.getElementById("sectionContent").innerHTML=html;
+}
+
+function nextInvoiceNumber(){
+  return "DOA-"+String(Date.now()).slice(-8);
+}
+
+function createInvoice(){
+
+  currentItems=[];
+
+  openSection("Create Invoice",`
+    <div class="section">
+      <label>Business Name</label>
+      <input id="business" placeholder="Your business name">
+
+      <label>Customer Name</label>
+      <input id="customer" placeholder="Customer name">
+
+      <label>Customer Phone</label>
+      <input id="phone" placeholder="Customer phone number">
+
+      <label>Invoice Date</label>
+      <input id="invoiceDate" type="date">
+
+      <label>Due Date</label>
+      <input id="dueDate" type="date">
+    </div>
+
+    <div class="section">
+      <h3>Add Products or Services</h3>
+
+      <label>Product / Service</label>
+      <input id="itemName">
+
+      <label>Quantity</label>
+      <input id="quantity" type="number" min="0.001" step="any">
+
+      <label>Unit Price (UGX)</label>
+      <input id="price" type="number" min="0" step="any">
+
+      <button class="secondary" onclick="addItem()">
+        + Add Item
+      </button>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="itemRows"></tbody>
+        </table>
+      </div>
+
+      <label>Discount (UGX)</label>
+      <input id="discount" type="number" min="0" value="0"
+        oninput="calculateTotal()">
+
+      <label>Tax (UGX)</label>
+      <input id="tax" type="number" min="0" value="0"
+        oninput="calculateTotal()">
+
+      <div class="total">
+        <strong>Subtotal: <span id="subtotal">UGX 0</span></strong><br>
+        <strong>Grand Total: <span id="grandTotal">UGX 0</span></strong>
+      </div>
+
+      <button class="btn" onclick="saveInvoice()">
+        Save Invoice
+      </button>
+    </div>
+  `);
+
+  document.getElementById("invoiceDate").value=
+    new Date().toISOString().slice(0,10);
+
+  renderItems();
+}
+
+function addItem(){
+
+  const name=document.getElementById("itemName").value.trim();
+  const qty=Number(document.getElementById("quantity").value);
+  const price=Number(document.getElementById("price").value);
+
+  if(!name||qty<=0||price<0){
+    alert("Enter a valid product, quantity and price.");
+    return;
+  }
+
+  currentItems.push({
+    name,
+    qty,
+    price,
+    total:qty*price
+  });
+
+  document.getElementById("itemName").value="";
+  document.getElementById("quantity").value="";
+  document.getElementById("price").value="";
+
+  renderItems();
+}
+
+function renderItems(){
+
+  const rows=document.getElementById("itemRows");
+
+  rows.innerHTML=currentItems.map(item=>`
+    <tr>
+      <td>${escapeHTML(item.name)}</td>
+      <td>${item.qty}</td>
+      <td>${money(item.price)}</td>
+      <td>${money(item.total)}</td>
+    </tr>
+  `).join("");
+
+  calculateTotal();
+}
+
+function calculateTotal(){
+
+  const subtotal=currentItems.reduce((a,x)=>a+x.total,0);
+
+  const discount=Number(
+    document.getElementById("discount")?.value||0
+  );
+
+  const tax=Number(
+    document.getElementById("tax")?.value||0
+  );
+
+  const total=Math.max(0,subtotal-discount+tax);
+
+  const sub=document.getElementById("subtotal");
+  const grand=document.getElementById("grandTotal");
+
+  if(sub)sub.textContent=money(subtotal);
+  if(grand)grand.textContent=money(total);
+
+  return {subtotal,discount,tax,total};
+}
+
+function saveInvoice(){
+
+  const business=document.getElementById("business").value.trim();
+  const customer=document.getElementById("customer").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+
+  if(!customer||currentItems.length===0){
+    alert("Enter customer details and add at least one item.");
+    return;
+  }
+
+  const totals=calculateTotal();
+
+  const invoice={
+    id:nextInvoiceNumber(),
+    business,
+    customer,
+    phone,
+    date:document.getElementById("invoiceDate").value,
+    dueDate:document.getElementById("dueDate").value,
+    items:currentItems,
+    ...totals,
+    paid:0,
+    status:"Unpaid",
+    createdAt:new Date().toISOString()
+  };
+
+  invoices.unshift(invoice);
+  save();
+
+  alert("Invoice saved successfully.");
+
+  viewInvoice(invoice.id);
+}
+
+function viewInvoice(id){
+
+  const inv=invoices.find(x=>x.id===id);
+
+  if(!inv)return;
+
+  const remaining=Math.max(0,inv.total-inv.paid);
+
+  openSection("Invoice "+inv.id,`
+    <div class="invoice-paper" id="invoicePaper">
+
+      <h2>${escapeHTML(inv.business||"Business Name")}</h2>
+      <h3>INVOICE</h3>
+
+      <p><strong>Invoice Number:</strong> ${inv.id}</p>
+      <p><strong>Date:</strong> ${inv.date||""}</p>
+      <p><strong>Due Date:</strong> ${inv.dueDate||"Not specified"}</p>
+
+      <hr>
+
+      <h3>Bill To</h3>
+      <p>${escapeHTML(inv.customer)}</p>
+      <p>${escapeHTML(inv.phone)}</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${inv.items.map(item=>`
+              <tr>
+                <td>${escapeHTML(item.name)}</td>
+                <td>${item.qty}</td>
+                <td>${money(item.price)}</td>
+                <td>${money(item.total)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="total">
+        Subtotal: ${money(inv.subtotal)}<br>
+        Discount: ${money(inv.discount)}<br>
+        Tax: ${money(inv.tax)}<br>
+        <h3>Total: ${money(inv.total)}</h3>
+        Paid: ${money(inv.paid)}<br>
+        Balance Due: ${money(remaining)}
+      </div>
+
+      <p>Thank you for your business.</p>
+
+    </div>
+
+    <div class="section no-print">
+      <button class="btn" onclick="window.print()">Print / Save PDF</button>
+      <button class="secondary" onclick="recordPayment('${inv.id}')">
+        Record Payment
+      </button>
+    </div>
+  `);
+}
+
+function recordPayment(id){
+
+  const inv=invoices.find(x=>x.id===id);
+  if(!inv)return;
+
+  const remaining=inv.total-inv.paid;
+
+  const amount=Number(prompt(
+    "Enter payment received. Balance: "+money(remaining)
+  ));
+
+  if(!Number.isFinite(amount)||amount<=0||amount>remaining){
+    alert("Enter a valid payment not exceeding the outstanding balance.");
+    return;
+  }
+
+  inv.paid+=amount;
+
+  inv.status=
+    inv.paid>=inv.total?"Paid":
+    inv.paid>0?"Partially Paid":"Unpaid";
+
+  save();
+  viewInvoice(id);
+}
+
+function showHistory(){
+
+  openSection("Invoice History",`
+    <div class="section">
+      <input id="searchInvoice"
+        placeholder="Search invoice or customer..."
+        oninput="filterInvoices()">
+
+      <div id="historyList"></div>
+    </div>
+  `);
+
+  filterInvoices();
+}
+
+function filterInvoices(){
+
+  const q=(document.getElementById("searchInvoice")?.value||"").toLowerCase();
+
+  const results=invoices.filter(x=>
+    x.id.toLowerCase().includes(q)||
+    x.customer.toLowerCase().includes(q)
+  );
+
+  document.getElementById("historyList").innerHTML=
+    results.map(x=>`
+      <div class="record">
+        <strong>${escapeHTML(x.customer)}</strong><br>
+        ${x.id}<br>
+        ${money(x.total)}
+        <span class="status ${
+          x.status==="Paid"?"paid":"unpaid"
+        }">${x.status}</span>
+        <br><br>
+        <button class="secondary"
+          onclick="viewInvoice('${x.id}')">
+          View Invoice
+        </button>
+      </div>
+    `).join("")||"No invoices found.";
+}
+
+function showReports(){
+
+  const total=invoices.reduce((a,x)=>a+x.total,0);
+  const paid=invoices.reduce((a,x)=>a+x.paid,0);
+  const outstanding=total-paid;
+
+  openSection("Sales Reports",`
+    <div class="section">
+      <h3>Overall Invoice Summary</h3>
+      <p>Total Invoices: ${invoices.length}</p>
+      <p>Total Invoiced: ${money(total)}</p>
+      <p>Payments Received: ${money(paid)}</p>
+      <p>Outstanding Balance: ${money(outstanding)}</p>
+    </div>
+
+    <div class="section">
+      <h3>Invoice Breakdown</h3>
+      <p>Paid: ${invoices.filter(x=>x.status==="Paid").length}</p>
+      <p>Partially Paid: ${invoices.filter(x=>x.status==="Partially Paid").length}</p>
+      <p>Unpaid: ${invoices.filter(x=>x.status==="Unpaid").length}</p>
+    </div>
+  `);
+}
+
+function showPayments(){
+
+  const outstanding=invoices.filter(x=>x.paid<x.total);
+
+  openSection("Payments",`
+    <div class="section">
+      <h3>Outstanding Invoices</h3>
+
+      ${outstanding.map(x=>`
+        <div class="record">
+          <strong>${escapeHTML(x.customer)}</strong>
+          <p>Invoice: ${x.id}</p>
+          <p>Balance: ${money(x.total-x.paid)}</p>
+          <button class="secondary"
+            onclick="recordPayment('${x.id}')">
+            Record Payment
+          </button>
+        </div>
+      `).join("")||"No outstanding payments."}
+    </div>
+  `);
+}
+
+</script>
+</body>
+</html>
