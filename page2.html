@@ -135,7 +135,7 @@ textarea{min-height:85px;resize:vertical}
 hr{border:0;border-top:1px solid #385273;margin:18px 0}
 footer{text-align:center;color:#91a6c4;font-size:12px;padding:25px}
 
-/* FLOATING VOICE ASSISTANT */
+/* SHARED FLOATING VOICE ASSISTANT */
 #doaFloatMic{
  position:fixed;
  right:18px;
@@ -536,7 +536,7 @@ function money(amount){
  return 'UGX '+Number(amount||0).toLocaleString();
 }
 
-/* REMINDERS - ORIGINAL STORAGE KEY PRESERVED */
+/* REMINDERS */
 
 function addReminder(){
  const text=document.getElementById('reminderText').value.trim();
@@ -687,7 +687,7 @@ function calculateVAT(){
   ' | Total including VAT: '+money(price+vat);
 }
 
-/* DAILY EXPENSES - NEW PERSISTENT STORAGE KEY */
+/* MY EXPENSES - ORIGINAL STORAGE KEY PRESERVED */
 
 function addExpense(){
  const name=document.getElementById('expenseName').value.trim();
@@ -759,7 +759,7 @@ function clearExpenses(){
  }
 }
 
-/* DAILY PLAN - ORIGINAL STORAGE KEY PRESERVED */
+/* DAILY PLAN */
 
 function addPlan(){
  const date=document.getElementById('planDate').value;
@@ -1150,132 +1150,6 @@ function loadClassNotes(){
   existing?existing.notes:'';
 }
 
-/* FLOATING VOICE ASSISTANT */
-
-(() => {
- const mic=document.getElementById('doaFloatMic');
- const status=document.getElementById('doaVoiceStatus');
-
- const SpeechRecognition=
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
- if(!SpeechRecognition){
-  mic.onclick=()=>{
-   status.style.display='block';
-   status.textContent=
-    'Voice commands are not supported by this browser. Try Chrome.';
-  };
-  return;
- }
-
- const recognition=new SpeechRecognition();
- recognition.lang='en-UG';
- recognition.continuous=false;
- recognition.interimResults=false;
-
- let listening=false;
-
- function message(text){
-  status.textContent=text;
-  status.style.display='block';
- }
-
- function stopListening(){
-  if(listening){
-   try{recognition.stop();}catch(e){}
-  }
- }
-
- mic.addEventListener('click',()=>{
-  if(listening){
-   stopListening();
-   return;
-  }
-
-  try{
-   recognition.start();
-   listening=true;
-   mic.classList.add('listening');
-   mic.textContent='🔴';
-   message('DOA is listening. Speak your command.');
-  }catch(e){
-   message('Please wait a moment and try again.');
-  }
- });
-
- recognition.onresult=(event)=>{
-  const spoken=event.results[0][0].transcript
-   .toLowerCase().trim();
-
-  message('You said: '+spoken);
-  processVoiceCommand(spoken);
- };
-
- recognition.onerror=(event)=>{
-  let msg='Voice recognition failed. Please try again.';
-
-  if(event.error==='not-allowed'){
-   msg='Microphone permission denied. Allow microphone access in your browser.';
-  }else if(event.error==='no-speech'){
-   msg='No speech detected. Tap the microphone and try again.';
-  }else if(event.error==='network'){
-   msg='Voice recognition needs an internet connection.';
-  }
-
-  message(msg);
- };
-
- recognition.onend=()=>{
-  listening=false;
-  mic.classList.remove('listening');
-  mic.textContent='🎤';
- };
-
- function processVoiceCommand(command){
-
-  const commands={
-   calculator:['calculator','dealers calculator','business calculator'],
-   plan:['daily plan','my plan','open plan'],
-   reminders:['reminders','my reminders','open reminders'],
-   expenses:['expenses','my expenses','open expenses'],
-   class:['my class','class','lessons','learning'],
-   notice:['my notice','notice','announcements'],
-   stock:['my stock','stock','inventory'],
-   invoices:['invoices','reports','receipts'],
-   money:['my money','business money','finances']
-  };
-
-  for(const [tool,phrases] of Object.entries(commands)){
-   if(phrases.some(phrase=>
-    command.includes(phrase)
-   )){
-    openTool(tool);
-    message('Opening '+tool+'.');
-    return;
-   }
-  }
-
-  if(command.includes('close')||
-     command.includes('hide')){
-   document.querySelectorAll('.panel').forEach(panel=>{
-    panel.style.display='none';
-   });
-   message('Tools closed.');
-   return;
-  }
-
-  if(command.includes('help')||
-     command.includes('what can you do')){
-   message('Say: open calculator, expenses, daily plan, reminders, class, notice, stock, invoices or my money.');
-   return;
-  }
-
-  message('Command not recognised. Say "help" to see available commands.');
- }
-
-})();
-
 /* AUTOMATIC TOOL OPENING FROM PAGE 1 */
 
 const requestedTool=
@@ -1297,7 +1171,31 @@ if(supportedTools.includes(requestedTool)){
  openTool(requestedTool);
 }
 
+/* HANDLE A PENDING EXPENSE DRAFT FROM THE SHARED ASSISTANT */
+
+const pageParams=new URLSearchParams(window.location.search);
+const expenseDraft=pageParams.get('expenseDraft');
+const expenseAmount=pageParams.get('amount');
+
+if(expenseDraft==='true'){
+ openTool('expenses');
+
+ if(expenseAmount && Number(expenseAmount)>0){
+  document.getElementById('expenseAmount').value=expenseAmount;
+  document.getElementById('expenseName').focus();
+ }
+
+ const status=document.getElementById('doaVoiceStatus');
+ status.textContent=expenseAmount
+  ?'Your amount is ready. Enter what you spent the money on, then tap Add Expense.'
+  :'Enter your expense details, then tap Add Expense.';
+ status.style.display='block';
+}
+
 </script>
+
+<!-- SHARED ASSISTANT ENGINE -->
+<script src="doa-assistant.js"></script>
 
 </body>
 </html>
