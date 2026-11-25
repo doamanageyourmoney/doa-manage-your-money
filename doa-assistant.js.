@@ -1,0 +1,420 @@
+
+/* =====================================================
+   DOA SHARED ASSISTANT ENGINE
+   Shared by Page 1, Page 2 and future Page 3
+   ===================================================== */
+
+(() => {
+  "use strict";
+
+  if (window.DOAAssistant) return;
+
+  const STORAGE_KEY = "doa_assistant_session";
+  const RECOGNITION_LANG = "en-UG";
+
+  let recognition = null;
+  let listening = false;
+
+  const state = {
+    page: location.pathname.toLowerCase().includes("page2") ? 2 : 1,
+    lastCommand: "",
+    pendingExpense: null
+  };
+
+  function saveSession() {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (error) {
+      console.warn("DOA session could not be saved.", error);
+    }
+  }
+
+  function loadSession() {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}");
+      Object.assign(state, saved);
+    } catch (error) {
+      console.warn("DOA session could not be restored.", error);
+    }
+  }
+
+  function speak(message) {
+    if (!("speechSynthesis" in window)) return;
+
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(message);
+    speech.lang = RECOGNITION_LANG;
+    speech.rate = 1;
+
+    window.speechSynthesis.speak(speech);
+  }
+
+  function showStatus(message) {
+    const status =
+      document.getElementById("doaVoiceStatus") ||
+      document.getElementById("voiceStatus");
+
+    if (status) {
+      status.textContent = message;
+      status.style.display = "block";
+    }
+
+    document.dispatchEvent(
+      new CustomEvent("doa:status", {
+        detail: { message }
+      })
+    );
+  }
+
+  function setMicState(active) {
+    listening = active;
+
+    const mic =
+      document.getElementById("doaFloatMic") ||
+      document.getElementById("micButton");
+
+    if (mic) {
+      mic.classList.toggle("listening", active);
+      mic.setAttribute("aria-pressed", String(active));
+    }
+
+    showStatus(active ? "Listening..." : "DOA assistant ready");
+  }
+
+  function stopListening() {
+    if (recognition && listening) {
+      try {
+        recognition.stop();
+      } catch (error) {
+        console.warn(error);
+      }
+    }
+
+    listening = false;
+    setMicState(false);
+  }
+
+  function numberFromWords(input) {
+    const text = input.toLowerCase().replace(/,/g, " ");
+
+    const direct = text.match(
+      /(?:ugx|shillings?|shs)?\s*([\d]+(?:\.\d+)?)\s*(?:ugx|shillings?|shs)?/i
+    );
+
+    if (direct) return Number(direct[1]);
+
+    const small = {
+      zero: 0, one: 1, two: 2, three: 3, four: 4,
+      five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+      ten: 10, eleven: 11, twelve: 12, thirteen: 13,
+      fourteen: 14, fifteen: 15, sixteen: 16,
+      seventeen: 17, eighteen: 18, nineteen: 19,
+      twenty: 20, thirty: 30, forty: 40, fifty: 50,
+      sixty: 60, seventy: 70, eighty: 80, ninety: 90
+    };
+
+    const words = text
+      .replace(/-/g, " ")
+      .split(/\s+/);
+
+    let total = 0;
+    let current = 0;
+    let found = false;
+
+    for (const word of words) {
+      if (small[word] !== undefined) {
+        current += small[word];
+        found = true;
+      } else if (word === "hundred") {
+        current = Math.max(1, current) * 100;
+        found = true;
+      } else if (word === "thousand") {
+        total += Math.max(1, current) * 1000;
+        current = 0;
+        found = true;
+      } else if (word === "million") {
+        total += Math.max(1, current) * 1000000;
+        current = 0;
+        found = true;
+      }
+    }
+
+    return found ? total + current : null;
+  }
+
+  function getExpenseRequest(message) {
+    const text = message.toLowerCase();
+
+    const spendingWords =
+      /\b(spent|spend|paid|bought|purchased|expense|cost me)\b/;
+
+    if (!spendingWords.test(text)) return null;
+
+    const amount = numberFromWords(text);
+
+    if (!amount || !Number.isFinite(amount) || amount <= 0) {
+      return null;
+    }
+
+    return {
+      amount: Math.round(amount),
+      description: ""
+    };
+  }
+
+  function navigateToTool(tool, extra = {}) {
+    const params = new URLSearchParams();
+    params.set("tool", tool);
+
+    Object.entries(extra).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        params.set(key, String(value));
+      }
+    });
+
+    stopListening();
+    saveSession();
+
+    window.location.href = "page2.html?" + params.toString();
+  }
+
+  function identifyTool(message) {
+    const text = message.toLowerCase();
+
+    if (/\b(expenses?|spending|expenditure)\b/.test(text)) {
+      return "expenses";
+    }
+
+    if (/\b(daily plan|my plan|plan my day|today's plan)\b/.test(text)) {
+      return "plan";
+    }
+
+    if (/\b(reminders?|remind me)\b/.test(text)) {
+      return "reminders";
+    }
+
+    if (/\b(calculator|calculate|dealers calculator)\b/.test(text)) {
+      return "calculator";
+    }
+
+    if (/\b(my class|classroom)\b/.test(text)) {
+      return "class";
+    }
+
+    if (/\b(my notice|notices)\b/.test(text)) {
+      return "notice";
+    }
+
+    if (/\b(my stock|stock management)\b/.test(text)) {
+      return "stock";
+    }
+
+    if (/\b(reports|invoices)\b/.test(text)) {
+      return "reports";
+    }
+
+    if (/\b(my money|manage my money)\b/.test(text)) {
+      return "home";
+    }
+
+    return null;
+  }
+
+  function isOpenToolsCommand(message) {
+    return /\b(open|show|go to|take me to|launch|view)\b/i.test(message);
+  }
+
+  function handleCommand(message, source = "text") {
+    if (!message || !message.trim()) return false;
+
+    message = message.trim();
+    state.lastCommand = message;
+    saveSession();
+
+    document.dispatchEvent(
+      new CustomEvent("doa:command", {
+        detail: { message, source }
+      })
+    );
+
+    const expense = getExpenseRequest(message);
+
+    if (expense) {
+      state.pendingExpense = expense;
+      saveSession();
+
+      if (state.page !== 2) {
+        navigateToTool("expenses", {
+          amount: expense.amount,
+          expenseDraft: "true"
+        });
+      } else {
+        openPageTwoTool("expenses", {
+          amount: expense.amount,
+          expenseDraft: "true"
+        });
+      }
+
+      speak(
+        "I heard " + expense.amount.toLocaleString("en-UG") +
+        " shillings. What was the expense for? I will not save it until you confirm."
+      );
+
+      return true;
+    }
+
+    const tool = identifyTool(message);
+
+    if (tool && (isOpenToolsCommand(message) || tool === "home")) {
+      if (state.page !== 2) {
+        navigateToTool(tool);
+      } else {
+        openPageTwoTool(tool);
+      }
+
+      speak("Opening " + (tool === "home" ? "guest tools" : tool));
+      return true;
+    }
+
+    if (/\b(open guest tools|open page two|open page 2|show guest tools|go to page two|go to page 2|open tools)\b/i.test(message)) {
+      if (state.page !== 2) {
+        navigateToTool("home");
+      } else {
+        openPageTwoTool("home");
+      }
+      speak("Opening guest tools");
+      return true;
+    }
+
+    if (/\b(stop listening|stop microphone|turn off microphone)\b/i.test(message)) {
+      stopListening();
+      speak("Microphone stopped");
+      return true;
+    }
+
+    return false;
+  }
+
+  function openPageTwoTool(tool, extra = {}) {
+    if (typeof window.openTool === "function") {
+      window.openTool(tool === "home" ? "home" : tool);
+
+      if (tool === "expenses" && extra.amount) {
+        setTimeout(() => {
+          const amountInput = document.getElementById("expenseAmount");
+
+          if (amountInput) {
+            amountInput.value = extra.amount;
+            amountInput.dispatchEvent(new Event("input", { bubbles: true }));
+          }
+
+          showStatus(
+            "Enter what you spent " +
+            Number(extra.amount).toLocaleString("en-UG") +
+            " UGX on, then confirm before saving."
+          );
+        }, 250);
+      }
+    } else {
+      navigateToTool(tool, extra);
+    }
+  }
+
+  function startListening() {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      showStatus("Voice recognition is not supported by this browser.");
+      speak("Please use a supported browser for voice commands.");
+      return;
+    }
+
+    if (listening) {
+      stopListening();
+      return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = RECOGNITION_LANG;
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setMicState(true);
+
+    recognition.onresult = (event) => {
+      const message = event.results[0][0].transcript.trim();
+
+      showStatus("You said: " + message);
+
+      const handled = handleCommand(message, "voice");
+
+      if (!handled) {
+        document.dispatchEvent(
+          new CustomEvent("doa:voice-message", {
+            detail: { message }
+          })
+        );
+      }
+    };
+
+    recognition.onerror = (event) => {
+      showStatus("Voice error: " + event.error);
+      setMicState(false);
+    };
+
+    recognition.onend = () => {
+      listening = false;
+      setMicState(false);
+    };
+
+    try {
+      recognition.start();
+    } catch (error) {
+      showStatus("Could not start microphone. Please try again.");
+      setMicState(false);
+    }
+  }
+
+  function bindMicrophones() {
+    const micIds = ["doaFloatMic", "micButton"];
+
+    micIds.forEach((id) => {
+      const mic = document.getElementById(id);
+
+      if (!mic || mic.dataset.doaBound === "true") return;
+
+      mic.dataset.doaBound = "true";
+
+      mic.addEventListener("click", (event) => {
+        event.preventDefault();
+        startListening();
+      });
+    });
+  }
+
+  loadSession();
+
+  window.DOAAssistant = {
+    startListening,
+    stopListening,
+    speak,
+    showStatus,
+    handleCommand,
+    getExpenseRequest,
+    navigateToTool,
+    getState: () => ({ ...state })
+  };
+
+  document.addEventListener("DOMContentLoaded", bindMicrophones);
+  bindMicrophones();
+
+  window.addEventListener("pageshow", () => {
+    state.page = location.pathname.toLowerCase().includes("page2") ? 2 : 1;
+    bindMicrophones();
+  });
+
+  console.log("DOA shared assistant engine loaded.");
+})();
