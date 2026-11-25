@@ -1,1 +1,610 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071426">
+<title>DOA - My Money</title>
+
+<style>
+:root {
+  --bg:#071426;
+  --panel:#0d2038;
+  --panel2:#102945;
+  --line:#203b59;
+  --text:#f4f7fb;
+  --muted:#a8b8ca;
+  --green:#55c7a5;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+.app {
+  max-width:1000px;
+  margin:auto;
+  padding:20px 15px 45px;
+}
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo {
+  background:var(--green);
+  color:#06251d;
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  font-size:22px;
+}
+h1 {font-size:23px;margin:0}
+.subtitle {color:var(--muted);font-size:13px;margin-top:5px}
+.page-label {
+  border:1px solid #285b55;
+  color:#8fe2c7;
+  border-radius:20px;
+  padding:7px 12px;
+  font-size:12px;
+}
+.balance {
+  background:linear-gradient(120deg,#123b47,#102945);
+  border:1px solid #286052;
+  border-radius:18px;
+  padding:23px;
+  margin-bottom:20px;
+}
+.balance small {color:#b5d5d0}
+.balance h2 {
+  font-size:30px;
+  margin:9px 0;
+}
+.summary {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:25px;
+}
+.stat {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+}
+.stat span {color:var(--muted);font-size:12px}
+.stat strong {display:block;font-size:18px;margin-top:8px}
+h3 {font-size:17px}
+.features {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+.feature {
+  background:linear-gradient(150deg,#102945,#0c1e34);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px 13px;
+  color:white;
+  text-align:left;
+  min-height:115px;
+}
+.feature:active {border-color:var(--green)}
+.feature .icon {
+  font-size:27px;
+  display:block;
+  margin-bottom:12px;
+}
+.feature strong {font-size:14px}
+.feature small {
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+}
+.section {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:17px;
+  margin-top:22px;
+}
+button {cursor:pointer}
+.action {
+  border:0;
+  border-radius:9px;
+  padding:11px 15px;
+  background:var(--green);
+  color:#06251d;
+  font-weight:bold;
+}
+.secondary {
+  background:#183652;
+  border:1px solid #31506d;
+  color:white;
+  border-radius:9px;
+  padding:10px 13px;
+}
+input,select,textarea {
+  width:100%;
+  padding:12px;
+  margin:7px 0 14px;
+  border:1px solid #36516b;
+  border-radius:9px;
+  background:#08182a;
+  color:white;
+}
+label {font-size:13px;color:var(--muted)}
+.hidden {display:none!important}
+.back {
+  background:none;
+  color:#b8c9d9;
+  border:0;
+  padding:10px 0;
+  font-size:15px;
+}
+.record {
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+.record:last-child {border-bottom:0}
+@media(max-width:600px) {
+  .features {grid-template-columns:repeat(2,1fr)}
+  .balance h2 {font-size:25px}
+}
+</style>
+</head>
+
+<body>
+<main class="app">
+
+<header>
+  <div class="brand">
+    <div class="logo">D</div>
+    <div>
+      <h1>DOA My Money</h1>
+      <div class="subtitle">Your personal financial assistant</div>
+    </div>
+  </div>
+  <div class="page-label">PAGE 4</div>
+</header>
+
+<div id="home">
+
+  <div class="balance">
+    <small>TOTAL BALANCE</small>
+    <h2 id="balance">UGX 0</h2>
+    <small>Your financial overview</small>
+  </div>
+
+  <div class="summary">
+    <div class="stat">
+      <span>Total Income</span>
+      <strong id="income">UGX 0</strong>
+    </div>
+    <div class="stat">
+      <span>Total Expenses</span>
+      <strong id="expenses">UGX 0</strong>
+    </div>
+  </div>
+
+  <h3>Manage Your Money</h3>
+
+  <div class="features">
+
+    <button class="feature" onclick="showSection('income')">
+      <span class="icon">📈</span>
+      <strong>Income</strong>
+      <small>Record money received</small>
+    </button>
+
+    <button class="feature" onclick="showSection('expenses')">
+      <span class="icon">💸</span>
+      <strong>Expenses</strong>
+      <small>Track your spending</small>
+    </button>
+
+    <button class="feature" onclick="showSection('savings')">
+      <span class="icon">🐷</span>
+      <strong>Savings</strong>
+      <small>Manage savings goals</small>
+    </button>
+
+    <button class="feature" onclick="showSection('budgets')">
+      <span class="icon">👛</span>
+      <strong>Budgets</strong>
+      <small>Plan your spending</small>
+    </button>
+
+    <button class="feature" onclick="showSection('debts')">
+      <span class="icon">🤝</span>
+      <strong>Debts & Loans</strong>
+      <small>Track money owed</small>
+    </button>
+
+    <button class="feature" onclick="showSection('reports')">
+      <span class="icon">📊</span>
+      <strong>Reports</strong>
+      <small>View financial records</small>
+    </button>
+
+  </div>
+
+  <div class="section">
+    <h3>Quick Record</h3>
+    <p class="subtitle">Record income or expenses using text or voice.</p>
+    <textarea id="quickText"
+      placeholder="Example: I spent 15000 on food today"></textarea>
+    <button class="action" onclick="processText()">Save Text</button>
+    <button class="secondary" onclick="startVoice()">🎤 Speak</button>
+    <p id="voiceStatus" class="subtitle"></p>
+  </div>
+
+</div>
+
+<div id="workspace" class="hidden">
+  <button class="back" onclick="goHome()">← Back to My Money</button>
+  <h2 id="sectionTitle"></h2>
+  <div id="sectionContent"></div>
+</div>
+
+</main>
+
+<script>
+const KEY = "doa_my_money_v1";
+
+let data = JSON.parse(localStorage.getItem(KEY) || "{}");
+
+data.records = data.records || [];
+data.savings = data.savings || [];
+data.budgets = data.budgets || [];
+data.debts = data.debts || [];
+
+function save() {
+  localStorage.setItem(KEY,JSON.stringify(data));
+  updateDashboard();
+}
+
+function money(value) {
+  return "UGX " + Number(value || 0).toLocaleString("en-UG");
+}
+
+function totals() {
+  let income = data.records
+    .filter(x => x.type === "income")
+    .reduce((a,x) => a+x.amount,0);
+
+  let expenses = data.records
+    .filter(x => x.type === "expenses")
+    .reduce((a,x) => a+x.amount,0);
+
+  return {income,expenses};
+}
+
+function updateDashboard() {
+  let t = totals();
+
+  document.getElementById("income").textContent=money(t.income);
+  document.getElementById("expenses").textContent=money(t.expenses);
+  document.getElementById("balance").textContent=money(t.income-t.expenses);
+}
+
+function goHome() {
+  document.getElementById("home").classList.remove("hidden");
+  document.getElementById("workspace").classList.add("hidden");
+  updateDashboard();
+}
+
+function showSection(type) {
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("workspace").classList.remove("hidden");
+
+  let titles = {
+    income:"Income",
+    expenses:"Expenses",
+    savings:"Savings",
+    budgets:"Budgets",
+    debts:"Debts & Loans",
+    reports:"Financial Reports"
+  };
+
+  document.getElementById("sectionTitle").textContent=titles[type];
+
+  let content="";
+
+  if(type==="income" || type==="expenses") {
+    content=`
+      <div class="section">
+        <form id="recordForm">
+          <label>Amount (UGX)</label>
+          <input type="number" id="amount" min="1" required>
+
+          <label>Description</label>
+          <input id="description" required placeholder="Enter description">
+
+          <label>Date</label>
+          <input type="date" id="date" required>
+
+          <button class="action">Save Record</button>
+        </form>
+      </div>
+      <div class="section">
+        <h3>Recent Records</h3>
+        <div id="records"></div>
+      </div>
+    `;
+  }
+
+  if(type==="savings") {
+    content=`
+      <div class="section">
+        <form id="savingForm">
+          <label>Savings Goal</label>
+          <input id="goalName" required>
+          <label>Target Amount (UGX)</label>
+          <input type="number" id="goalAmount" min="1" required>
+          <label>Amount Saved (UGX)</label>
+          <input type="number" id="savedAmount" min="0" value="0">
+          <button class="action">Create Goal</button>
+        </form>
+      </div>
+      <div class="section" id="savingList"></div>
+    `;
+  }
+
+  if(type==="budgets") {
+    content=`
+      <div class="section">
+        <form id="budgetForm">
+          <label>Budget Category</label>
+          <input id="budgetName" required>
+          <label>Budget Amount (UGX)</label>
+          <input type="number" id="budgetAmount" min="1" required>
+          <button class="action">Save Budget</button>
+        </form>
+      </div>
+      <div class="section" id="budgetList"></div>
+    `;
+  }
+
+  if(type==="debts") {
+    content=`
+      <div class="section">
+        <form id="debtForm">
+          <label>Person or Institution</label>
+          <input id="debtPerson" required>
+          <label>Amount (UGX)</label>
+          <input type="number" id="debtAmount" min="1" required>
+          <label>Type</label>
+          <select id="debtType">
+            <option value="I owe">I owe</option>
+            <option value="Owed to me">Owed to me</option>
+          </select>
+          <button class="action">Save Debt</button>
+        </form>
+      </div>
+      <div class="section" id="debtList"></div>
+    `;
+  }
+
+  if(type==="reports") {
+    let t=totals();
+    content=`
+      <div class="section">
+        <h3>Financial Summary</h3>
+        <p>Total Income: ${money(t.income)}</p>
+        <p>Total Expenses: ${money(t.expenses)}</p>
+        <p>Remaining Balance: ${money(t.income-t.expenses)}</p>
+        <p>Total Records: ${data.records.length}</p>
+      </div>
+      <div class="section">
+        <h3>All Transactions</h3>
+        ${data.records.map(x=>`
+          <div class="record">
+            ${x.type}: ${x.description}
+            <strong>${money(x.amount)}</strong>
+            <small>${x.date}</small>
+          </div>
+        `).join("") || "No transactions yet."}
+      </div>
+    `;
+  }
+
+  document.getElementById("sectionContent").innerHTML=content;
+
+  if(type==="income" || type==="expenses") {
+    document.getElementById("date").value=
+      new Date().toISOString().slice(0,10);
+
+    document.getElementById("recordForm").onsubmit=e=>{
+      e.preventDefault();
+
+      data.records.unshift({
+        id:Date.now(),
+        type,
+        amount:Number(document.getElementById("amount").value),
+        description:document.getElementById("description").value,
+        date:document.getElementById("date").value
+      });
+
+      save();
+      showSection(type);
+    };
+
+    document.getElementById("records").innerHTML=
+      data.records.filter(x=>x.type===type).map(x=>`
+        <div class="record">
+          ${x.description}
+          <strong>${money(x.amount)}</strong>
+          <small>${x.date}</small>
+        </div>
+      `).join("") || "No records yet.";
+  }
+
+  if(type==="savings") {
+    document.getElementById("savingForm").onsubmit=e=>{
+      e.preventDefault();
+
+      data.savings.push({
+        name:document.getElementById("goalName").value,
+        target:Number(document.getElementById("goalAmount").value),
+        saved:Number(document.getElementById("savedAmount").value)
+      });
+
+      save();
+      showSection("savings");
+    };
+
+    document.getElementById("savingList").innerHTML=
+      "<h3>My Savings Goals</h3>"+
+      data.savings.map(x=>`
+        <div class="record">
+          ${x.name}
+          <p>${money(x.saved)} / ${money(x.target)}</p>
+        </div>
+      `).join("") || "No savings goals yet.";
+  }
+
+  if(type==="budgets") {
+    document.getElementById("budgetForm").onsubmit=e=>{
+      e.preventDefault();
+
+      data.budgets.push({
+        name:document.getElementById("budgetName").value,
+        amount:Number(document.getElementById("budgetAmount").value)
+      });
+
+      save();
+      showSection("budgets");
+    };
+
+    document.getElementById("budgetList").innerHTML=
+      "<h3>My Budgets</h3>"+
+      data.budgets.map(x=>`
+        <div class="record">${x.name}: ${money(x.amount)}</div>
+      `).join("") || "No budgets yet.";
+  }
+
+  if(type==="debts") {
+    document.getElementById("debtForm").onsubmit=e=>{
+      e.preventDefault();
+
+      data.debts.push({
+        person:document.getElementById("debtPerson").value,
+        amount:Number(document.getElementById("debtAmount").value),
+        type:document.getElementById("debtType").value
+      });
+
+      save();
+      showSection("debts");
+    };
+
+    document.getElementById("debtList").innerHTML=
+      "<h3>My Debts & Loans</h3>"+
+      data.debts.map(x=>`
+        <div class="record">
+          ${x.person} - ${x.type}
+          <strong>${money(x.amount)}</strong>
+        </div>
+      `).join("") || "No debt records yet.";
+  }
+}
+
+function processText() {
+  let textInput=document.getElementById("quickText").value.trim();
+
+  if(!textInput) {
+    alert("Enter a transaction description first.");
+    return;
+  }
+
+  let amountMatch=textInput.match(/(\d[\d,]*)/);
+
+  if(!amountMatch) {
+    alert("Please include an amount, e.g. I spent 15000 on food.");
+    return;
+  }
+
+  let amount=Number(amountMatch[1].replace(/,/g,""));
+
+  if(!amount || amount<=0) {
+    alert("Enter a valid amount.");
+    return;
+  }
+
+  let lower=textInput.toLowerCase();
+
+  let type =
+    /\b(spent|paid|bought|expense|purchase|cost)\b/.test(lower)
+    ? "expenses"
+    : /\b(received|earned|income|salary|sold)\b/.test(lower)
+    ? "income"
+    : null;
+
+  if(!type) {
+    alert("Please say whether this is income or an expense.");
+    return;
+  }
+
+  data.records.unshift({
+    id:Date.now(),
+    type,
+    amount,
+    description:textInput,
+    date:new Date().toISOString().slice(0,10)
+  });
+
+  save();
+
+  document.getElementById("quickText").value="";
+  alert("Transaction saved.");
+}
+
+function startVoice() {
+  const Recognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!Recognition) {
+    alert("Voice recognition is not supported in this browser. Please use text recording.");
+    return;
+  }
+
+  const recognition=new Recognition();
+  recognition.lang="en-UG";
+  recognition.interimResults=false;
+
+  document.getElementById("voiceStatus").textContent="Listening...";
+
+  recognition.onresult=event=>{
+    document.getElementById("quickText").value=
+      event.results[0][0].transcript;
+
+    document.getElementById("voiceStatus").textContent=
+      "Voice captured. Review and press Save Text.";
+  };
+
+  recognition.onerror=()=>{
+    document.getElementById("voiceStatus").textContent=
+      "Voice recording failed. Please try again or type.";
+  };
+
+  recognition.start();
+}
+
+updateDashboard();
+</script>
+
+</body>
+</html>
