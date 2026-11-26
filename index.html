@@ -1,1797 +1,704 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#071426">
-<title>DOA 3.0 - Your Personal Assistant</title>
-
+<title>DOA 4.0 · Voice Assistant</title>
 <style>
-:root {
-  --bg:#071426;
-  --panel:#0d2036;
-  --panel2:#102943;
-  --cyan:#35d6ee;
-  --blue:#3188ff;
-  --text:#edf6ff;
-  --muted:#91a9c2;
-  --border:rgba(151,190,225,.16);
-}
-
-* { box-sizing:border-box; }
-
-body {
-  margin:0;
-  min-height:100vh;
-  background:radial-gradient(ellipse at top,#12365a,#071426 65%);
-  color:var(--text);
-  font-family:Arial,sans-serif;
-}
-
-button { cursor:pointer; }
-.hidden { display:none !important; }
-
-.app {
-  max-width:950px;
-  height:100vh;
-  height:100dvh;
-  margin:auto;
-  padding:0 15px;
-  display:flex;
-  flex-direction:column;
-}
-
-header {
-  min-height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-
-.brand {
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.logo {
-  width:42px;
-  height:42px;
-  display:grid;
-  place-items:center;
-  border-radius:14px;
-  background:linear-gradient(135deg,#65f2f4,#258bff);
-  color:#061827;
-  font-size:22px;
-  font-weight:bold;
-}
-
-.brand-name {
-  font-size:19px;
-  font-weight:bold;
-}
-
-.brand-sub {
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:1px;
-}
-
-.new-chat,
-.page-nav {
-  padding:10px 13px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:var(--panel);
-  color:var(--text);
-}
-
-.header-actions {
-  display:flex;
-  align-items:center;
-  gap:7px;
-}
-
-main {
-  flex:1;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-}
-
-.welcome {
-  margin:auto;
-  text-align:center;
-  max-width:600px;
-  padding:25px 10px;
-}
-
-.welcome-icon {
-  width:70px;
-  height:70px;
-  margin:0 auto 20px;
-  display:grid;
-  place-items:center;
-  border-radius:22px;
-  background:var(--panel2);
-  border:1px solid #35d6ee55;
-  color:var(--cyan);
-  font-size:30px;
-  font-weight:bold;
-}
-
-.welcome h1 {
-  font-size:30px;
-  margin:0 0 10px;
-}
-
-.welcome p {
-  color:var(--muted);
-  margin:0;
-}
-
-.suggestions {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:9px;
-  margin-top:25px;
-}
-
-.suggestion {
-  padding:10px 13px;
-  border:1px solid var(--border);
-  border-radius:14px;
-  background:var(--panel);
-  color:#d5eaff;
-}
-
-.messages {
-  flex:1;
-  overflow-y:auto;
-  padding:22px 2px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-.message {
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  max-width:90%;
-}
-
-.message.user {
-  align-self:flex-end;
-  flex-direction:row-reverse;
-}
-
-.avatar {
-  width:32px;
-  height:32px;
-  flex-shrink:0;
-  border-radius:11px;
-  display:grid;
-  place-items:center;
-  background:#123b55;
-  color:var(--cyan);
-  font-size:11px;
-  font-weight:bold;
-}
-
-.user .avatar {
-  background:#1d4e7d;
-  color:white;
-}
-
-.bubble {
-  padding:12px 15px;
-  border:1px solid var(--border);
-  background:var(--panel);
-  border-radius:5px 16px 16px 16px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  line-height:1.6;
-}
-
-.user .bubble {
-  background:#123b60;
-  border-radius:16px 5px 16px 16px;
-}
-
-.error { color:#ff9999; }
-
-.composer-wrap {
-  padding:12px 0 18px;
-}
-
-.composer {
-  display:flex;
-  align-items:flex-end;
-  gap:8px;
-  padding:10px;
-  border:1px solid #31516e;
-  border-radius:18px;
-  background:var(--panel);
-}
-
-#messageInput {
-  flex:1;
-  min-width:0;
-  min-height:42px;
-  max-height:150px;
-  resize:none;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:var(--text);
-  font-size:15px;
-  padding:10px 6px;
-}
-
-#messageInput::placeholder { color:#7892ad; }
-
-.mic-button {
-  width:43px;
-  height:43px;
-  flex-shrink:0;
-  border:1px solid #31516e;
-  border-radius:14px;
-  background:#142d47;
-  color:#7edff0;
-  font-size:19px;
-}
-
-.mic-button.recording {
-  background:#8b2635;
-  color:white;
-  border-color:#ff697d;
-  animation:pulse 1.2s infinite;
-}
-
-.mic-button:disabled {
-  opacity:.5;
-  cursor:not-allowed;
-}
-
-@keyframes pulse {
-  0% { box-shadow:0 0 0 0 #ff697d66; }
-  70% { box-shadow:0 0 0 10px #ff697d00; }
-  100% { box-shadow:0 0 0 0 #ff697d00; }
-}
-
-.send {
-  width:44px;
-  height:44px;
-  flex-shrink:0;
-  border:0;
-  border-radius:14px;
-  background:linear-gradient(135deg,#62edf0,#318dff);
-  color:#061827;
-  font-size:22px;
-  font-weight:bold;
-}
-
-.send:disabled { opacity:.5; }
-
-.mic-status {
-  min-height:19px;
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding-top:7px;
-}
-
-.footnote {
-  text-align:center;
-  color:#7189a3;
-  font-size:11px;
-  padding-top:5px;
-}
-
-/* EXISTING EMBEDDED GUEST TOOLS - LEFT IN PLACE */
-
-#page2 {
-  min-height:100vh;
-  min-height:100dvh;
-  padding:0 15px 30px;
-}
-
-.guest-app {
-  max-width:950px;
-  margin:auto;
-}
-
-.guest-header {
-  min-height:70px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  border-bottom:1px solid var(--border);
-}
-
-.guest-heading {
-  font-size:21px;
-  font-weight:bold;
-}
-
-.guest-subheading {
-  font-size:12px;
-  color:var(--muted);
-  margin-top:5px;
-}
-
-.guest-intro {
-  padding:30px 5px 20px;
-  text-align:center;
-}
-
-.guest-intro h1 {
-  font-size:27px;
-  margin:0 0 10px;
-}
-
-.guest-intro p {
-  color:var(--muted);
-  line-height:1.5;
-}
-
-.guest-tools-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:13px;
-  margin:20px auto;
-}
-
-.guest-tool-card {
-  min-height:125px;
-  padding:18px 12px;
-  border:1px solid #31516e;
-  border-radius:16px;
-  background:linear-gradient(145deg,#102943,#0d2036);
-  color:var(--text);
-  text-align:left;
-}
-
-.guest-tool-card:active { transform:scale(.98); }
-
-.guest-tool-icon {
-  display:block;
-  font-size:26px;
-  margin-bottom:12px;
-}
-
-.guest-tool-card strong {
-  display:block;
-  font-size:15px;
-}
-
-.guest-tool-card small {
-  display:block;
-  color:var(--muted);
-  margin-top:6px;
-  line-height:1.4;
-}
-
-.guest-note {
-  color:var(--muted);
-  text-align:center;
-  font-size:12px;
-  padding:15px 5px;
-}
-
-.guest-overlay {
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  background:#061426ee;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:14px;
-}
-
-.guest-box {
-  width:100%;
-  max-width:520px;
-  max-height:90vh;
-  overflow:auto;
-  background:#0d2036;
-  border:1px solid #31516e;
-  border-radius:18px;
-  padding:18px;
-  color:#edf6ff;
-}
-
-.guest-box h2 { margin-top:0; }
-
-.guest-box input:not([type="checkbox"]),
-.guest-box select {
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border:1px solid #31516e;
-  border-radius:10px;
-  background:#071426;
-  color:white;
-}
-
-.guest-box button {
-  padding:10px 13px;
-  margin:4px;
-  border:1px solid #31516e;
-  border-radius:10px;
-  background:#102943;
-  color:white;
-}
-
-.guest-box .primary {
-  background:linear-gradient(135deg,#62edf0,#318dff);
-  color:#061827;
-  font-weight:bold;
-}
-
-.guest-item {
-  padding:10px;
-  margin:7px 0;
-  background:#102943;
-  border-radius:10px;
-  overflow-wrap:anywhere;
-}
-
-.guest-close { float:right; }
-
-.guest-total {
-  color:#35d6ee;
-  font-size:20px;
-  font-weight:bold;
-}
-
-.guest-box p { line-height:1.5; }
-
-@media(max-width:600px) {
-  .app { padding:0 12px; }
-  .message { max-width:96%; }
-  .welcome h1 { font-size:26px; }
-  .suggestion { font-size:12px; }
-  .guest-tools-grid { gap:9px; }
-  .guest-tool-card { padding:14px 10px; }
-  .guest-intro h1 { font-size:24px; }
-  .guest-header { flex-wrap:wrap; padding:10px 0; }
-}
+:root{--bg:#071426;--panel:#0d2036;--panel2:#102943;--cyan:#35d6ee;--blue:#318dff;--text:#edf6ff;--muted:#91a9c2;--border:rgba(151,190,225,.16);--red:#ff697d;--green:#4ade80;--amber:#f6ad55}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:system-ui,Arial,sans-serif;background:radial-gradient(ellipse at top,#12365a,#071426 65%);color:var(--text);-webkit-tap-highlight-color:transparent}
+.app{max-width:720px;height:100vh;height:100dvh;margin:auto;display:flex;flex-direction:column;padding:0 14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
+.brand{display:flex;gap:10px;align-items:center}
+.logo{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#65f2f4,#258bff);color:#061827;display:grid;place-items:center;font-weight:800}
+.title{font-weight:700;font-size:18px}
+.sub{font-size:11px;color:var(--muted);letter-spacing:1px}
+.pill{font-size:12px;padding:6px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--border);color:var(--muted);white-space:nowrap}
+.pill.on{color:#061827;background:var(--cyan);border-color:var(--cyan)}
+button{font-family:inherit;cursor:pointer}
+.back{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:10px;font-size:14px}
+main{flex:1;overflow-y:auto;min-height:0;padding:14px 0}
+.screen{display:none}
+.screen.active{display:block}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:16px}
+.muted{color:var(--muted);font-size:14px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.stat{background:var(--panel2);border:1px solid var(--border);border-radius:14px;padding:12px 10px}
+.stat small{color:var(--muted);font-size:12px}
+.stat strong{display:block;font-size:15px;margin-top:4px;overflow-wrap:anywhere}
+.good{color:var(--green)}.bad{color:var(--red)}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+.tile{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px 12px;text-align:left;color:var(--text);font-size:15px;font-weight:600}
+.tile .ic{font-size:24px;display:block;margin-bottom:8px}
+.tile small{display:block;color:var(--muted);margin-top:4px;font-size:12px;font-weight:400}
+ul.list{list-style:none;margin:0;padding:0}
+ul.list li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:15px;overflow-wrap:anywhere}
+ul.list li:last-child{border-bottom:0}
+ul.list li.done span{text-decoration:line-through;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px;padding:6px 0;margin:0}
+.row2{display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:5px}
+.bar{height:8px;background:#1b3550;border-radius:6px;overflow:hidden}
+.bar div{height:100%;background:var(--blue)}
+.bar div.warn{background:var(--amber)}
+.bar div.over{background:var(--red)}
+.big{font-size:34px;font-weight:700;color:var(--cyan)}
+.restore{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:14px}
+.chat{display:flex;flex-direction:column;gap:10px}
+.bubble{padding:10px 13px;border-radius:14px;background:var(--panel);border:1px solid var(--border);white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.5;max-width:92%}
+.bubble.user{align-self:flex-end;background:#123b60}
+.bubble.bot{align-self:flex-start}
+.dock{border-top:1px solid var(--border);padding:10px 0 14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+#heard{min-height:20px;font-size:14px;color:var(--cyan);text-align:center;overflow-wrap:anywhere;max-width:100%}
+#reply{min-height:20px;font-size:14px;text-align:center;padding:0 8px;max-height:90px;overflow-y:auto;overflow-wrap:anywhere;max-width:100%}
+.mic{width:88px;height:88px;border-radius:50%;border:0;background:linear-gradient(135deg,#62edf0,#318dff);color:#061827;font-size:34px;box-shadow:0 8px 30px #35d6ee44;transition:transform .15s}
+.mic:active{transform:scale(.95)}
+.mic.listening{background:linear-gradient(135deg,#ff8a9a,#d33b57);color:#fff;animation:pulse 1.2s infinite}
+.mic.speaking{background:linear-gradient(135deg,#a78bfa,#6d5cff);color:#fff}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #ff697d88}70%{box-shadow:0 0 0 18px #ff697d00}100%{box-shadow:0 0 0 0 #ff697d00}}
+.hint{font-size:12px;color:var(--muted);text-align:center}
+#typed{width:100%;display:flex}
+#typedInput{flex:1;padding:10px 12px;border-radius:12px;border:1px solid #31516e;background:var(--panel);color:var(--text);font-size:14px}
+.toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);background:#102b46;border:1px solid var(--border);padding:10px 14px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;z-index:20}
+.toast.show{opacity:1}
+.overlay{position:fixed;inset:0;background:#071426;display:none;align-items:center;justify-content:center;text-align:center;z-index:50;padding:20px}
+.overlay.show{display:flex}
+.overlay button{margin-top:16px;padding:12px 20px;border-radius:12px;border:0;background:linear-gradient(135deg,#62edf0,#318dff);color:#061827;font-weight:700;font-size:15px}
 </style>
 </head>
-
 <body>
-
-<section id="page1">
 <div class="app">
-
-<header>
-  <div class="brand">
-    <div class="logo">D</div>
-    <div>
-      <div class="brand-name">
-        DOA <span style="color:#35d6ee">3.0</span>
+  <header>
+    <div class="brand">
+      <div class="logo">D</div>
+      <div>
+        <div class="title">DOA <span style="color:var(--cyan)">4.0</span> · <span id="title">Home</span></div>
+        <div class="sub">VOICE FIRST</div>
       </div>
-      <div class="brand-sub">YOUR PERSONAL ASSISTANT</div>
     </div>
-  </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="back" id="backBtn" hidden>‹ Back</button>
+      <span class="pill" id="pill">Standby</span>
+    </div>
+  </header>
 
-  <div class="header-actions">
-    <button class="page-nav" id="goPage2">Guest Tools</button>
-    <button class="new-chat" id="newChat">＋ New chat</button>
-  </div>
-</header>
+  <main id="main">
 
-<main>
-
-<section class="welcome" id="welcome">
-  <div class="welcome-icon">D</div>
-  <h1>Welcome to DOA</h1>
-  <p>Your best personal assistant. What can I help you with today?</p>
-
-  <div class="suggestions">
-    <button class="suggestion" data-prompt="Help me plan my day">Plan my day</button>
-    <button class="suggestion" data-prompt="Help me manage my money">Manage my money</button>
-    <button class="suggestion" data-prompt="Help me grow my business">Grow my business</button>
-    <button class="suggestion" data-prompt="Explain something to me clearly">Learn something</button>
-  </div>
-</section>
-
-<section class="messages hidden" id="messages"></section>
-
-</main>
-
-<div class="composer-wrap">
-  <form class="composer" id="chatForm">
-
-    <textarea
-      id="messageInput"
-      rows="1"
-      placeholder="Message DOA..."
-      aria-label="Message DOA"
-    ></textarea>
-
-    <button
-      class="mic-button"
-      id="micButton"
-      type="button"
-      aria-label="Start voice conversation"
-      title="Start voice conversation"
-    >🎙</button>
-
-    <button
-      class="send"
-      id="sendButton"
-      type="submit"
-      aria-label="Send message"
-    >↑</button>
-
-  </form>
-
-  <div class="mic-status" id="micStatus">
-    Tap the microphone to start a voice conversation.
-  </div>
-
-  <div class="footnote">
-    DOA can make mistakes. Check important information.
-  </div>
-</div>
-
-</div>
-</section>
-
-<!-- EMBEDDED PAGE 2 MARKUP RETAINED FOR NOW -->
-
-<section id="page2" class="hidden">
-<div class="guest-app">
-
-  <div class="guest-header">
-    <div>
-      <div class="guest-heading">
-        DOA <span style="color:#35d6ee">GUEST TOOLS</span>
+    <section class="screen" data-screen="home">
+      <div class="stats" id="homeStats"></div>
+      <div class="card">
+        <h2>Say something</h2>
+        <p class="muted">"Open money" · "Spent 8000 on lunch" · "Remind me to call mom at 5 pm" · "Add buy bread to my plan" · "What is 25 times 4" · "Help"</p>
       </div>
-      <div class="guest-subheading">Your everyday personal tools</div>
-    </div>
+      <div class="card" id="homeNext"></div>
+      <div class="tiles">
+        <button class="tile" data-go="money"><span class="ic">💰</span>Money<small>Income, expenses, budgets</small></button>
+        <button class="tile" data-go="reminders"><span class="ic">🔔</span>Reminders<small>Timed alerts</small></button>
+        <button class="tile" data-go="plan"><span class="ic">📅</span>Daily Plan<small>Today's activities</small></button>
+        <button class="tile" data-go="calc"><span class="ic">🧮</span>Calculator<small>Quick maths</small></button>
+        <button class="tile" data-go="ask"><span class="ic">✨</span>Ask DOA<small>Questions and advice</small></button>
+      </div>
+      <button class="restore" id="restoreBtn">Restore a backup file (tap)</button>
+    </section>
 
-    <button class="page-nav" id="backPage1">← Back to DOA</button>
-  </div>
+    <section class="screen" data-screen="money">
+      <div class="stats" id="moneyStats"></div>
+      <div class="card"><h2>Budgets this month</h2><div id="budgets"></div></div>
+      <div class="card"><h2>Recent transactions</h2><div id="txList"></div></div>
+    </section>
 
-  <div class="guest-intro">
-    <h1>Manage Your Day</h1>
-    <p>
-      Simple tools to organise your activities,
-      calculate amounts and remember important things.
-    </p>
-  </div>
+    <section class="screen" data-screen="reminders">
+      <div class="card"><h2>Pending reminders</h2><div id="remList"></div></div>
+    </section>
 
-  <div class="guest-tools-grid">
+    <section class="screen" data-screen="plan">
+      <div class="card"><h2>Today's plan</h2><div id="planList"></div></div>
+    </section>
 
-    <button class="guest-tool-card" data-tool="reminders">
-      <span class="guest-tool-icon">🔔</span>
-      <strong>My Reminders</strong>
-      <small>Create and manage your reminders.</small>
-    </button>
+    <section class="screen" data-screen="calc">
+      <div class="card"><h2>Last result</h2><div id="calcLast"></div></div>
+      <div class="card"><h2>Recent calculations</h2><div id="calcHist"></div></div>
+    </section>
 
-    <button class="guest-tool-card" data-tool="calculator">
-      <span class="guest-tool-icon">🧮</span>
-      <strong>Calculator</strong>
-      <small>Calculate everyday amounts.</small>
-    </button>
+    <section class="screen" data-screen="ask">
+      <div class="chat" id="chat"></div>
+    </section>
 
-    <button class="guest-tool-card" data-tool="expenses">
-      <span class="guest-tool-icon">💰</span>
-      <strong>Daily Expenses</strong>
-      <small>Calculate your daily spending.</small>
-    </button>
+  </main>
 
-    <button class="guest-tool-card" data-tool="plan">
-      <span class="guest-tool-icon">📅</span>
-      <strong>My Daily Plan</strong>
-      <small>Organise your daily activities.</small>
-    </button>
+  <footer class="dock">
+    <div id="heard"></div>
+    <div id="reply"></div>
+    <button class="mic" id="mic" aria-label="Start or pause voice">🎙</button>
+    <div class="hint">Tap once, then just talk. Say "help" to hear the commands.</div>
+    <form id="typed" autocomplete="off">
+      <input id="typedInput" placeholder="Or type a command (optional)">
+    </form>
+  </footer>
+</div>
 
-  </div>
-
-  <div class="guest-note">
-    Guest tools store their information on this device.
-    They do not save transactions to your DOA financial account.
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="closed" class="overlay">
+  <div>
+    <div style="font-size:52px">👋</div>
+    <h1>DOA is closed</h1>
+    <p class="muted">Your data is saved on this device.</p>
+    <button id="reopen">Reopen DOA</button>
   </div>
 </div>
-</section>
-
-<div class="guest-overlay" id="guestOverlay">
-  <div class="guest-box">
-    <button class="guest-close" id="guestClose">✕ Close</button>
-    <h2 id="guestTitle">DOA Tools</h2>
-    <div id="guestContent"></div>
-  </div>
-</div>
+<input type="file" id="restoreFile" accept="application/json,.json" hidden>
 
 <script>
 "use strict";
 
-/* EXISTING DOA CLOUDFLARE WORKER */
-const WORKER_URL =
-"https://soft-frog-4cf8.doa2026app.workers.dev/";
+/* ---------- CONSTANTS ---------- */
+const $ = id => document.getElementById(id);
+const KEY = "doa_v4";
+const AI_URL = "https://soft-frog-4cf8.doa2026app.workers.dev/";
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const synth = window.speechSynthesis || null;
 
-const form = document.getElementById("chatForm");
-const input = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const messagesEl = document.getElementById("messages");
-const welcomeEl = document.getElementById("welcome");
-const newChatButton = document.getElementById("newChat");
-const micButton = document.getElementById("micButton");
-const micStatus = document.getElementById("micStatus");
+const EXP = ["Food","Transport","Rent","Utilities","Education","Health","Shopping","Entertainment","Savings","Other"];
+const INC = ["Salary","Business","Gifts","Investments","Other"];
+const KW = {
+  Food:["lunch","dinner","breakfast","food","snack","coffee","groceries","meal","restaurant","tea","supper"],
+  Transport:["taxi","boda","bus","fuel","petrol","transport","uber","matatu","fare","parking"],
+  Rent:["rent"],
+  Utilities:["electricity","water","internet","airtime","bill","utilities","power"],
+  Education:["school","fees","books","tuition","course"],
+  Health:["hospital","medicine","doctor","pharmacy","clinic"],
+  Shopping:["shopping","clothes","shoes","shirt"],
+  Entertainment:["movie","party","game","outing","cinema"],
+  Savings:["savings","save"],
+  Salary:["salary","wage","paycheck","payroll"],
+  Business:["business","sales","sold","customer","client"],
+  Gifts:["gift","donation"],
+  Investments:["interest","dividend","investment","shares"]
+};
+const NUM = {zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19,twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+const OPS = {plus:"+",add:"+","+":"+",minus:"-",subtract:"-","-":"-",times:"*","multiplied by":"*",x:"*","*":"*","/":"/",over:"/","divided by":"/"};
+const CURRENCIES = ["UGX","KES","TZS","USD","EUR","GBP","INR","NGN","ZAR"];
+const SCREENS = {
+  home:["home","main menu","dashboard"],
+  money:["money","finance","finances","budget","budgets","expenses","expense","income","transactions","spending","wallet"],
+  reminders:["reminders","reminder","my reminders"],
+  plan:["plan","daily plan","my plan","my daily plan","day plan","schedule"],
+  calc:["calculator","calc","calculations"],
+  ask:["ask","chat","assistant","ask doa"]
+};
+const TITLES = {home:"Home",money:"Money",reminders:"Reminders",plan:"Daily Plan",calc:"Calculator",ask:"Ask DOA"};
+const NAV_VERB = /^(open|show|go|go to|take me to|switch to|launch|start|view|bring up|display)\s+/;
+const HELP = "Say open money, open reminders, or open daily plan to move between screens. For money, say spent 8000 on lunch, received 50000 salary, balance, budget food 200000, or report. For reminders, say remind me to call mom at 5 pm. For the plan, say add buy bread to my plan. For maths, say what is 25 times 4. For anything else, just ask and DOA will answer. Say close DOA to end.";
 
-/* PAGE NAVIGATION */
+/* ---------- HELPERS ---------- */
+const uid = () => crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const r2 = n => Math.round(n * 100) / 100;
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
+const monthKey = () => today().slice(0,7);
+const inMonth = t => t.date.startsWith(monthKey());
+const money = n => `${Number(n).toLocaleString(undefined,{maximumFractionDigits:2})} ${state.currency}`;
+const when = ts => new Date(ts).toLocaleString([], {weekday:"short", hour:"numeric", minute:"2-digit"});
+const stat = (label, value, cls="") => `<div class="stat"><small>${label}</small><strong class="${cls}">${esc(value)}</strong></div>`;
+const hasOwn = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
-const page1 = document.getElementById("page1");
-const page2 = document.getElementById("page2");
-
-/* OPEN THE SEPARATE PAGE 2 FILE */
-
-document.getElementById("goPage2").addEventListener("click", () => {
-  stopVoiceConversation();
-  window.location.href = "page2.html";
-});
-
-/* KEEP THE EMBEDDED BACK BUTTON FUNCTIONAL */
-
-document.getElementById("backPage1").addEventListener("click", () => {
-  page2.classList.add("hidden");
-  page1.classList.remove("hidden");
-});
-
-/* EXISTING CHAT STATE */
-
-let history = [];
-let busy = false;
-
-/* VOICE CONVERSATION */
-
-const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
-const speechSynthesis = window.speechSynthesis;
-
-let recognition = null;
-let voiceMode = false;
-let isRecording = false;
-let pendingTranscript = "";
-let restartTimer = null;
-
-function setMicRecording(recording) {
-  isRecording = recording;
-
-  micButton.classList.toggle("recording", recording);
-
-  micButton.textContent = recording
-    ? "■"
-    : (voiceMode ? "🔊" : "🎙");
-
-  micButton.title = !voiceMode
-    ? "Start voice conversation"
-    : recording
-      ? "Stop listening"
-      : "Stop voice conversation";
+function normalize(s){
+  return String(s).toLowerCase()
+    .replace(/×/g," times ").replace(/÷/g," divided by ")
+    .replace(/(\d),(\d)/g,"$1$2")
+    .replace(/[’']/g,"")
+    .replace(/[^a-z0-9.%+\-*\/\s]/g," ")
+    .replace(/\s+/g," ").trim();
+}
+function wordsToDigits(s){
+  const out = []; let total = 0, cur = 0, has = false;
+  const flush = () => { if (has) out.push(String(total + cur)); total = 0; cur = 0; has = false; };
+  for (const tok of s.split(" ")) {
+    if (hasOwn(NUM, tok)) { cur += NUM[tok]; has = true; }
+    else if (tok === "hundred" && has) { cur = (cur || 1) * 100; }
+    else if ((tok === "thousand" || tok === "million") && has) { total += (cur || 1) * (tok === "thousand" ? 1e3 : 1e6); cur = 0; }
+    else { flush(); out.push(tok); }
+  }
+  flush();
+  return out.join(" ");
+}
+function amountIn(t){
+  let best = null;
+  for (const m of t.matchAll(/(\d+(?:\.\d+)?)\s*(k|m|thousand|million)?\b/g)) {
+    const mult = {k:1e3, thousand:1e3, m:1e6, million:1e6}[m[2]] || 1;
+    const v = parseFloat(m[1]) * mult;
+    if (best === null || v > best) best = v;
+  }
+  return best === null ? null : r2(best);
+}
+function parseDue(t){
+  let m = t.match(/\bin (\d+) (minutes?|mins?|hours?)\b/);
+  if (m) {
+    const ms = /hour/.test(m[2]) ? +m[1] * 3600e3 : +m[1] * 60e3;
+    return {due: Date.now() + ms, rest: t.replace(m[0], " ")};
+  }
+  m = t.match(/\bat (\d{1,2})(?::(\d{2}))?\s*(am|pm)?\b/) || t.match(/\b(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/);
+  if (m) {
+    let h = +m[1]; const mi = +(m[2] || 0); const ap = m[3];
+    if (ap === "pm" && h < 12) h += 12;
+    if (ap === "am" && h === 12) h = 0;
+    if (h > 23 || mi > 59) return {due: null, rest: t};
+    const d = new Date(); d.setHours(h, mi, 0, 0);
+    if (/\btomorrow\b/.test(t)) d.setDate(d.getDate() + 1);
+    else if (d.getTime() <= Date.now()) d.setDate(d.getDate() + 1);
+    return {due: d.getTime(), rest: t.replace(m[0], " ")};
+  }
+  return {due: null, rest: t};
 }
 
-function clearRestartTimer() {
-  if (restartTimer !== null) {
-    clearTimeout(restartTimer);
-    restartTimer = null;
-  }
+/* ---------- SHARED STATE (text/JSON in localStorage) ---------- */
+function defaultState(){
+  return {currency:"UGX", transactions:[], budgets:{}, reminders:[], plan:[], calcHistory:[], lastResult:null};
+}
+function loadState(){
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "null");
+    if (s && typeof s === "object") return {...defaultState(), ...s};
+  } catch {}
+  const st = defaultState();
+  try {
+    const old = JSON.parse(localStorage.getItem("doa_transactions_v2") || localStorage.getItem("doa_transactions") || "[]");
+    if (Array.isArray(old)) st.transactions = old.filter(t => t && Number(t.amount) > 0).map(t => ({
+      id: String(t.id || uid()), type: t.type === "income" ? "income" : "expense", amount: Number(t.amount),
+      category: String(t.category || "Other"), desc: String(t.description || t.desc || ""),
+      date: /^\d{4}-\d{2}-\d{2}$/.test(t.date) ? t.date : today(), at: Number(t.createdAt) || Date.now()
+    }));
+    st.budgets = JSON.parse(localStorage.getItem("doa_budgets_v1") || "{}") || {};
+  } catch {}
+  try {
+    st.reminders = JSON.parse(localStorage.getItem("doa_reminders") || "[]").filter(x => x && x.text).map(x => ({
+      id: uid(), text: String(x.text), due: x.time ? Date.parse(x.time) || null : null, done: false, notified: false
+    }));
+  } catch {}
+  try {
+    st.plan = JSON.parse(localStorage.getItem("doa_plan") || "[]").filter(x => x && x.text).map(x => ({id: uid(), text: String(x.text), done: !!x.done}));
+  } catch {}
+  return st;
+}
+let state = loadState();
+function save(){
+  try { localStorage.setItem(KEY, JSON.stringify(state)); }
+  catch { toast("Storage is full or disabled."); }
+  render();
 }
 
-function scheduleListening(delay = 600) {
-  clearRestartTimer();
-
-  restartTimer = setTimeout(() => {
-    restartTimer = null;
-    startListening();
-  }, delay);
+/* ---------- MONEY CALCULATIONS ---------- */
+function monthTotals(){
+  let income = 0, expense = 0;
+  state.transactions.forEach(t => {
+    if (!inMonth(t)) return;
+    if (t.type === "income") income += t.amount; else expense += t.amount;
+  });
+  return {income: r2(income), expense: r2(expense), balance: r2(income - expense)};
+}
+function spentIn(cat){
+  return r2(state.transactions.filter(t => t.type === "expense" && t.category === cat && inMonth(t)).reduce((a, t) => a + t.amount, 0));
+}
+function summarySpeech(){
+  const m = monthTotals();
+  const cats = {};
+  state.transactions.forEach(t => { if (t.type === "expense" && inMonth(t)) cats[t.category] = (cats[t.category] || 0) + t.amount; });
+  const top = Object.entries(cats).sort((a, b) => b[1] - a[1])[0];
+  return `This month you earned ${money(m.income)} and spent ${money(m.expense)}, leaving ${money(m.balance)}.` +
+    (top ? ` Your biggest spending is ${top[0]} at ${money(top[1])}.` : "");
+}
+function reportText(){
+  const m = monthTotals();
+  const lines = [`DOA report for ${monthKey()}`, `Income: ${money(m.income)}`, `Expenses: ${money(m.expense)}`, `Balance: ${money(m.balance)}`, "", "Transactions:"];
+  state.transactions.filter(inMonth).sort((a, b) => a.at - b.at)
+    .forEach(t => lines.push(`${t.date}  ${t.type.padEnd(7)}  ${money(t.amount)}  ${t.category}  ${t.desc}`));
+  return lines.join("\n");
+}
+function download(name, text, type){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], {type}));
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
 }
 
-/* CHAT DISPLAY */
+/* ---------- SCREENS (all views read the same state) ---------- */
+let screen = sessionStorage.getItem("doa_screen") || "home";
+let navStack = [];
+let listening = false, speaking = false, busy = false, closed = false;
+let current = null, listenTimer = null, speakId = 0, errors = 0, confirmFn = null;
+let chat = [];
 
-function showConversation() {
-  welcomeEl.classList.add("hidden");
-  messagesEl.classList.remove("hidden");
+function go(name, {push = true} = {}){
+  if (!hasOwn(SCREENS, name)) return;
+  if (push && name !== screen) navStack.push(screen);
+  screen = name;
+  sessionStorage.setItem("doa_screen", name);
+  $("main").scrollTop = 0;
+  render();
 }
-
-function addMessage(role, text) {
-  showConversation();
-
-  const row = document.createElement("div");
-  row.className = "message " + role;
-
-  const avatar = document.createElement("div");
-  avatar.className = "avatar";
-  avatar.textContent = role === "user" ? "YOU" : "D";
-
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.textContent = text || "";
-
-  row.appendChild(avatar);
-  row.appendChild(bubble);
-
-  messagesEl.appendChild(row);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-
-  return bubble;
+function back(){
+  if (!navStack.length) { speak("You are already on the home screen."); return; }
+  go(navStack.pop(), {push: false});
+  speak(`Back to ${TITLES[screen].toLowerCase()}.`);
 }
-
-function setBusy(value) {
-  busy = value;
-  sendButton.disabled = value;
-  input.disabled = value;
-  sendButton.textContent = value ? "…" : "↑";
+function navTo(name){
+  go(name);
+  speak(`Opened ${TITLES[name].toLowerCase()}.`);
 }
-
-/* READ AI RESPONSE */
-
-function extractText(data) {
-  if (data == null) return "";
-
-  if (typeof data === "string") return data;
-
-  if (Array.isArray(data)) {
-    return data.map(extractText).join("");
-  }
-
-  if (typeof data !== "object") return "";
-
-  const fields = [
-    "reply",
-    "response",
-    "answer",
-    "text",
-    "output",
-    "delta",
-    "content"
-  ];
-
-  for (const field of fields) {
-    if (typeof data[field] === "string") {
-      return data[field];
-    }
-  }
-
-  if (data.candidates?.[0]?.content?.parts) {
-    return data.candidates[0].content.parts
-      .map(part => part.text || "")
-      .join("");
-  }
-
-  if (data.choices?.[0]?.delta?.content) {
-    return data.choices[0].delta.content;
-  }
-
-  if (data.choices?.[0]?.message?.content) {
-    return data.choices[0].message.content;
-  }
-
-  if (data.result) return extractText(data.result);
-  if (data.data) return extractText(data.data);
-
-  return "";
+function findScreen(name){
+  return Object.keys(SCREENS).find(k => SCREENS[k].includes(name));
 }
-
-async function readWorkerResponse(response, onUpdate) {
-  const contentType =
-    (response.headers.get("content-type") || "").toLowerCase();
-
-  if (
-    contentType.includes("application/json") ||
-    !response.body ||
-    !response.body.getReader
-  ) {
-    const raw = await response.text();
-    let data;
-
-    try {
-      data = JSON.parse(raw);
-    } catch {
-      throw new Error("The server returned an unreadable response.");
-    }
-
-    if (data.success === false || data.error) {
-      throw new Error(data.error || data.details || "AI server error.");
-    }
-
-    const answer = extractText(data);
-
-    if (!answer) {
-      throw new Error("The AI server returned an empty answer.");
-    }
-
-    onUpdate(answer);
-    return answer;
-  }
-
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-
-  let buffer = "";
-  let fullAnswer = "";
-  const isSSE = contentType.includes("text/event-stream");
-
-  function processEvent(event) {
-    const lines = event.split(/\r?\n/);
-
-    const dataLines = lines
-      .filter(line => line.startsWith("data:"))
-      .map(line => line.slice(5).trimStart());
-
-    if (!dataLines.length) return;
-
-    const dataText = dataLines.join("\n").trim();
-
-    if (!dataText || dataText === "[DONE]") return;
-
-    let chunk = "";
-
-    try {
-      const parsed = JSON.parse(dataText);
-
-      if (parsed.error) throw new Error(parsed.error);
-
-      chunk = extractText(parsed);
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        chunk = dataText;
-      } else {
-        throw error;
-      }
-    }
-
-    if (chunk) {
-      fullAnswer += chunk;
-      onUpdate(fullAnswer);
-    }
-  }
-
-  while (true) {
-    const result = await reader.read();
-
-    if (result.done) break;
-
-    buffer += decoder.decode(result.value, {stream:true});
-
-    if (isSSE) {
-      let boundary;
-
-      while ((boundary = buffer.search(/\r?\n\r?\n/)) !== -1) {
-        const event = buffer.slice(0, boundary);
-        const separator = buffer.match(/\r?\n\r?\n/)[0];
-
-        buffer = buffer.slice(boundary + separator.length);
-        processEvent(event);
-      }
-    } else {
-      const lines = buffer.split(/\r?\n/);
-      buffer = lines.pop() || "";
-
-      for (const line of lines) {
-        const trimmed = line.trim();
-
-        if (!trimmed) continue;
-
-        if (trimmed.startsWith("data:")) {
-          processEvent(trimmed);
-          continue;
-        }
-
-        try {
-          const parsed = JSON.parse(trimmed);
-
-          if (parsed.error) throw new Error(parsed.error);
-
-          const chunk = extractText(parsed);
-
-          if (chunk) {
-            fullAnswer += chunk;
-            onUpdate(fullAnswer);
-          }
-        } catch (error) {
-          if (!(error instanceof SyntaxError)) throw error;
-        }
-      }
-    }
-  }
-
-  buffer += decoder.decode();
-
-  if (buffer.trim()) {
-    if (buffer.trim().startsWith("data:")) {
-      processEvent(buffer);
-    } else {
-      try {
-        const parsed = JSON.parse(buffer.trim());
-
-        if (parsed.error) throw new Error(parsed.error);
-
-        const finalText = extractText(parsed);
-
-        if (finalText && !fullAnswer) {
-          fullAnswer = finalText;
-          onUpdate(fullAnswer);
-        }
-      } catch (error) {
-        if (!(error instanceof SyntaxError)) throw error;
-      }
-    }
-  }
-
-  if (!fullAnswer) {
-    throw new Error("The Worker stream ended without a readable answer.");
-  }
-
-  return fullAnswer;
-}
-
-/* DOA SPEAKS ITS ANSWER */
-
-function speakReply(text) {
-  if (!voiceMode) return;
-
-  if (!speechSynthesis) {
-    micStatus.textContent =
-      "Your browser does not support spoken replies.";
-
-    stopVoiceConversation();
-    return;
-  }
-
-  speechSynthesis.cancel();
-
-  const cleanText = text
-    .replace(/```[\s\S]*?```/g, "Code omitted.")
-    .replace(/https?:\/\/\S+/g, "link")
-    .trim();
-
-  const utterance = new SpeechSynthesisUtterance(cleanText);
-
-  utterance.rate = 1;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-
-  const voices = speechSynthesis.getVoices();
-
-  const preferredVoice = voices.find(voice =>
-    voice.lang && voice.lang.toLowerCase().startsWith("en")
-  );
-
-  if (preferredVoice) {
-    utterance.voice = preferredVoice;
-  }
-
-  utterance.onstart = () => {
-    if (voiceMode) {
-      micStatus.textContent =
-        "DOA is speaking. Tap the microphone to interrupt.";
-    }
-  };
-
-  utterance.onend = () => {
-    if (voiceMode) {
-      micStatus.textContent =
-        "DOA has finished. Listening again...";
-
-      scheduleListening(600);
-    }
-  };
-
-  utterance.onerror = () => {
-    if (voiceMode) {
-      micStatus.textContent =
-        "Voice reply stopped. Listening again...";
-
-      scheduleListening(800);
-    }
-  };
-
-  speechSynthesis.speak(utterance);
-}
-
-/* PAGE 2 COMMAND DETECTOR - TEXT AND VOICE */
-
-function detectGuestToolCommand(message) {
-  const text = message.toLowerCase()
-    .replace(/[^\w\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (
-    /\b(open guest tools|open page 2|show guest tools|go to page 2|open tools)\b/.test(text)
-  ) {
-    return "home";
-  }
-
-  if (
-    /\b(plan my day|help me plan my day|daily plan|my daily plan)\b/.test(text)
-  ) {
-    return "plan";
-  }
-
-  if (
-    /\b(reminders?|my reminders)\b/.test(text) &&
-    /\b(open|show|go to|take me to|launch|start|my reminders)\b/.test(text)
-  ) {
-    return "reminders";
-  }
-
-  if (
-    /\b(calculator|calculations)\b/.test(text) &&
-    /\b(open|show|go to|take me to|launch|start|my calculator|calculator)\b/.test(text)
-  ) {
-    return "calculator";
-  }
-
-  if (
-    /\b(expenditure|expenses?|spending)\b/.test(text) &&
-    /\b(open|show|go to|take me to|launch|start|my expenditure|my expenses|expenses|expenditure)\b/.test(text)
-  ) {
-    return "expenses";
-  }
-
-  if (
-    /\b(manage my money|help me manage my money|open my money|open money management)\b/.test(text)
-  ) {
-    return "home";
-  }
-
+function matchNav(t){
+  const verb = NAV_VERB.test(t);
+  const core = t.replace(NAV_VERB, "").replace(/^(my|the)\s+/, "").replace(/\s+(screen|page|section|tool|tab)$/, "");
+  const target = findScreen(core);
+  if (target && (verb || findScreen(t))) return target;
   return null;
 }
 
-/* DOA EXIT COMMAND DETECTOR */
+function render(){
+  const m = monthTotals();
+  document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.dataset.screen === screen));
+  $("title").textContent = TITLES[screen];
+  $("backBtn").hidden = !navStack.length;
 
-function detectExitCommand(message) {
-  const text = message.toLowerCase()
-    .replace(/[^\w\s']/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  $("homeStats").innerHTML =
+    stat("Income", money(m.income), "good") +
+    stat("Spent", money(m.expense), "bad") +
+    stat("Balance", money(m.balance), m.balance < 0 ? "bad" : "good");
+  const pendingR = state.reminders.filter(r => !r.done).sort((a, b) => (a.due || 9e15) - (b.due || 9e15));
+  const planLeft = state.plan.filter(p => !p.done).length;
+  $("homeNext").innerHTML = `<h2>Overview</h2>` +
+    (pendingR.length ? `<p class="muted">Next reminder: <b>${esc(pendingR[0].text)}</b>${pendingR[0].due ? " · " + esc(when(pendingR[0].due)) : ""}</p>` : `<p class="muted">No reminders pending.</p>`) +
+    `<p class="muted">${planLeft} plan item${planLeft === 1 ? "" : "s"} left today.</p>`;
 
-  const exitCommands = [
-    "close doa",
-    "exit doa",
-    "quit doa",
-    "goodbye doa",
-    "stop doa",
-    "i am done",
-    "i'm done",
-    "im done",
-    "i am finished",
-    "i'm finished",
-    "im finished",
-    "close the app",
-    "exit the app",
-    "end conversation",
-    "end my conversation",
-    "that's all doa",
-    "thats all doa"
-  ];
+  $("moneyStats").innerHTML =
+    stat("Income", money(m.income), "good") + stat("Spent", money(m.expense), "bad") + stat("Balance", money(m.balance), m.balance < 0 ? "bad" : "good");
+  const budgetRows = EXP.filter(c => state.budgets[c]).map(c => {
+    const s = spentIn(c), lim = state.budgets[c];
+    const p = Math.min(100, s / lim * 100);
+    const cls = s >= lim ? "over" : p >= 80 ? "warn" : "";
+    return `<div style="margin-bottom:12px"><div class="row2"><span>${esc(c)}</span><span>${esc(money(s))} / ${esc(money(lim))}</span></div><div class="bar"><div class="${cls}" style="width:${p.toFixed(0)}%"></div></div></div>`;
+  }).join("");
+  $("budgets").innerHTML = budgetRows || `<p class="empty">No budgets yet. Say "budget food 200000".</p>`;
+  const recent = [...state.transactions].sort((a, b) => b.at - a.at).slice(0, 20);
+  $("txList").innerHTML = recent.length
+    ? `<ul class="list">` + recent.map(t => `<li><span><small class="muted">${esc(t.date)}</small><br>${esc(t.category)}${t.desc ? " · " + esc(t.desc) : ""}</span><span class="${t.type === "income" ? "good" : "bad"}">${t.type === "income" ? "+" : "−"}${esc(money(t.amount))}</span></li>`).join("") + `</ul>`
+    : `<p class="empty">No transactions yet. Say "spent 8000 on lunch".</p>`;
 
-  return exitCommands.includes(text);
+  const pend = state.reminders.filter(r => !r.done);
+  $("remList").innerHTML = pend.length
+    ? `<ul class="list">` + pend.map((r, i) => `<li><span>${i + 1}. ${esc(r.text)}</span><small class="muted">${r.due ? esc(when(r.due)) : "No time"}</small></li>`).join("") + `</ul>`
+    : `<p class="empty">No reminders. Say "remind me to call mom at 5 pm".</p>`;
+
+  $("planList").innerHTML = state.plan.length
+    ? `<ul class="list">` + state.plan.map((p, i) => `<li class="${p.done ? "done" : ""}"><span>${i + 1}. ${esc(p.text)}</span><small class="muted">${p.done ? "Done" : "To do"}</small></li>`).join("") + `</ul>`
+    : `<p class="empty">Your plan is empty. Say "add buy bread to my plan".</p>`;
+
+  $("calcLast").innerHTML = state.lastResult
+    ? `<div class="big">${esc(Number(state.lastResult.result).toLocaleString())}</div><p class="muted">${esc(state.lastResult.expr)}</p>`
+    : `<p class="empty">Say "what is 25 times 4".</p>`;
+  $("calcHist").innerHTML = state.calcHistory.length
+    ? `<ul class="list">` + state.calcHistory.map(c => `<li><span>${esc(c.expr)}</span><span>${esc(Number(c.result).toLocaleString())}</span></li>`).join("") + `</ul>`
+    : `<p class="empty">No calculations yet.</p>`;
+
+  $("chat").innerHTML = chat.length
+    ? chat.map(x => `<div class="bubble ${x.role === "user" ? "user" : "bot"}">${esc(x.text)}</div>`).join("")
+    : `<p class="empty">Ask anything, for example "how can I save more money?"</p>`;
+  $("chat").scrollTop = $("chat").scrollHeight;
 }
 
-/* CLOSE DOA */
-
-function exitDOA() {
-  stopVoiceConversation();
-
-  if (speechSynthesis) {
-    speechSynthesis.cancel();
-  }
-
-  history = [];
-  busy = false;
-
-  /* Try to close the browser tab */
-  window.close();
-
-  /* Fallback if Android/browser blocks closing the tab */
-  document.body.innerHTML = `
-    <div style="
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:25px;
-      background:#071426;
-      color:#edf6ff;
-      font-family:Arial,sans-serif;
-    ">
-      <div>
-        <div style="font-size:55px;margin-bottom:20px;">👋</div>
-        <h1>DOA is closed</h1>
-        <p style="color:#91a9c2;line-height:1.7;">
-          Your conversation has ended.<br>
-          Thank you for using DOA 3.0.
-        </p>
-        <p style="color:#91a9c2;font-size:13px;">
-          You can now close this browser tab.
-        </p>
-      </div>
-    </div>
-  `;
+/* ---------- VOICE OUTPUT ---------- */
+function setMicState(){
+  const mic = $("mic");
+  mic.classList.toggle("listening", listening && !!current && !speaking);
+  mic.classList.toggle("speaking", speaking);
+  mic.textContent = speaking ? "🔊" : "🎙";
+  const label = !listening ? "Paused" : speaking ? "Speaking" : busy ? "Thinking" : current ? "Listening" : "Standby";
+  $("pill").textContent = label;
+  $("pill").classList.toggle("on", listening);
 }
-
-/* SEND MESSAGE TO EXISTING WORKER */
-
-async function sendMessage(message) {
-  if (!message) return;
-
-  /* CHECK EXIT COMMAND BEFORE ANY OTHER COMMAND */
-
-  if (detectExitCommand(message)) {
-    exitDOA();
+function speak(text){
+  text = String(text || "").trim();
+  $("reply").textContent = text;
+  stopRec();
+  if (!text || !synth) {
+    speaking = false; setMicState();
+    if (listening) scheduleListen(350);
     return;
   }
-
-  /* CHECK FOR GUEST TOOL COMMANDS BEFORE SENDING TO AI */
-
-  const requestedTool = detectGuestToolCommand(message);
-
-  if (requestedTool !== null) {
-    stopVoiceConversation();
-
-    const destination = requestedTool === "home"
-      ? "page2.html"
-      : "page2.html?tool=" + encodeURIComponent(requestedTool);
-
-    window.location.href = destination;
-    return;
-  }
-
-  if (busy) return;
-
-  addMessage("user", message);
-
-  const previousHistory = history.slice();
-
-  history.push({
-    role:"user",
-    text:message
-  });
-
-  input.value = "";
-  resizeInput();
-  setBusy(true);
-
-  if (voiceMode) {
-    micStatus.textContent = "DOA is thinking...";
-  }
-
-  const answerBubble = addMessage(
-    "assistant",
-    "DOA is thinking..."
-  );
-
-  let successfulAnswer = "";
-
-  try {
-    const response = await fetch(WORKER_URL, {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "Accept":"application/json, text/event-stream"
-      },
-      body:JSON.stringify({
-        message:message,
-        prompt:message,
-        history:previousHistory,
-        messages:previousHistory
-      })
-    });
-
-    if (!response.ok) {
-      const raw = await response.text();
-      let detail = raw;
-
-      try {
-        const data = JSON.parse(raw);
-
-        detail =
-          data.error ||
-          data.details ||
-          data.message ||
-          raw;
-      } catch {}
-
-      throw new Error(detail || "Worker error: " + response.status);
-    }
-
-    answerBubble.textContent = "";
-
-    successfulAnswer = await readWorkerResponse(
-      response,
-      text => {
-        answerBubble.textContent = text;
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-      }
-    );
-
-    answerBubble.textContent = successfulAnswer;
-
-    history.push({
-      role:"assistant",
-      text:successfulAnswer
-    });
-
-  } catch (error) {
-    answerBubble.classList.add("error");
-
-    answerBubble.textContent =
-      "I'm having trouble connecting right now. " +
-      (error.message || "Please try again.");
-
-    history = previousHistory;
-  }
-
-  setBusy(false);
-  messagesEl.scrollTop = messagesEl.scrollHeight;
-
-  if (successfulAnswer && voiceMode) {
-    speakReply(successfulAnswer);
-  } else if (voiceMode) {
-    micStatus.textContent =
-      "I couldn't get a reply. Listening again...";
-
-    scheduleListening(1000);
-  } else {
-    input.focus();
-  }
-}
-
-/* START LISTENING */
-
-function startListening() {
-  if (!voiceMode || busy || isRecording) return;
-
-  if (!SpeechRecognition) {
-    micStatus.textContent =
-      "Voice recognition is not supported. Try Chrome on Android.";
-
-    stopVoiceConversation();
-    return;
-  }
-
-  if (speechSynthesis && speechSynthesis.speaking) return;
-
-  try {
-    pendingTranscript = "";
-
-    recognition = new SpeechRecognition();
-
-    recognition.lang = "en-US";
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-      if (!voiceMode) return;
-
-      setMicRecording(true);
-      micStatus.textContent = "Listening... Talk to DOA.";
-    };
-
-    recognition.onresult = event => {
-      let interim = "";
-
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const result = event.results[i];
-        const transcript = result[0].transcript;
-
-        if (result.isFinal) {
-          pendingTranscript += transcript + " ";
-        } else {
-          interim += transcript;
-        }
-      }
-
-      if (interim) {
-        micStatus.textContent = "Hearing: " + interim;
-      }
-    };
-
-    recognition.onerror = event => {
-      if (!voiceMode) return;
-
-      if (event.error === "no-speech") {
-        micStatus.textContent =
-          "I didn't hear anything. Listening again...";
-        return;
-      }
-
-      let message = "Microphone error. Please try again.";
-
-      if (
-        event.error === "not-allowed" ||
-        event.error === "service-not-allowed"
-      ) {
-        message =
-          "Please allow microphone access in your browser.";
-      } else if (event.error === "network") {
-        message =
-          "Speech recognition needs an internet connection.";
-      } else if (event.error === "audio-capture") {
-        message = "No microphone was detected.";
-      }
-
-      micStatus.textContent = message;
-      stopVoiceConversation();
-    };
-
-    recognition.onend = () => {
-      setMicRecording(false);
-      recognition = null;
-
-      if (!voiceMode) return;
-
-      const spokenMessage = pendingTranscript.trim();
-      pendingTranscript = "";
-
-      if (spokenMessage) {
-        sendMessage(spokenMessage);
-      } else {
-        scheduleListening(700);
-      }
-    };
-
-    recognition.start();
-
-  } catch (error) {
-    micStatus.textContent =
-      "Could not start listening. Please try again.";
-
-    stopVoiceConversation();
-  }
-}
-
-/* STOP VOICE CONVERSATION */
-
-function stopVoiceConversation() {
-  voiceMode = false;
-
-  clearRestartTimer();
-
-  if (recognition) {
-    const oldRecognition = recognition;
-    recognition = null;
-
-    try {
-      oldRecognition.stop();
-    } catch {}
-  }
-
-  if (speechSynthesis) {
-    speechSynthesis.cancel();
-  }
-
-  pendingTranscript = "";
-  setMicRecording(false);
-
-  micStatus.textContent =
-    "Voice conversation stopped. Tap the microphone to start again.";
-}
-
-/* MICROPHONE BUTTON */
-
-micButton.addEventListener("click", () => {
-
-  if (!voiceMode) {
-    if (!SpeechRecognition) {
-      micStatus.textContent =
-        "Try Chrome on Android for voice conversation.";
-      return;
-    }
-
-    if (!speechSynthesis) {
-      micStatus.textContent =
-        "Your browser does not support spoken replies.";
-      return;
-    }
-
-    voiceMode = true;
-    micStatus.textContent = "Starting voice conversation...";
-    startListening();
-    return;
-  }
-
-  if (speechSynthesis && speechSynthesis.speaking) {
-    speechSynthesis.cancel();
-
-    micStatus.textContent =
-      "DOA interrupted. Listening to you...";
-
-    scheduleListening(400);
-    return;
-  }
-
-  if (isRecording) {
-    stopVoiceConversation();
-    return;
-  }
-
-  if (busy) {
-    stopVoiceConversation();
-    return;
-  }
-
-  startListening();
-});
-
-/* INPUT AND NEW CHAT */
-
-function resizeInput() {
-  input.style.height = "auto";
-
-  input.style.height =
-    Math.min(input.scrollHeight, 150) + "px";
-}
-
-form.addEventListener("submit", event => {
-  event.preventDefault();
-
-  const message = input.value.trim();
-
-  if (!message || busy) return;
-
-  if (isRecording && recognition) {
-    const oldRecognition = recognition;
-    recognition = null;
-
-    try {
-      oldRecognition.stop();
-    } catch {}
-
-    setMicRecording(false);
-  }
-
-  sendMessage(message);
-});
-
-input.addEventListener("input", resizeInput);
-
-input.addEventListener("keydown", event => {
-  if (event.key === "Enter" && !event.shiftKey) {
-    event.preventDefault();
-    form.requestSubmit();
-  }
-});
-
-document.querySelectorAll("#page1 .suggestion").forEach(button => {
-  button.addEventListener("click", () => {
-    sendMessage(button.dataset.prompt || "");
-  });
-});
-
-newChatButton.addEventListener("click", () => {
-  stopVoiceConversation();
-
-  history = [];
-
-  messagesEl.replaceChildren();
-  messagesEl.classList.add("hidden");
-
-  welcomeEl.classList.remove("hidden");
-
-  input.value = "";
-  resizeInput();
-
-  micStatus.textContent =
-    "Tap the microphone to start a voice conversation.";
-});
-
-/* HTTPS IS REQUIRED FOR MICROPHONE ACCESS */
-
-if (!window.isSecureContext) {
-  micStatus.textContent =
-    "Microphone access requires a secure HTTPS website.";
-}
-
-/* EXISTING EMBEDDED GUEST TOOL CODE RETAINED */
-
-(() => {
-
-  const storage = {
-
-    get(key) {
-      try {
-        return JSON.parse(
-          localStorage.getItem("doa_" + key) || "[]"
-        );
-      } catch {
-        return [];
-      }
-    },
-
-    save(key, value) {
-      localStorage.setItem(
-        "doa_" + key,
-        JSON.stringify(value)
-      );
-    }
-
+  synth.cancel();
+  const id = ++speakId;
+  speaking = true; setMicState();
+  const clean = text.replace(/`{3}[\s\S]*?`{3}/g, " code omitted ")
+    .replace(/https?:\/\/\S+/g, "link").replace(/[*_#`>]/g, "").replace(/\s+/g, " ");
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = "en-US"; u.rate = 1;
+  const v = synth.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith("en"));
+  if (v) u.voice = v;
+  const done = () => {
+    if (id !== speakId) return;
+    speaking = false; setMicState();
+    if (listening) scheduleListen(350);
   };
+  u.onend = done; u.onerror = done;
+  synth.speak(u);
+}
 
-  const overlay = document.getElementById("guestOverlay");
-  const content = document.getElementById("guestContent");
-  const title = document.getElementById("guestTitle");
-
-  function openTool(name) {
-    overlay.style.display = "flex";
-
-    if (name === "reminders") showReminders();
-    if (name === "plan") showPlan();
-    if (name === "expenses") showExpenses();
-    if (name === "calculator") showCalculator();
-  }
-
-  function closeTool() {
-    overlay.style.display = "none";
-  }
-
-  document.getElementById("guestClose")
-    .addEventListener("click", closeTool);
-
-  overlay.addEventListener("click", event => {
-    if (event.target === overlay) closeTool();
-  });
-
-  function safe(value) {
-    const div = document.createElement("div");
-    div.textContent = String(value);
-    return div.innerHTML;
-  }
-
-  function showReminders() {
-    title.textContent = "My Reminders";
-
-    content.innerHTML = `
-      <p>Create a reminder on this device.</p>
-      <input id="reminderText" placeholder="What should you remember?">
-      <input id="reminderTime" type="datetime-local">
-      <button class="primary" id="addReminder">Add Reminder</button>
-      <div id="reminderList"></div>
-    `;
-
-    function render() {
-      const list = content.querySelector("#reminderList");
-      const current = storage.get("reminders");
-
-      list.innerHTML = current.length
-        ? current.map((item, i) => `
-          <div class="guest-item">
-            <strong>${safe(item.text)}</strong>
-            <p>${safe(item.time || "No date selected")}</p>
-            <button data-delete="${i}">Delete</button>
-          </div>
-        `).join("")
-        : "<p>No reminders yet.</p>";
+/* ---------- VOICE INPUT ---------- */
+function startRec(){
+  if (!SR || current || !listening || speaking || busy) return;
+  const r = new SR();
+  r.lang = "en-US"; r.continuous = false; r.interimResults = true; r.maxAlternatives = 1;
+  let finalText = "";
+  r.onstart = () => { errors = 0; setMicState(); };
+  r.onresult = e => {
+    if (speaking) return;
+    errors = 0;
+    let interim = "";
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      const x = e.results[i];
+      if (x.isFinal) finalText += x[0].transcript + " ";
+      else interim += x[0].transcript;
     }
-
-    content.querySelector("#addReminder").onclick = () => {
-      const text = content.querySelector("#reminderText").value.trim();
-      const time = content.querySelector("#reminderTime").value;
-
-      if (!text) return alert("Enter a reminder.");
-
-      const current = storage.get("reminders");
-      current.push({text, time});
-      storage.save("reminders", current);
-
-      render();
-      content.querySelector("#reminderText").value = "";
-      content.querySelector("#reminderTime").value = "";
+    const live = (finalText + interim).trim();
+    if (live) $("heard").textContent = "Hearing: " + live;
+  };
+  r.onerror = e => {
+    const msgs = {
+      "not-allowed": "Microphone is blocked. Allow it in your browser settings.",
+      "service-not-allowed": "Speech service is blocked in this browser.",
+      "audio-capture": "No microphone was found."
     };
-
-    content.querySelector("#reminderList").onclick = event => {
-      if (event.target.dataset.delete === undefined) return;
-
-      const current = storage.get("reminders");
-      current.splice(Number(event.target.dataset.delete), 1);
-      storage.save("reminders", current);
-      render();
-    };
-
-    render();
-  }
-
-  function showPlan() {
-    title.textContent = "Plan My Day";
-
-    content.innerHTML = `
-      <p>Organise what you want to do today.</p>
-      <input id="planTask" placeholder="Add an activity">
-      <button class="primary" id="addPlan">Add Activity</button>
-      <div id="planList"></div>
-    `;
-
-    function render() {
-      const items = storage.get("plan");
-
-      content.querySelector("#planList").innerHTML =
-        items.length
-          ? items.map((item, i) => `
-            <div class="guest-item">
-              <label>
-                <input type="checkbox" data-done="${i}"
-                  ${item.done ? "checked" : ""}
-                  style="width:auto">
-                ${safe(item.text)}
-              </label>
-              <button data-delete="${i}">Delete</button>
-            </div>
-          `).join("")
-          : "<p>Your daily plan is empty.</p>";
+    if (msgs[e.error]) { pauseListening(msgs[e.error]); return; }
+    if (e.error === "network" && ++errors >= 3) pauseListening("Speech needs an internet connection. Tap the mic to try again.");
+  };
+  r.onend = () => {
+    if (current === r) current = null;
+    setMicState();
+    const text = finalText.trim();
+    if (text) {
+      handle(text);
+      if (listening) scheduleListen(1500); // safety restart if the command did not speak
+      return;
     }
+    if (listening && !speaking && !busy) scheduleListen(400);
+  };
+  current = r;
+  try { r.start(); } catch { current = null; }
+}
+function scheduleListen(ms = 300){
+  clearTimeout(listenTimer);
+  listenTimer = setTimeout(() => {
+    if (listening && !speaking && !busy && !current) startRec();
+  }, ms);
+}
+function stopRec(){
+  const r = current;
+  current = null;
+  if (r) { try { r.abort(); } catch {} }
+}
+function pauseListening(msg){
+  listening = false;
+  clearTimeout(listenTimer);
+  stopRec();
+  speak(msg || "Paused. Tap the mic to talk again.");
+}
 
-    content.querySelector("#addPlan").onclick = () => {
-      const taskInput = content.querySelector("#planTask");
+/* ---------- COMMAND ROUTER ---------- */
+function handle(raw){
+  const t = wordsToDigits(normalize(raw));
+  if (!t) return;
+  $("heard").textContent = "You said: " + raw;
 
-      if (!taskInput.value.trim()) return;
-
-      const items = storage.get("plan");
-      items.push({text:taskInput.value.trim(), done:false});
-      storage.save("plan", items);
-
-      taskInput.value = "";
-      render();
-    };
-
-    content.querySelector("#planList").onclick = event => {
-      const items = storage.get("plan");
-
-      if (event.target.dataset.delete !== undefined) {
-        items.splice(Number(event.target.dataset.delete), 1);
-      } else if (event.target.dataset.done !== undefined) {
-        const index = Number(event.target.dataset.done);
-        items[index].done = event.target.checked;
-      } else {
-        return;
-      }
-
-      storage.save("plan", items);
-      render();
-    };
-
-    render();
+  if (confirmFn) {
+    const fn = confirmFn; confirmFn = null;
+    if (/^(yes|yeah|yep|confirm|do it|sure|ok|okay)$/.test(t)) { fn(); return; }
+    if (/^(no|nope|cancel|never mind)$/.test(t)) { speak("Cancelled."); return; }
   }
+  if (/^(close|exit|quit|stop|goodbye|bye) doa$|^(close|exit) the app$|^(im done|i am done|im finished|i am finished|thats all doa|that is all doa|end conversation|goodbye)$/.test(t)) return exitDOA();
+  if (/^(stop listening|pause listening|go to sleep|sleep|turn off the mic)$/.test(t)) return pauseListening("Okay, I stopped listening. Tap the mic when you need me.");
+  if (/^(be quiet|stop talking|stop speaking|silence)$/.test(t)) { if (synth) synth.cancel(); speaking = false; setMicState(); return; }
+  if (/^(help|what can i say|commands|what can you do)$/.test(t)) return speak(HELP);
+  if (/what time is it|current time|tell me the time/.test(t)) return speak(`It is ${new Date().toLocaleTimeString([], {hour:"numeric", minute:"2-digit"})}.`);
+  if (/what day is it|what is the date|what date is it|todays date/.test(t)) return speak(`Today is ${new Date().toLocaleDateString(undefined, {weekday:"long", year:"numeric", month:"long", day:"numeric"})}.`);
+  if (/^(go back|back|previous)$/.test(t)) return back();
+  const nav = matchNav(t);
+  if (nav) return navTo(nav);
+  if (tryCalc(t)) return;
+  if (/\bremind/.test(t) && handleReminders(t)) return;
+  if (/\bplan\b/.test(t) && handlePlan(t)) return;
+  if (handleMoney(t)) return;
+  askAI(raw);
+}
 
-  function showExpenses() {
-    title.textContent = "Daily Expense Calculator";
-
-    content.innerHTML = `
-      <p>Calculate today's expenses without saving them to your financial account.</p>
-      <input id="expenseName" placeholder="Expense description">
-      <input id="expenseAmount" type="number" min="1" step="1" placeholder="Amount in UGX">
-      <button class="primary" id="addExpense">Add Expense</button>
-      <div id="expenseList"></div>
-      <p>Total: <span class="guest-total" id="expenseTotal">UGX 0</span></p>
-      <button id="clearExpenses">Clear Today's List</button>
-    `;
-
-    let expenses = [];
-
-    function render() {
-      const total = expenses.reduce(
-        (sum, item) => sum + item.amount, 0
-      );
-
-      content.querySelector("#expenseTotal").textContent =
-        "UGX " + total.toLocaleString();
-
-      content.querySelector("#expenseList").innerHTML =
-        expenses.map((item, i) => `
-          <div class="guest-item">
-            ${safe(item.name)} — UGX ${item.amount.toLocaleString()}
-            <button data-delete="${i}">Remove</button>
-          </div>
-        `).join("");
+/* ---------- MONEY ---------- */
+function handleMoney(t){
+  if (/\bbalance\b/.test(t)) {
+    const m = monthTotals();
+    speak(`Your balance this month is ${money(m.balance)}. You earned ${money(m.income)} and spent ${money(m.expense)}.`);
+    return true;
+  }
+  if (/\b(report|summary)\b/.test(t)) { speak(summarySpeech()); return true; }
+  if (/\b(total income|how much (did i|have i) (earn|earned|receive|received))\b/.test(t)) {
+    speak(`You have received ${money(monthTotals().income)} this month.`); return true;
+  }
+  if (/\b(total expenses?|total spending|how much (did i|have i) spen[dt]|my spending)\b/.test(t)) {
+    speak(`You have spent ${money(monthTotals().expense)} this month.`); return true;
+  }
+  if (/\bbudgets?\b/.test(t)) {
+    const cat = EXP.find(c => t.includes(c.toLowerCase()));
+    const amt = amountIn(t);
+    if (/\b(show|read|what|list|my)\b/.test(t) && amt === null) {
+      const rows = EXP.filter(c => state.budgets[c]).map(c => `${c}, ${money(spentIn(c))} of ${money(state.budgets[c])}`);
+      speak(rows.length ? "Budgets this month. " + rows.join(". ") : "You have no budgets yet.");
+      return true;
     }
-
-    content.querySelector("#addExpense").onclick = () => {
-      const name = content.querySelector("#expenseName").value.trim();
-      const amount = Number(content.querySelector("#expenseAmount").value);
-
-      if (!name || !Number.isSafeInteger(amount) || amount <= 0) {
-        return alert("Enter a description and a valid whole-number amount.");
-      }
-
-      expenses.push({name, amount});
-
-      content.querySelector("#expenseName").value = "";
-      content.querySelector("#expenseAmount").value = "";
-
-      render();
-    };
-
-    content.querySelector("#expenseList").onclick = event => {
-      if (event.target.dataset.delete === undefined) return;
-
-      expenses.splice(Number(event.target.dataset.delete), 1);
-      render();
-    };
-
-    content.querySelector("#clearExpenses").onclick = () => {
-      if (!confirm("Clear today's expense list?")) return;
-
-      expenses = [];
-      render();
-    };
-
-    render();
+    if (!cat) { speak("Which category? For example, say budget food 200,000."); return true; }
+    if (/\b(remove|delete|clear|cancel)\b/.test(t)) {
+      delete state.budgets[cat]; save(); speak(`Budget for ${cat} removed.`); return true;
+    }
+    if (amt === null) { speak(`What amount should the ${cat} budget be?`); return true; }
+    state.budgets[cat] = amt; save();
+    speak(`Monthly budget for ${cat} set to ${money(amt)}.`);
+    return true;
+  }
+  const cur = t.match(/\bcurrency\b.*\b([a-z]{3})\b/);
+  if (cur && CURRENCIES.includes(cur[1].toUpperCase())) {
+    state.currency = cur[1].toUpperCase(); save();
+    speak(`Currency changed to ${state.currency}.`);
+    return true;
+  }
+  if (/\b(delete|remove|undo)\b.*\blast\b/.test(t)) {
+    if (!state.transactions.length) { speak("There is nothing to remove."); return true; }
+    const last = [...state.transactions].sort((a, b) => b.at - a.at)[0];
+    state.transactions = state.transactions.filter(x => x.id !== last.id);
+    save();
+    speak(`Removed the last entry, ${last.type} of ${money(last.amount)}.`);
+    return true;
+  }
+  if (/\b(erase|wipe|delete)\b.*\b(all|everything)\b/.test(t)) {
+    confirmFn = () => { state = defaultState(); save(); go("home", {push: false}); speak("All DOA data has been erased."); };
+    speak("This erases all money, reminders and plan items. Say yes to confirm or no to cancel.");
+    return true;
+  }
+  if (/\b(backup|back up|export)\b/.test(t)) {
+    if (/\b(text|report|txt)\b/.test(t)) {
+      download(`DOA-report-${today()}.txt`, reportText(), "text/plain");
+      speak("Your report text file is downloaded.");
+    } else {
+      download(`DOA-backup-${today()}.json`, JSON.stringify(state, null, 2), "application/json");
+      speak("Your backup file is downloaded.");
+    }
+    return true;
+  }
+  if (/\brestore\b/.test(t)) {
+    speak("To restore, tap the Restore button on the home screen and choose your backup file.");
+    return true;
   }
 
-  function showCalculator() {
-    title.textContent = "Calculator";
+  const amt = amountIn(t);
+  if (amt === null) return false;
+  const inc = /\b(received|receive|earned|got paid|income|salary|sold|sale|deposit|got)\b/.test(t);
+  const exp = /\b(spent|spend|expense|bought|paid|cost|pay|buy)\b/.test(t);
+  const addWord = /^(add|record|log|save|enter)\b/.test(t);
+  const type = inc && !exp ? "income" : "expense";
+  const list = type === "income" ? INC : EXP;
+  const cat = list.find(c => KW[c].some(w => new RegExp("\\b" + w + "\\b").test(t))) || null;
+  if (!(inc || exp || addWord || cat)) return false;
 
-    content.innerHTML = `
-      <p>Calculate everyday amounts.</p>
-      <input id="calcFirst" type="number" placeholder="First number">
-      <select id="calcOperator">
-        <option value="+">Addition (+)</option>
-        <option value="-">Subtraction (-)</option>
-        <option value="*">Multiplication (×)</option>
-        <option value="/">Division (÷)</option>
-      </select>
-      <input id="calcSecond" type="number" placeholder="Second number">
-      <button class="primary" id="calculate">Calculate</button>
-      <p class="guest-total" id="calcResult">Result: —</p>
-    `;
-
-    content.querySelector("#calculate").onclick = () => {
-      const firstInput = content.querySelector("#calcFirst");
-      const secondInput = content.querySelector("#calcSecond");
-
-      const a = Number(firstInput.value);
-      const b = Number(secondInput.value);
-      const op = content.querySelector("#calcOperator").value;
-
-      if (
-        firstInput.value === "" ||
-        secondInput.value === "" ||
-        !Number.isFinite(a) ||
-        !Number.isFinite(b)
-      ) {
-        return alert("Enter two valid numbers.");
-      }
-
-      if (op === "/" && b === 0) {
-        return alert("You cannot divide by zero.");
-      }
-
-      let result;
-
-      if (op === "+") result = a + b;
-      if (op === "-") result = a - b;
-      if (op === "*") result = a * b;
-      if (op === "/") result = a / b;
-
-      content.querySelector("#calcResult").textContent =
-        "Result: " + result.toLocaleString();
-    };
+  const desc = t.replace(/\d+(?:\.\d+)?\s*(k|m|thousand|million)?\b/g, " ")
+    .replace(/\b(spent|spend|received|receive|earned|got paid|got|add|record|log|save|enter|on|for|expense|income|i|a|an|the|paid|bought|cost|today|of|some|my|to|at|from|in|pay|buy|sold|sale)\b/g, " ")
+    .replace(/\s+/g, " ").trim();
+  const tx = {id: uid(), type, amount: amt, category: cat || "Other", desc: cap(desc).slice(0, 60), date: today(), at: Date.now()};
+  state.transactions.push(tx);
+  save();
+  let msg = `${type === "income" ? "Income" : "Expense"} of ${money(amt)} saved under ${tx.category}.`;
+  const lim = state.budgets[tx.category];
+  if (type === "expense" && lim) {
+    const s = spentIn(tx.category);
+    msg += s > lim
+      ? ` Warning: you are over your ${tx.category} budget by ${money(s - lim)}.`
+      : ` ${money(lim - s)} left in your ${tx.category} budget.`;
   }
+  speak(msg);
+  return true;
+}
 
-  document.querySelectorAll("[data-tool]").forEach(button => {
-    button.addEventListener("click", () => {
-      openTool(button.dataset.tool);
-    });
-  });
+/* ---------- REMINDERS ---------- */
+function handleReminders(t){
+  const pend = state.reminders.filter(r => !r.done);
+  const findReminder = () => {
+    const n = t.match(/\b(\d+)\b/);
+    if (n) return pend[+n[1] - 1];
+    return pend.find(r => t.includes(normalize(r.text)));
+  };
+  if (/\b(read|list|what are|whats|tell me|what)\b/.test(t) && /\breminders?\b/.test(t)) {
+    speak(pend.length
+      ? `You have ${pend.length} reminders. ` + pend.map((r, i) => `Number ${i + 1}, ${r.text}${r.due ? ", " + when(r.due) : ""}`).join(". ")
+      : "You have no reminders.");
+    return true;
+  }
+  if (/\b(delete|remove|cancel|clear)\b/.test(t)) {
+    const r = findReminder();
+    if (!r) { speak("I could not find that reminder. Say read my reminders first."); return true; }
+    state.reminders = state.reminders.filter(x => x.id !== r.id);
+    save();
+    speak(`Deleted reminder: ${r.text}.`);
+    return true;
+  }
+  if (/\b(done|complete|completed|finish|finished|mark)\b/.test(t)) {
+    const r = findReminder();
+    if (!r) { speak("I could not find that reminder."); return true; }
+    r.done = true; save();
+    speak(`Marked as done: ${r.text}.`);
+    return true;
+  }
+  if (!/^(please )?(remind|add|set|create|new)\b/.test(t)) return false;
+  const body = t.replace(/^(please )?(add a reminder|add reminder|set a reminder|set reminder|create a reminder|remind me|remind)\s*/, "");
+  const {due, rest} = parseDue(body);
+  const text = cap(rest.replace(/\btomorrow\b/g, " ").replace(/^to\s+/, "").replace(/\s+/g, " ").trim());
+  if (!text) { speak("What should I remind you about?"); return true; }
+  state.reminders.push({id: uid(), text, due, done: false, notified: false});
+  save();
+  speak(`Reminder set: ${text}${due ? ", for " + when(due) : ""}.`);
+  return true;
+}
 
-})();
-</script>
-
-</body>
-</html>
+/* ---------- DAILY PLAN ---------- */
+function handlePlan(t){
+  const add = t.match(/^(?:please )?(?:add|put|schedule)\s+(?:to\s+)?(?:my\s+|the\s+)?(?:daily\s+)?plan\s+(.+)$/)
+    || t.match(/^(?:please )?(?:add|put|schedule)\s+(.+?)\s+(?:to|in|on)\s+(?:my\s+|the\s+)?(?:daily\s+)?plan$/);
+  if (add) {
+    const text = cap(add[1].trim());
+    state.plan.push({id: uid(), text, done: false}); save();
+    speak(`Added to your plan: ${text}.`);
+    return true;
+  }
+  if (/^(mark|complete|finish|tick|check off|check)\b/.test(t)) {
+    const body = t.replace(/^(mark|complete|finish|tick|check off|check)\s+/, "")
+      .replace(/\s+(as\s+)?(done|complete|completed|finished)$/, "")
+      .replace(/^(the\s+)?(plan\s+)?(item\s+)?/, "").trim();
+    const items = state.plan.filter(p => !p.done);
+    const item = /^\d+$/.test(body) ? items[+body - 1] : items.find(p => normalize(p.text).includes(body));
+    if (!item) { speak("I could not find that plan item."); return true; }
+    item.done = true; save();
+    speak(`Marked as done: ${item.text}.`);
+    return true;
+  }
+  if (/\bclear\b/.test(t)) {
+    const onlyDone = /\b(done|completed|finished)\b/.test(t);
+    state.plan = onlyDone ? state.plan.filter(p => !p.done) : [];
+    save();
+    speak(onlyDone ? "Cleared completed plan items." : "Cleared your daily plan.");
+    return true;
+  }
+  if (/^(read|what is|whats|show|list|tell me|what)\b/.test(t) || /^(my |the )?(daily )?plan$/.test(t)) {
+    speak(state.plan.length
+      ? "Your plan. " + state.plan.map((p,
